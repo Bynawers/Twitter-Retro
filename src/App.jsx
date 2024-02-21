@@ -1,5 +1,3 @@
-import "./App.css";
-
 import RoutesContainer from "./containers/RoutesContainer";
 
 function App() {
