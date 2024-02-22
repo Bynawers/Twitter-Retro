@@ -13,7 +13,7 @@ function Login() {
   const handleSubmitEvent = (e) => {
     e.preventDefault();
     if (input.email !== "" && input.password !== "") {
-      console.log(input.email +" "+ input.password)
+      console.log(input.email + " " + input.password);
       // dispatch action from hooks
     } else {
       alert("Please provide a valid input");
@@ -30,12 +30,13 @@ function Login() {
 
   return (
     <>
-      <div className="flex h-screen">
-        <div className="w-1/2 flex justify-center items-center">
-          <img src={twitterLogo} alt="twitter logo" className="max-w-full" />
+      <div className="flex flex-col md:flex-row h-screen">
+        <div className="md:w-1/2 flex justify-center items-center">
+          <img src={twitterLogo} alt="twitter logo" className="w-2/3" />
         </div>
-        <div className="w-1/2 flex justify-center items-center">
-          <form onSubmit={handleSubmitEvent} className="w-3/4">
+        <div className="md:w-1/2 flex flex-col items-center justify-evenly px-6 py-8 md:mx-auto md:h-screen lg:py-0">
+          <h1 className="mb-8 w-3/4 font-bold text-4xl text-gray-700">Happening now.</h1>
+          <form onSubmit={handleSubmitEvent} className="w-full md:w-3/4">
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
@@ -94,18 +95,14 @@ function Login() {
               >
                 Login
               </button>
-              <p className="mt-2 text-sm text-gray-600">
-                Don't have an account?{" "}
-              </p>
-              <Modal></Modal>
             </div>
           </form>
+          
+          <Modal></Modal>
         </div>
       </div>
     </>
   );
 }
-
-
 
 export default Login;

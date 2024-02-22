@@ -12,10 +12,15 @@ export default function Modal() {
 
   return (
     <>
-      <button
+    <div className="w-full md:w-3/4 self-">
+    <p className="mt-2 text-sm text-gray-600">
+                Don't have an account?{" "}
+      </p>
+    <button
+        
         type="button"
         onClick={() => setShowModal(true)}
-        className="w-full px-4 py-2 text-sm font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+        className="w-full  px-4 py-2 text-sm font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
       >
         Sign In
       </button>
@@ -82,7 +87,7 @@ export default function Modal() {
                   />
 
                   <button
-                    type="submit"
+                    type="button"
                     className="w-full text-center py-3 rounded bg-blue-500 text-white hover:bg-green-dark focus:outline-none"
                   >
                     Next
@@ -94,6 +99,9 @@ export default function Modal() {
           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
         </>
       ) : null}
+    </div>
+      
+
     </>
   );
 }
