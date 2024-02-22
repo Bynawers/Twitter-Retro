@@ -1,8 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import SideBar from "../components/home/SideBar";
-
 import Login from "../pages/Login";
 import Home from "../pages/Home";
 import Explorer from "../pages/Explorer";
@@ -16,10 +14,13 @@ const RoutesContainer = () => {
     <BrowserRouter>
       <Routes>
         <Route exact path="/" element={<Login />} />
-        <Route path="/home" element={<Layout />} />
-        <Route path="/explore" element={<Explorer />} />
-        <Route path="/notifications" element={<Notifications />} />
-        <Route path="/not-found" element={<NotFound />} />
+        <Route path="/home" element={<Layout children={<Home />} />} />
+        <Route path="/explore" element={<Layout children={<Explorer />} />} />
+        <Route
+          path="/notifications"
+          element={<Layout children={<Notifications />} />}
+        />
+        <Route path="/not-found" element={<Layout children={<NotFound />} />} />
       </Routes>
     </BrowserRouter>
   );
