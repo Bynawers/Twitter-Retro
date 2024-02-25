@@ -15,6 +15,7 @@ const RoutesContainer = () => {
     <BrowserRouter>
       <Routes>
         <Route exact path="/" element={<Login />} />
+        <Route exact path="/login" element={<Login />} />
         <Route path="/home" element={<Layout children={<Home />} />} />
         <Route path="/explore" element={<Layout children={<Explorer />} />} />
         <Route
