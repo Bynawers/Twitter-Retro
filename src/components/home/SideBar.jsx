@@ -60,7 +60,7 @@ const Avatar = () => {
         <div className="flex flex-row items-center">
           <img
             className="flex h-[50px] w-[50px] rounded-full object-cover"
-            src="./src/assets/defaultAvatar.jpg"
+            src="./src/assets/defaultAvatar.png"
           />
           <div className="hidden flex-col items-start xl:flex 2xl:flex">
             <span className="text-sm pl-3 font-bold">Bynawers</span>

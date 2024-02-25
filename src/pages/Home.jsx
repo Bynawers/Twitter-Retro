@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import HeaderFeed from "../components/home/HeaderFeed";
+import Feed from "../components/home/Feed";
 
 export default function Home() {
   const [view, setView] = useState("Pour vous");
@@ -12,8 +13,8 @@ export default function Home() {
   return (
     <>
       <HeaderFeed label="Home" view={view} setView={handleSetView} />
-      <main className="flex flex-1 w-full h-full justify-center">
-        {view === "Pour vous" && <ForYou />}
+      <main className=" w-full h-full justify-center">
+        {view === "Pour vous" && <Feed />}
         {view === "Abonnement" && <Subscription />}
       </main>
     </>

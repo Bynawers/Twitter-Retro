@@ -1,13 +1,20 @@
 import React, { useState } from "react";
 
-import HeaderFeed from "./HeaderFeed";
+import Post from "../Post.jsx";
+
+import data from "../../services/FeedExample.json";
 
 function Feed() {
   return (
-    <div className="border-b-[1px] border-neutral-800 p-5">
-      <div className="flex flex-row items-center gap-2">
-        <h1 className="text-white text-xl font-semibold"></h1>
-      </div>
+    <div className="flex flex-col">
+      {data.map((elem, index) => {
+        console.log(elem.user);
+        return (
+          <React.Fragment key={index}>
+            <Post data={elem} />
+          </React.Fragment>
+        );
+      })}
     </div>
   );
 }

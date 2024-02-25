@@ -6,8 +6,9 @@ import Home from "../pages/Home";
 import Explorer from "../pages/Explorer";
 import Notifications from "../pages/Notifications";
 import NotFound from "../pages/NotFound";
+import User from "../pages/User.jsx";
 
-import Layout from "../pages/Layout.jsx";
+import Layout from "../components/Layout.jsx";
 
 const RoutesContainer = () => {
   return (
@@ -21,6 +22,7 @@ const RoutesContainer = () => {
           element={<Layout children={<Notifications />} />}
         />
         <Route path="/not-found" element={<Layout children={<NotFound />} />} />
+        <Route path="/:pseudo" element={<Layout children={<User />} />} />
       </Routes>
     </BrowserRouter>
   );

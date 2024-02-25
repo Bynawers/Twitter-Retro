@@ -85,7 +85,7 @@ const SideBarElement = (props) => {
         ))}
 
       {props.name !== "Twitter" && (
-        <span className="hidden xl:inline 2xl:inline text-xl font-medium pl-3 ">
+        <span className="hidden xl:inline 2xl:inline text-xl font-medium pl-3 pr-4 ">
           {props.name}
         </span>
       )}

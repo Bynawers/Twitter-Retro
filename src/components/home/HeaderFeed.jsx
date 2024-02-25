@@ -8,7 +8,7 @@ const HeaderFeed = (props) => {
 
   return (
     <div
-      className={`border-b-[1px] sticky top-0 w-full bg-opacity-70 bg-white backdrop-filter backdrop-blur-md transition-all duration-500 sm:top-0 ${
+      className={`border-b-[1px] sticky w-full bg-opacity-70 bg-white backdrop-filter backdrop-blur-md transition-all duration-500 sm:top-0 ${
         scrollDirection === "down" ? "-top-24" : "top-0"
       }`}
     >
@@ -27,6 +27,7 @@ function useScrollDirection() {
     const updateScrollDirection = () => {
       const scrollY = window.pageYOffset;
       const direction = scrollY > lastScrollY ? "down" : "up";
+
       if (
         direction !== scrollDirection &&
         (scrollY - lastScrollY > 10 || scrollY - lastScrollY < -10)
@@ -43,6 +44,7 @@ function useScrollDirection() {
 
   return scrollDirection;
 }
+
 const UpperHeader = () => {
   return (
     <div className="flex flex-row flex-1 w-full h-14 sm:hidden justify-between pl-3 pr-1">

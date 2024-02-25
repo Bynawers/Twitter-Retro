@@ -16,6 +16,7 @@ export default {
         black: "#0f1419",
         blackLight: "#161a1f",
         text: "#4e5255",
+        icon: "#697783",
       },
       dark: {
         background: "#000000",
