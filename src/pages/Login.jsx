@@ -30,12 +30,12 @@ function Login() {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row h-screen max-md:pt-20">
-        <div className="md:w-1/2 flex justify-center items-center">
+      <div className="flex px-6 flex-col md:flex-row h-screen max-md:pt-20">
+        <div className="max-md:w-1/2 md:w-1/2 flex justify-center items-center">
           <img src={twitterLogo} alt="twitter logo" className="w-2/3" />
         </div>
-        <div className="md:w-1/2 flex flex-col items-center justify-center px-6 py-8 md:mx-auto md:h-screen lg:py-0">
-          <h1 className="mb-20 w-3/4 font-bold text-4xl text-gray-700">Happening now.</h1>
+        <div className="md:w-1/2 flex flex-col items-center justify-center py-8 md:mx-auto md:h-screen lg:py-0">
+          <h1 className="max-md:text-6xl max-md:self-start mb-20 w-3/4 font-bold text-4xl text-gray-700">Happening now.</h1>
           <form onSubmit={handleSubmitEvent} className="mb-10 w-full md:w-3/4">
             <div className="mb-4">
               <label
@@ -47,7 +47,7 @@ function Login() {
               <input
                 value={input.email}
                 onChange={handleInput}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none h-12 border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="email"
                 type="text"
                 name="email"
@@ -64,7 +64,7 @@ function Login() {
               <input
                 onChange={handleInput}
                 value={input.password}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow h-12 appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                 id="password"
                 type="password"
                 name="password"
@@ -74,7 +74,7 @@ function Login() {
             <div className="mb-2">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center">
-                  <input type="checkbox" id="rememberMe" className="mr-2" />
+                  <input type="checkbox" id="rememberMe" className=" mr-2" />
                   <label
                     htmlFor="rememberMe"
                     className="text-sm font-bold text-gray-700 cursor-pointer"
@@ -91,15 +91,17 @@ function Login() {
               </div>
               <button
                 type="submit"
-                className="w-full px-4 py-2 text-sm font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+                className="w-full h-12 px-4 py-2 text-sm font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
               >
                 Login
               </button>
             </div>
           </form>
           
+          
           <Modal></Modal>
         </div>
+        
       </div>
     </>
   );
