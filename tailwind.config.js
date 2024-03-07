@@ -6,9 +6,23 @@ export default {
       fontFamily: {
         twitterFont: ["Roboto Font"],
       },
+      screens: {
+        sm: "500px",
+      },
       colors: {
         twitter: "#00ADED",
-        // définir couleurs
+        background: "#ffffff",
+        foreground: "#f7f9f9",
+        black: "#0f1419",
+        blackLight: "#161a1f",
+        text: "#4e5255",
+        icon: "#697783",
+      },
+      dark: {
+        background: "#000000",
+        foreground: "#16181c",
+        text: "#c0c2c3",
+        white: "#eff3f4",
       },
     },
   },

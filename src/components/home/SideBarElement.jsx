@@ -30,9 +30,9 @@ const SideBarElement = (props) => {
     <Link
       to={props.path}
       onClick={() => props.setSelected(props.name)}
-      className="group flex max-w-fit
-      cursor-pointer items-center space-x-2 rounded-full px-4 py-3 font-sans
-      transition-all duration-200 hover:bg-gray-200 dark:bg-gray-600 mb-1 "
+      className="group flex max-w-fit 
+      cursor-pointer items-center space-x-1 rounded-full px-4 py-3 font-sans
+      transition-all duration-200 hover:bg-gray-200 mb-1 border-white"
     >
       {props.name === "Twitter" && <FaTwitter size="2em" color="#00ADED" />}
       {props.name === "Accueil" &&
@@ -85,7 +85,7 @@ const SideBarElement = (props) => {
         ))}
 
       {props.name !== "Twitter" && (
-        <span className="hidden md:flex sm:flex text-xl font-medium pl-3">
+        <span className="hidden xl:inline 2xl:inline text-xl font-medium pl-3 pr-4 ">
           {props.name}
         </span>
       )}
