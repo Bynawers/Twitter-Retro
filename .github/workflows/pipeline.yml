@@ -26,7 +26,7 @@ jobs:
         with:
           switches: -avzr --delete
           path: .
-          remote_path: /var/www/twitter-retro-app/
+          remote_path: /var/www/html/twitter-retro-app/
           remote_host: 185.216.26.172
           remote_user: root
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -39,4 +39,4 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: "22"
           script: |
-            cd /var/www/twitter-retro-app/
+            cd /var/www/html/twitter-retro-app/
