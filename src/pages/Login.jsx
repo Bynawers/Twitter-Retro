@@ -1,6 +1,6 @@
 import twitterLogo from "../assets/twitter.png";
 import { useState } from "react";
-import { Modal } from "../components/Modals/Modal.jsx";
+import ModalSignIn from "../components/modal/ModalSignIn.jsx";
 
 function Login() {
   const [open, setOpen] = useState(false);
@@ -35,7 +35,9 @@ function Login() {
           <img src={twitterLogo} alt="twitter logo" className="w-2/3" />
         </div>
         <div className="md:w-1/2 flex flex-col items-center justify-center px-6 py-8 md:mx-auto md:h-screen lg:py-0">
-          <h1 className="mb-20 w-3/4 font-bold text-4xl text-gray-700">Happening now.</h1>
+          <h1 className="mb-20 w-3/4 font-bold text-4xl text-gray-700">
+            Happening now.
+          </h1>
           <form onSubmit={handleSubmitEvent} className="mb-10 w-full md:w-3/4">
             <div className="mb-4">
               <label
@@ -97,8 +99,8 @@ function Login() {
               </button>
             </div>
           </form>
-          
-          <Modal></Modal>
+
+          <ModalSignIn />
         </div>
       </div>
     </>

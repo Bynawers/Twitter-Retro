@@ -6,18 +6,20 @@ import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { Link } from "react-router-dom";
 
 const Sidebar = () => {
+  const user = "bynawers";
+
   return (
-    <div className="hidden md:inline sm:inline lg:inline xl:inline 2xl:inline h-full pr-2 md:pr-4">
+    <div className="hidden md:inline sm:inline lg:inline xl:inline 2xl:inline h-full">
       <div className="flex flex-col items-end ">
-        <div className="space-y-2 fixed h-full xl:min-w-[270px] pt-2">
+        <div className="space-y-2 fixed h-full xl:min-w-[270px] pt-2 border-r-[1px] pr-3">
           <SideBarElement name="Twitter" path="/home" />
           <SideBarElement name="Accueil" path="/home" />
           <SideBarElement name="Explorer" path="/explore" />
           <SideBarElement name="Notifications" path="/notifications" />
-          <SideBarElement name="Messages" path="/not-found" />
-          <SideBarElement name="Listes" path="/not-found" />
+          <SideBarElement name="Messages" path="/messages" />
+          <SideBarElement name="Listes" path="/lists" />
           <SideBarElement name="Signets" path="/not-found" />
-          <SideBarElement name="Profiles" path="/not-found" />
+          <SideBarElement name="Profiles" path={"/" + user} />
           <SideBarElement name="Plus" path="/not-found" />
           <div className="pb-5" />
           <ButtonPost />

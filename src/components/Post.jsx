@@ -10,7 +10,7 @@ import {
 
 const Post = (props) => {
   return (
-    <button className="flex w-full flex-row pr-4 pl-4 pt-3 pb-3 font-sans border-b-[1px]">
+    <div className="flex w-full flex-row pr-4 pl-4 pt-3 pb-3 font-sans border-b-[1px]">
       <div className="flex w-[40px] mr-2">
         <img
           className="flex h-[40px] w-[40px] rounded-full object-cover"
@@ -66,7 +66,7 @@ const Post = (props) => {
           </div>
         </div>
       </main>
-    </button>
+    </div>
   );
 };
 

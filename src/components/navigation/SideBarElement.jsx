@@ -31,7 +31,7 @@ const SideBarElement = (props) => {
       to={props.path}
       onClick={() => props.setSelected(props.name)}
       className="group flex max-w-fit 
-      cursor-pointer items-center space-x-1 rounded-full px-4 py-3 font-sans
+      cursor-pointer items-center space-x-1 rounded-full px-4 py-3 font-san
       transition-all duration-200 hover:bg-gray-200 mb-1 border-white"
     >
       {props.name === "Twitter" && <FaTwitter size="2em" color="#00ADED" />}
