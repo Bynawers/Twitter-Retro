@@ -1,6 +1,6 @@
 import twitterLogo from "../assets/twitter.png";
 import { useState } from "react";
-import { Modal } from "../components/Modals/Modal.jsx";
+import { Modal } from "../components/SignUp/ModalSignup";
 
 function Login() {
   const [open, setOpen] = useState(false);

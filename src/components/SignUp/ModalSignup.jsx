@@ -2,6 +2,7 @@ import { useState, React } from "react";
 import DatePicker from "react-datepicker";
 import twitterLogo from "../../assets/twitter.png";
 import "react-datepicker/dist/react-datepicker.css";
+import SignUpForm from "./SignUpForm.jsx";
 
 export default function Modal() {
   const [showModal, setShowModal] = useState(false);
@@ -29,7 +30,7 @@ export default function Modal() {
       {showModal ? (
         <>
           <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-            <div className="relative w-auto my-6 mx-auto max-w-5xl">
+            <div className="relative  my-6 mx-auto max-w-5xl w-1/3 max-md:w-full">
               {/*content*/}
               <div
                 className="p-9 border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none"
@@ -58,43 +59,7 @@ export default function Modal() {
                 <div className="flex justify-center items-center mb-4">
                   <img src={twitterLogo} alt="twitter logo" className="w-7" />
                 </div>
-                <div>
-                  <input
-                    type="text"
-                    className="block border border-grey-light w-full p-3 rounded mb-2"
-                    name="fullname"
-                    placeholder="Full Name"
-                  />
-
-                  <input
-                    type="text"
-                    className="block border border-grey-light w-full p-3 rounded mb-10"
-                    name="email"
-                    placeholder="Email"
-                  />
-
-                  <div className="text-gray-600 mb-2">
-                    Date of birth
-                    <p className="text-xs">
-                      This will not be shown publicly. Confirm your own age,
-                      even if this <br />account is for a business, a pet, or
-                      something else.
-                    </p>
-                  </div>
-
-                  <DatePicker
-                    className="block border border-grey-light w-full p-3 rounded mb-2"
-                    selected={startDate}
-                    onChange={(date) => setStartDate(date)}
-                  />
-
-                  <button
-                    type="button"
-                    className="w-full h-12 text-center py-3 rounded-full bg-blue-500 text-white hover:bg-green-dark focus:outline-none"
-                  >
-                    Next
-                  </button>
-                </div>
+                <SignUpForm></SignUpForm>
               </div>
             </div>
           </div>
