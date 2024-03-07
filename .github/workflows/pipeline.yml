@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "20.x"
+          node-version: "18.17.0"
 
       - name: Install dependencies
         run: npm install
@@ -40,3 +40,4 @@ jobs:
           port: "22"
           script: |
             cd /var/www/twitter-retro-app/
+            npm run build
