@@ -1,6 +1,8 @@
 import twitterLogo from "../assets/twitter.png";
 import { useState } from "react";
+import { useAuth } from "../hooks/AuthProvider";
 import { Modal } from "../components/SignUp/ModalSignup";
+import { ToastContainer, toast } from "react-toastify";
 
 function Login() {
   const [open, setOpen] = useState(false);
@@ -9,14 +11,15 @@ function Login() {
     email: "",
     password: "",
   });
-
+  const auth = useAuth();
   const handleSubmitEvent = (e) => {
     e.preventDefault();
     if (input.email !== "" && input.password !== "") {
       console.log(input.email + " " + input.password);
-      // dispatch action from hooks
+      //console.log(input);
+      auth.loginAction(input);
     } else {
-      alert("Please provide a valid input");
+      toast.error("Please provide a valid input");
     }
   };
 
@@ -35,7 +38,9 @@ function Login() {
           <img src={twitterLogo} alt="twitter logo" className="w-2/3" />
         </div>
         <div className="md:w-1/2 flex flex-col items-center justify-center py-8 md:mx-auto md:h-screen lg:py-0">
-          <h1 className="max-md:text-6xl max-md:self-start mb-20 w-3/4 font-bold text-4xl text-gray-700">Happening now.</h1>
+          <h1 className="max-md:text-6xl max-md:self-start mb-20 w-3/4 font-bold text-4xl text-gray-700">
+            Happening now.
+          </h1>
           <form onSubmit={handleSubmitEvent} className="mb-10 w-full md:w-3/4">
             <div className="mb-4">
               <label
@@ -97,11 +102,10 @@ function Login() {
               </button>
             </div>
           </form>
-          
-          
+          <ToastContainer></ToastContainer>
+
           <Modal></Modal>
         </div>
-        
       </div>
     </>
   );

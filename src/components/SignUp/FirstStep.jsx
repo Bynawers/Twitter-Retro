@@ -20,7 +20,7 @@ function SignUpInfo({ formData, setFormData }) {
         placeholder="Full Name"
         value={formData.fullname}
         onChange={(e) => {
-          setFormData({ ...formData, fullname: e.target.value });
+          setFormData({ ...formData, fullName: e.target.value });
         }}
       />
 
