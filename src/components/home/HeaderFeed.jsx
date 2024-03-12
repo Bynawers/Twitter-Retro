@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { FiSettings } from "react-icons/fi";
 import { FaTwitter } from "react-icons/fa";
 
-import BottomBar from "../navigation/BottomBar";
 import useScrollDirection from "../../utils/ScrollDirection";
 
 const HeaderFeed = (props) => {

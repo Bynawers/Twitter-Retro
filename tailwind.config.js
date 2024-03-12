@@ -8,15 +8,21 @@ export default {
       },
       screens: {
         sm: "500px",
+        md: "1000px",
+        lg: "1100px",
       },
       colors: {
         twitter: "#00ADED",
         background: "#ffffff",
         foreground: "#f7f9f9",
+        foregroundHover: "#eff1f1",
         black: "#0f1419",
         blackLight: "#161a1f",
         text: "#4e5255",
-        icon: "#697783",
+        textLight: "#697883",
+        icon: "#536471",
+        iconHover: "#61b7f0",
+        iconBackgroundHover: "#dae8f0",
       },
       dark: {
         background: "#000000",

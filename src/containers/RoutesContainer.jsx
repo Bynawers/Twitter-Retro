@@ -9,6 +9,8 @@ import NotFound from "../pages/NotFound";
 import User from "../pages/User.jsx";
 import Lists from "../pages/Lists.jsx";
 import Messages from "../pages/Messages.jsx";
+import Post from "../pages/Post.jsx";
+import PostPhoto from "../pages/PostPhoto.jsx";
 
 import Layout from "../components/Layout.jsx";
 
@@ -27,7 +29,15 @@ const RoutesContainer = () => {
         <Route path="/messages" element={<Layout children={<Messages />} />} />
         <Route path="/lists" element={<Layout children={<Lists />} />} />
         <Route path="/not-found" element={<Layout children={<NotFound />} />} />
-        <Route path="/:pseudo" element={<Layout children={<User />} />} />
+        <Route path="/:user" element={<Layout children={<User />} />} />
+        <Route
+          path="/:user/status/:post"
+          element={<Layout children={<Post />} />}
+        />
+        <Route
+          path="/:user/status/:post/photo"
+          element={<Layout children={<PostPhoto />} />}
+        />
       </Routes>
     </BrowserRouter>
   );

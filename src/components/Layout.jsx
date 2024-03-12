@@ -7,18 +7,18 @@ import BottomBar from "./navigation/BottomBar";
 const Layout = ({ children }) => {
   return (
     <div className="w-full h-full overflow-y-scroll">
-      <div className="flex h-full mx-auto xl:px-30 max-w-[1200px]">
+      <div className="flex h-full mx-auto xl:px-30 max-w-[1300px]">
         <div className="flex flex-1 h-full overflow-x-hidden">
           <div className="flex flex-1 xl:min-w-[300px] justify-end sm:min-w-[88px]">
             <Sidebar />
           </div>
-          <div className="flex flex-2 flex-col max-w-[600px] lg:min-w-[600px]">
+          <div className="flex flex-2 flex-col max-w-[600px] lg:min-w-[600px] relative">
             {children}
             <BottomBar />
           </div>
           <div className="flex flex-1">
-            <div className="flex lg:w-[320px] 2xl:w-[380px] border-l-[1px] lg:mr-[10px] xl:mr-[30px] lg:pr-4">
-              <div className="hidden lg:block w-full">
+            <div className="flex md:w-[320px] lg:w-[414px] border-l-[1px] md:pl-4 md:pr-4 lg:pl-8 lg:pr-8">
+              <div className="hidden md:block w-full">
                 <Widget />
               </div>
             </div>
