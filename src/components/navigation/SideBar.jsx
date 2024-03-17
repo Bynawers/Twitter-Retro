@@ -1,17 +1,18 @@
-import SideBarElement from "./SideBarElement";
-
 import { FaFeatherAlt } from "react-icons/fa";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 
 import { Link } from "react-router-dom";
 
+import SideBarElement from "./SideBarElement";
+import TooltipUser from "../tooltip/TooltipUser";
+
 const Sidebar = () => {
   const user = "bynawers";
 
   return (
-    <div className="hidden md:inline sm:inline lg:inline xl:inline 2xl:inline h-full">
+    <div className="hidden sm:inline h-full">
       <div className="flex flex-col items-end ">
-        <div className="space-y-2 fixed h-full xl:min-w-[270px] pt-2 border-r-[1px] pr-3">
+        <div className="fixed z-0 space-y-2 h-full xl:min-w-[270px] pt-2 border-r-[1px] pr-3">
           <SideBarElement name="Twitter" path="/home" />
           <SideBarElement name="Accueil" path="/home" />
           <SideBarElement name="Explorer" path="/explore" />
@@ -50,9 +51,13 @@ const ButtonPost = () => {
   );
 };
 
-const Avatar = () => {
+const Avatar = (props) => {
   return (
-    <div className="flex absolute bottom-5 w-full">
+    <button
+      className="flex flex-col items-center absolute bottom-5 w-full"
+      data-tooltip-id="signup"
+    >
+      <TooltipUser />
       <div
         to={"/not-found"}
         onClick={() => {}}
@@ -73,7 +78,7 @@ const Avatar = () => {
           <HiOutlineDotsHorizontal size="1.5em" />
         </div>
       </div>
-    </div>
+    </button>
   );
 };
 

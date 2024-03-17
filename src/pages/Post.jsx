@@ -4,6 +4,8 @@ import { useLocation, Link } from "react-router-dom";
 
 import { IoEllipsisHorizontal } from "react-icons/io5";
 
+import HeaderBack from "../components/header/HeaderBack";
+
 import ActionButtons from "../components/ActionsButtons";
 import Comment from "../components/Comment";
 import PostYourself from "../components/PostYourself";
@@ -31,6 +33,7 @@ function Post() {
 
   return (
     <div className="flex flex-col h-screen">
+      <HeaderBack />
       <div className="pl-4 pr-4">
         <div className="h-3 w-full" />
         <div className="flex flex-row h-[42px] bg-red">

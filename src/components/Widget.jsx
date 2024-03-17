@@ -4,11 +4,17 @@ import { IoEllipsisHorizontal } from "react-icons/io5";
 
 import ReduceBigNumber from "../utils/ReduceBigNumbers";
 
+import HeaderSearch from "./header/HeaderSearch";
+
 const Widget = () => {
   return (
-    <div className="flex flex-col w-full h-full mt-10">
-      <Trends />
-      <RefLink />
+    <div>
+      <HeaderSearch />
+      <main className="flex flex-col w-full h-full mt-10">
+        <Trends />
+        <Trends />
+        <RefLink />
+      </main>
     </div>
   );
 };
@@ -24,11 +30,11 @@ const Trends = () => {
       stat: 509302,
     },
     {
-      name: "Russie",
+      name: "Cryptographie",
       stat: 4034823,
     },
     {
-      name: "Macron",
+      name: "Champions League",
       stat: 2234234,
     },
   ];

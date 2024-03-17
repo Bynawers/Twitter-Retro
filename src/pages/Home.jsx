@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import HeaderFeed from "../components/home/HeaderFeed";
+import HeaderFeed from "../components/header/HeaderFeed";
 import Feed from "../components/home/Feed";
 
 export default function Home() {
@@ -11,12 +11,9 @@ export default function Home() {
   };
 
   return (
-    <div style={{}}>
+    <div className="">
       <HeaderFeed label="Home" view={view} setView={handleSetView} />
-      <main
-        className=" w-full h-full justify-center "
-        style={{ height: "calc(100vh - 4rem)" }}
-      >
+      <main className=" w-full h-full justify-center ">
         {view === "Pour vous" && <Feed />}
         {view === "Abonnement" && <Subscription />}
       </main>
