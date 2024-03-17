@@ -1,53 +1,44 @@
 import { useContext, createContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
+  const BASE_URL = "https://api.twitter-retro.fr";
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("site") || "");
-  const navigate = useNavigate();
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
+
   const loginAction = async (data) => {
+    const ERROR_MESSAGE = {
+      401: "Unknow User, please retry",
+      _: "Unknow Error",
+    };
+
     try {
-      const response = await fetch("http://localhost:3001/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      // Check if the request was successful (status code 2xx)
-      if (response.ok) {
-        // Parse the JSON response
-        const res = await response.json();
-        // Now you can access the response data
-        if (res) {
-          setUser(res.user.tag);
-          //console.log(res)
-          setToken(res.token);
-          localStorage.setItem("site", res.token);
-          console.log("token set");
+      await axios
+        .post(`${BASE_URL}/auth/login`, data)
+        .then((response) => {
+          console.log("Réponse du serveur :", response.data.user);
+          setToken(response.data.token);
+          setUser(response.data.user);
+          localStorage.setItem("token", response.data.token);
           toast.success("Logged in successfully");
-          navigate("/home");
-
-          return;
-        }
-      } else {
-        toast.error("Failed to login");
-        throw new Error("Failed to login: " + response.statusText);
-      }
+        })
+        .catch((error) => {
+          if (error.response) {
+            toast.error(ERROR_MESSAGE[error.response.status]);
+          }
+        });
     } catch (err) {
-      // Handle any errors that occurred during the fetch
       console.error(err);
     }
   };
+
   const logOut = () => {
     setUser(null);
     setToken("");
-    localStorage.removeItem("site");
-    navigate("/login");
+    localStorage.removeItem("token");
   };
 
   return (

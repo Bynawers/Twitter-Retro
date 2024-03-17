@@ -1,5 +1,5 @@
 import twitterLogo from "../assets/twitter.png";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../hooks/AuthProvider";
 import { Modal } from "../components/SignUp/ModalSignup";
 import { ToastContainer, toast } from "react-toastify";
@@ -11,6 +11,7 @@ function Login() {
     email: "",
     password: "",
   });
+
   const auth = useAuth();
   const handleSubmitEvent = (e) => {
     e.preventDefault();

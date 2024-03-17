@@ -1,8 +1,13 @@
 import { Tooltip as ReactTooltip } from "react-tooltip";
 
+import { useAuth } from "../../hooks/AuthProvider";
+
 const TooltipUser = (props) => {
+  const { logOut } = useAuth();
+
   const handleDisconnect = () => {
     console.log("Disconnect..");
+    logOut();
   };
   const handleAddAccount = () => {
     console.log("AddAccount..");

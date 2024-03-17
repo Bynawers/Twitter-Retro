@@ -2,7 +2,11 @@ import RoutesContainer from "./containers/RoutesContainer";
 import AuthProvider from "./hooks/AuthProvider";
 
 function App() {
-  return <RoutesContainer />;
+  return (
+    <AuthProvider>
+      <RoutesContainer />
+    </AuthProvider>
+  );
 }
 
 export default App;

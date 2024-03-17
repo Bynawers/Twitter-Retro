@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 
 import Login from "../pages/Login";
 import Home from "../pages/Home";
@@ -11,19 +11,21 @@ import Lists from "../pages/Lists.jsx";
 import Messages from "../pages/Messages.jsx";
 import Post from "../pages/Post.jsx";
 import PostPhoto from "../pages/PostPhoto.jsx";
-import AuthProvider from "../hooks/AuthProvider";
 
 import Layout from "../components/Layout.jsx";
 
+import PrivateRoutes from "./PrivatesRoutes";
+import PublicRoutes from "./PublicRoutes";
+
 const RoutesContainer = () => {
-  //const user = useAuth();
-  //if (!user.token) return <Navigate to="/login" />;
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <Routes>
-          <Route exact path="/" element={<Login />} />
-          <Route exact path="/login" element={<Login />} />
+      <Routes>
+        <Route element={<PublicRoutes />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Route>
+        <Route element={<PrivateRoutes />}>
           <Route path="/home" element={<Layout children={<Home />} />} />
           <Route path="/explore" element={<Layout children={<Explorer />} />} />
           <Route
@@ -48,8 +50,8 @@ const RoutesContainer = () => {
             path="/:user/status/:post/photo"
             element={<Layout children={<PostPhoto />} />}
           />
-        </Routes>
-      </AuthProvider>
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 };
