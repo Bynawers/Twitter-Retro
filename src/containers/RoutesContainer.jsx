@@ -13,6 +13,7 @@ import Post from "../pages/Post.jsx";
 import PostPhoto from "../pages/PostPhoto.jsx";
 
 import Layout from "../components/Layout.jsx";
+import LayoutMessages from "../components/LayoutMessages.jsx";
 
 import PrivateRoutes from "./PrivatesRoutes";
 import PublicRoutes from "./PublicRoutes";
@@ -34,7 +35,7 @@ const RoutesContainer = () => {
           />
           <Route
             path="/messages"
-            element={<Layout children={<Messages />} />}
+            element={<LayoutMessages children={<Messages />} />}
           />
           <Route path="/lists" element={<Layout children={<Lists />} />} />
           <Route
