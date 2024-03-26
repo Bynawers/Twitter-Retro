@@ -1,16 +1,20 @@
 import { useState, React } from "react";
-import DatePicker from "react-datepicker";
-import twitterLogo from "../../assets/twitter.png";
+
 import "react-datepicker/dist/react-datepicker.css";
 import SignUpForm from "./SignUpForm.jsx";
+import IconButton from "../button/IconButton";
 
-export default function Modal() {
+const ModalSignup = () => {
+  const [step, setStep] = useState(0);
   const [showModal, setShowModal] = useState(false);
+
   const handleCloseModal = () => {
     setShowModal(false);
   };
 
-  const [nextState, setNextState] = useState(0);
+  const handlePreviousStep = () => {
+    setStep(step - 1);
+  };
 
   return (
     <>
@@ -25,39 +29,33 @@ export default function Modal() {
         >
           Sign In
         </button>
+
         {showModal ? (
           <>
             <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
               <div className="relative  my-6 mx-auto max-w-5xl w-1/3 max-md:w-full">
-                {/*content*/}
-                <div
-                  className="p-9 border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none"
-                  style={{ maxHeight: "80vh", overflowY: "auto" }}
-                >
-                  {/* Close button */}
-                  <button
-                    className="absolute top-0 right-0 mt-4 mr-4 text-gray-600 hover:text-gray-800"
-                    onClick={handleCloseModal}
-                  >
-                    <svg
-                      className="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M6 18L18 6M6 6l12 12"
+                <div className="p-9 border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none overflow-y-auto">
+                  <div className="flex justify-between items-center">
+                    {step > 0 ? (
+                      <IconButton
+                        name="back"
+                        event={handlePreviousStep}
+                        size={30}
                       />
-                    </svg>
-                  </button>
-                  {/*header*/}
-                  <div className="flex justify-center items-center mb-4">
-                    <img src={twitterLogo} alt="twitter logo" className="w-7" />
+                    ) : (
+                      <div />
+                    )}
+                    <IconButton
+                      name="close"
+                      event={handleCloseModal}
+                      size={30}
+                    />
                   </div>
-                  <SignUpForm></SignUpForm>
+
+                  <div className="flex justify-center items-center mb-4">
+                    <IconButton name="twitter" event={null} hover={false} />
+                  </div>
+                  <SignUpForm step={step} setStep={setStep} />
                 </div>
               </div>
             </div>
@@ -67,5 +65,5 @@ export default function Modal() {
       </div>
     </>
   );
-}
-export { Modal };
+};
+export default ModalSignup;

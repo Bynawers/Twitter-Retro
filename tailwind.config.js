@@ -13,6 +13,7 @@ export default {
       },
       colors: {
         twitter: "#00ADED",
+        twitterDark: "#1a8cd8",
         background: "#ffffff",
         foreground: "#f7f9f9",
         foregroundHover: "#eff1f1",
@@ -20,9 +21,17 @@ export default {
         blackLight: "#161a1f",
         text: "#4e5255",
         textLight: "#697883",
-        icon: "#536471",
-        iconHover: "#61b7f0",
         iconBackgroundHover: "#dae8f0",
+        icon: {
+          default: {
+            color: "#536471",
+            background: "#61b7f0",
+          },
+          retweet: {
+            color: "#13ba82",
+            background: "#def1eb",
+          },
+        },
       },
       dark: {
         background: "#000000",
@@ -34,3 +43,10 @@ export default {
   },
   plugins: [],
 };
+
+/*
+color: "#536471",
+            background: "#61b7f0",
+            */
+
+//"#e7e7e8 Default background hover button

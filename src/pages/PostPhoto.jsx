@@ -1,7 +1,9 @@
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-function PostPhoto({ location }) {
-  const image = location;
+function PostPhoto() {
+  const location = useLocation();
+
+  const image = location.state.image;
 
   console.log(image);
   return (
@@ -9,7 +11,7 @@ function PostPhoto({ location }) {
       <main className="flex h-screen w-screen">
         <img
           className="flex rounded-xl object-cover mt-3"
-          src={"./src/services/images-content/" + image}
+          src={"/src/services/images-content/" + image}
         />
       </main>
     </div>

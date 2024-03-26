@@ -1,23 +1,20 @@
 import twitterLogo from "../assets/twitter.png";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAuth } from "../hooks/AuthProvider";
-import { Modal } from "../components/SignUp/ModalSignup";
+import ModalSignup from "../components/SignUp/ModalSignup";
 import { ToastContainer, toast } from "react-toastify";
 
 function Login() {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen((cur) => !cur);
   const [input, setInput] = useState({
     email: "",
     password: "",
   });
 
   const auth = useAuth();
+
   const handleSubmitEvent = (e) => {
     e.preventDefault();
     if (input.email !== "" && input.password !== "") {
-      console.log(input.email + " " + input.password);
-      //console.log(input);
       auth.loginAction(input);
     } else {
       toast.error("Please provide a valid input");
@@ -105,7 +102,7 @@ function Login() {
           </form>
           <ToastContainer />
 
-          <Modal />
+          <ModalSignup />
         </div>
       </div>
     </>

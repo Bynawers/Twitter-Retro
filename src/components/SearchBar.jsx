@@ -19,6 +19,7 @@ const SearchBar = () => {
     <>
       <HiSearch className="absolute left-4 top-4 text-icon" size={25} />
       <input
+        data-tooltip-id="search"
         type="text"
         placeholder="Chercher"
         value={search}

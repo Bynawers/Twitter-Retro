@@ -1,19 +1,27 @@
 import React from "react";
 
-import { IoEllipsisHorizontal } from "react-icons/io5";
+import { useLocation } from "react-router-dom";
 
 import ReduceBigNumber from "../utils/ReduceBigNumbers";
 
 import HeaderSearch from "./header/HeaderSearch";
+import IconButton from "./button/IconButton";
 
 const Widget = () => {
+  const location = useLocation();
+  const currentPath = location.pathname;
+
   return (
     <div>
-      <HeaderSearch />
+      {currentPath !== "/messages" && <HeaderSearch />}
       <main className="flex flex-col w-full h-full mt-10">
-        <Trends />
-        <Trends />
-        <RefLink />
+        {currentPath !== "/messages" && (
+          <>
+            <Trends />
+            <Trends />
+            <RefLink />
+          </>
+        )}
       </main>
     </div>
   );
@@ -61,6 +69,7 @@ const Trends = () => {
 
 const TrendsElement = (props) => {
   const reduceValue = ReduceBigNumber(props.item.stat);
+  const handleTooltip = () => {};
 
   return (
     <div className="px-3 py-4 flex flex-col hover:bg-foregroundHover cursor-pointer ">
@@ -68,9 +77,14 @@ const TrendsElement = (props) => {
         <span className="font-normal text-textLight text-sm">
           {props.rank} · Tendances
         </span>
-        <button className="text-icon hover:text-iconHover hover:bg-iconBackgroundHover rounded-full p-2 self-center">
-          <IoEllipsisHorizontal className="self-center" />
-        </button>
+        <IconButton
+          name="more"
+          styles="hover:bg-iconBackgroundHover"
+          color={"#229df0"}
+          background={"#dae8f0"}
+          event={handleTooltip}
+          value={null}
+        />
       </div>
       <div className="h-5">
         <span>#{props.item.name}</span>

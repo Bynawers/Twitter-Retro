@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import useScrollDirection from "../../utils/ScrollDirection";
 
 import SearchBar from "../../components/SearchBar";
+import TooltipSearch from "../tooltip/TooltipSearch";
 
 const HeaderSearch = (props) => {
   const scrollDirection = useScrollDirection();
@@ -15,6 +16,7 @@ const HeaderSearch = (props) => {
     >
       <div className="flex flex-row p-5 pl-1 pr-1 flex-1 h-14 items-center">
         <SearchBar />
+        <TooltipSearch />
       </div>
     </div>
   );

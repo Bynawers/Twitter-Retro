@@ -1,14 +1,29 @@
+import { useState } from "react";
+
 import ReduceBigNumber from "../utils/ReduceBigNumbers";
 
 import IconButton from "./button/IconButton";
 
 const ActionButtons = (props) => {
-  const reduceValue = ReduceBigNumber(props.value);
+  const [like, setLike] = useState(false);
+  const [retweet, setRetweet] = useState(false);
+  const [bookmark, setBookmark] = useState(false);
 
-  const handleClickButton = (e) => {
-    e.preventDefault();
-    alert("test");
+  const handleDefault = (e) => {};
+
+  const handleLike = (e) => {
+    setLike(!like);
   };
+
+  const handleRetweet = (e) => {
+    setRetweet(!retweet);
+  };
+
+  const handleBookmark = (e) => {
+    setBookmark(!bookmark);
+  };
+
+  const handleShare = (e) => {};
 
   return (
     <div
@@ -17,40 +32,64 @@ const ActionButtons = (props) => {
       }`}
     >
       <IconButton
-        event={handleClickButton}
-        value={ReduceBigNumber(7246324)}
+        event={handleDefault}
+        value={ReduceBigNumber(props.data ? props.data.comment : -1)}
+        color={"#54b3f3"}
+        background={"#e9f6fd"}
         name="chat"
       />
       <IconButton
-        event={handleClickButton}
-        value={ReduceBigNumber(84932)}
+        event={handleRetweet}
+        value={ReduceBigNumber(props.data ? props.data.retweet : -1)}
+        color={"#13ba82"}
+        background={"#def1eb"}
+        state={retweet}
         name="retweet"
       />
       <IconButton
-        event={handleClickButton}
-        value={ReduceBigNumber(3482)}
+        event={handleLike}
+        value={ReduceBigNumber(props.data ? props.data.like : -1)}
+        color={"#fa2c8b"}
+        background={"#fee7f2"}
+        state={like}
         name="like"
       />
 
       {props.view == "menu" && (
         <IconButton
-          event={handleClickButton}
-          value={ReduceBigNumber(865658)}
+          event={handleDefault}
+          value={ReduceBigNumber(props.data ? props.data.view : -1)}
+          color={"#54b3f3"}
+          background={"#e9f6fd"}
           name="view"
         />
       )}
       {props.view == "main" && (
         <IconButton
-          event={handleClickButton}
-          value={ReduceBigNumber(34)}
+          event={handleBookmark}
+          value={ReduceBigNumber(props.data ? props.data.bookmark : -1)}
+          color={"#54b3f3"}
+          background={"#e9f6fd"}
+          state={bookmark}
           name="bookmark"
         />
       )}
 
       {props.view == "menu" && (
         <div className="flex flex-row space-x-1">
-          <IconButton name="bookmark" />
-          <IconButton name="share" />
+          <IconButton
+            event={handleBookmark}
+            state={bookmark}
+            name="bookmark"
+            color={"#54b3f3"}
+            background={"#e9f6fd"}
+          />
+          <IconButton
+            event={handleShare}
+            name="share"
+            color={"#54b3f3"}
+            background={"#e9f6fd"}
+          />
         </div>
       )}
     </div>
