@@ -2,8 +2,8 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const BASE_URL = "http://localhost:3001/";
-//const BASE_URL = "https://api.twitter-retro.fr/";
+//const BASE_URL = "http://localhost:3001/";
+const BASE_URL = "https://api.twitter-retro.fr/";
 
 const getUsers = async (userId, auth) => {
   console.log(auth);
