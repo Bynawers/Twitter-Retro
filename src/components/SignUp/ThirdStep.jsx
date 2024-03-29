@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 
-export default function PersonalInfo({ formData, setFormData }) {
+const PersonalInfo = (props) => {
   const [avatar, setAvatar] = useState(null);
 
   const handleFileChange = (e) => {
-    // Access the file from event
     const file = e.target.files[0];
     setAvatar(file);
-    
-    // Update formData to include avatar file
-    setFormData({ ...formData, avatar: file });
+
+    props.setFormData({ ...props.formData, avatar: file });
   };
 
   return (
@@ -17,11 +15,12 @@ export default function PersonalInfo({ formData, setFormData }) {
       <input
         type="text"
         className="block border border-grey-light w-full p-3 rounded mb-10"
+        style={{ borderColor: props.errorTag ? "red" : "#d1d5db" }}
         name="tag"
         placeholder="Tag"
-        value={formData.tag}
+        value={props.formData.tag}
         onChange={(e) => {
-          setFormData({ ...formData, tag: e.target.value });
+          props.setFormData({ ...props.formData, tag: e.target.value });
         }}
       />
       <label htmlFor="avatar">Choose a profile picture:</label>
@@ -34,4 +33,6 @@ export default function PersonalInfo({ formData, setFormData }) {
       />
     </div>
   );
-}
+};
+
+export default PersonalInfo;

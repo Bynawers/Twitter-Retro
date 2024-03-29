@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-
 import { FaFeatherAlt } from "react-icons/fa";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 
@@ -8,9 +6,15 @@ import SideBarElement from "./SideBarElement";
 import TooltipUser from "../tooltip/TooltipUser";
 import ModalPost from "../modal/ModalPost";
 
+import { useAuth } from "../../hooks/AuthProvider";
+
 const Sidebar = () => {
+  const auth = useAuth();
+
+  const tag = "@Bynawers";
+  const username = "Bynawers";
+
   const [modalPost, setModalPost] = useState(false);
-  const user = "bynawers";
 
   const handleToggleModal = () => {
     setModalPost(!modalPost);
@@ -26,13 +30,12 @@ const Sidebar = () => {
           <SideBarElement name="Explorer" path="/explore" />
           <SideBarElement name="Notifications" path="/notifications" />
           <SideBarElement name="Messages" path="/messages" />
-          <SideBarElement name="Listes" path="/lists" />
           <SideBarElement name="Signets" path="/not-found" />
-          <SideBarElement name="Profiles" path={"/" + user} />
+          <SideBarElement name="Profiles" path={"/" + "undefined"} />
           <SideBarElement name="Plus" path="/not-found" />
           <div className="pb-5" />
           <ButtonPost handleToggleModal={handleToggleModal} />
-          <Avatar />
+          <Avatar username={"undefined"} tag={"undefined"} />
         </div>
       </div>
     </div>
@@ -75,8 +78,8 @@ const Avatar = (props) => {
             src="/src/assets/defaultAvatar.png"
           />
           <div className="hidden flex-col items-start xl:flex 2xl:flex">
-            <span className="text-sm pl-3 font-bold">Bynawers</span>
-            <span className="text-sm pl-3 font-light">@Byna_wers</span>
+            <span className="text-sm pl-3 font-bold">{props.username}</span>
+            <span className="text-sm pl-3 font-light">@{props.tag}</span>
           </div>
         </div>
         <div className="hidden items-start xl:inline 2xl:inline">

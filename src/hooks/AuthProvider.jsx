@@ -1,13 +1,15 @@
 import { useContext, createContext, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const AuthContext = createContext();
 
+const BASE_URL = "https://api.twitter-retro.fr";
+
 const AuthProvider = ({ children }) => {
-  const BASE_URL = "https://api.twitter-retro.fr";
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [token, setToken] = useState(Cookies.get("token") || "");
+  const [user, setUser] = useState(localStorage.getItem("user") || "");
 
   const loginAction = async (data) => {
     const ERROR_MESSAGE = {
@@ -19,10 +21,10 @@ const AuthProvider = ({ children }) => {
       await axios
         .post(`${BASE_URL}/auth/login`, data)
         .then((response) => {
-          console.log("Réponse du serveur :", response.data.user);
-          setToken(response.data.token);
           setUser(response.data.user);
-          localStorage.setItem("token", response.data.token);
+          Cookies.set("token", response.data.token, { expires: 7 });
+          setToken(response.data.token);
+          localStorage.setItem("user", response.data.user);
           toast.success("Logged in successfully");
         })
         .catch((error) => {
@@ -37,8 +39,9 @@ const AuthProvider = ({ children }) => {
 
   const logOut = () => {
     setUser(null);
+    Cookies.remove("token");
     setToken("");
-    localStorage.removeItem("token");
+    localStorage.removeItem("user");
   };
 
   return (

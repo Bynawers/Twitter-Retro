@@ -1,31 +1,36 @@
 import React from "react";
 
-function OtherInfo({ formData, setFormData }) {
+const OtherInfo = (props) => {
   return (
     <div>
       <input
         type="password"
         className="block border border-grey-light w-full p-3 rounded mb-2"
+        style={{ borderColor: props.errorPassword ? "red" : "#d1d5db" }}
         name="password"
         placeholder="Password"
-        value={formData.password}
+        value={props.formData.password}
         onChange={(e) => {
-          setFormData({ ...formData, password: e.target.value });
+          props.setFormData({ ...props.formData, password: e.target.value });
         }}
       />
 
       <input
         type="password"
         className="block border border-grey-light w-full p-3 rounded mb-2"
+        style={{ borderColor: props.errorConfirmPassword ? "red" : "#d1d5db" }}
         name="password"
         placeholder="Confirm Password"
-        value={formData.confirmPassword}
+        value={props.formData.confirmPassword}
         onChange={(e) => {
-          setFormData({ ...formData, confirmPassword: e.target.value });
+          props.setFormData({
+            ...props.formData,
+            confirmPassword: e.target.value,
+          });
         }}
       />
     </div>
   );
-}
+};
 
 export default OtherInfo;

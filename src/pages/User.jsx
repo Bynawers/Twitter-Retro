@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 
 import IconButton from "../components/button/IconButton";
@@ -11,15 +11,24 @@ import { getUsers } from "../services/RequestUsers";
 
 function User() {
   const location = useLocation();
-
   const auth = useAuth();
 
-  const username = location.pathname;
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    alert("/" + auth.user.tag);
+    if (location.pathname == "/" + auth.user.tag) {
+      setUserData(auth.User);
+      alert("yeyeyey");
+    } else {
+      // fetch
+    }
+  }, []);
 
   const handleFollow = () => {};
 
   useEffect(() => {
-    getUsers(1, auth);
+    getUsers(1);
     console.log("YEAHHH");
   }, [auth]);
 
@@ -53,7 +62,9 @@ function User() {
             </div>
           </div>
           <div className="flex flex-col h-[50px] mt-1 mb-3">
-            <span className="font-bold text-xl">Bynawers</span>
+            <span className="font-bold text-xl">
+              {userData ? userData.fullName : ""}
+            </span>
             <span className="font-normal text-sm text-icon-default-color">
               @Bynawers
             </span>

@@ -1,15 +1,15 @@
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import Cookies from "js-cookie";
 
-const BASE_URL = "https://api.twitter-retro.fr";
+//const BASE_URL = "https://api.twitter-retro.fr";
+const BASE_URL = "http://localhost:3001";
 
-const getTweets = async (userId, auth) => {
-  console.log("token : " + auth);
+const getTweets = async () => {
+  const token = Cookies.get("token");
   try {
     const response = await axios.get(BASE_URL + "/tweets", {
       headers: {
-        Auth: auth,
+        Auth: token,
       },
     });
     console.log(response.data.tweets);

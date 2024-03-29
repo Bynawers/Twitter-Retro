@@ -9,6 +9,7 @@ const ModalSignup = () => {
   const [showModal, setShowModal] = useState(false);
 
   const handleCloseModal = () => {
+    setStep(0);
     setShowModal(false);
   };
 

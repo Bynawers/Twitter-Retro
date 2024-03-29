@@ -2,15 +2,17 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-//const BASE_URL = "http://localhost:3001/";
-const BASE_URL = "https://api.twitter-retro.fr/";
+const BASE_URL = "http://localhost:3001";
+//const BASE_URL = "https://api.twitter-retro.fr";
+import Cookies from "js-cookie";
 
-const getUsers = async (userId, auth) => {
-  console.log(auth);
+const getUsers = async (userId) => {
+  const token = Cookies.get("token");
+
   try {
-    const response = await axios.get(BASE_URL + "users/" + userId, {
+    const response = await axios.get(BASE_URL + "/users/" + userId, {
       headers: {
-        Auth: `Bearer ${auth}`,
+        Auth: `Bearer ${token}`,
       },
     });
     return response.data;
@@ -20,25 +22,20 @@ const getUsers = async (userId, auth) => {
   }
 };
 
-const signupUser = async (data) => {
-  try {
-    const response = await axios.post(BASE_URL + "auth/register", {
-      tag: data.tag,
-      fullName: data.fullName,
-      email: data.email,
-      password: data.password,
-    });
+const getMe = async (userId) => {
+  const token = Cookies.get("token");
 
-    if (response.status === 200) {
-      toast.success("Form Submitted");
-      console.log(data);
-    } else {
-      throw new Error("Failed to submit form");
-    }
+  try {
+    const response = await axios.get(BASE_URL + "/users/me" + userId, {
+      headers: {
+        Auth: `Bearer ${token}`,
+      },
+    });
+    return response.data;
   } catch (error) {
     console.error("Erreur lors de la récupération des utilisateurs:", error);
     throw error;
   }
 };
 
-export { getUsers, signupUser };
+export { getUsers, getMe };

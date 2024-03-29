@@ -6,9 +6,19 @@ import SignUpInfo from "./FirstStep";
 import PersonalInfo from "./ThirdStep";
 import OtherInfo from "./SecondStep";
 
-import { signupUser } from "../../services/RequestUsers";
+import { signupUser, checkEmail, checkTag } from "../../services/RequestAuth";
+
+import { useAuth } from "../../hooks/AuthProvider";
 
 const SignUpForm = (props) => {
+  const auth = useAuth();
+
+  const [errorEmail, setErrorEmail] = useState(false);
+  const [errorFullname, setErrorFullname] = useState(false);
+  const [errorPassword, setErrorPassword] = useState(false);
+  const [errorConfirmPassword, setErrorConfirmPassword] = useState(false);
+  const [errorTag, setErrorTag] = useState(false);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -19,38 +29,145 @@ const SignUpForm = (props) => {
     avatar: "",
   });
 
-  const handleNextStep = () => {
-    if (
-      props.step == 0 &&
-      (formData.email === "" || formData.fullName === "")
-    ) {
-      toast.error("Please enter your email and fullname");
-      return;
-    } else if (
-      props.step == 1 &&
-      formData.password !== formData.confirmPassword
-    ) {
-      toast.error("Passwords not matching");
-      return;
+  const handleNextStep = async () => {
+    if (props.step == 0) {
+      if (!validateFullName()) {
+        return;
+      }
+      if ((await validateEmail()) == false) {
+        return;
+      }
+    }
+    if (props.step == 1) {
+      if (!validatePassword()) {
+        return;
+      }
     } else if (props.step === 2) {
+      if ((await validateTag()) == false) {
+        return;
+      }
       handleSubmit();
+      return;
     }
 
     props.setStep(props.step + 1);
   };
 
-  const handlePreviousStep = () => {};
+  const validatePassword = () => {
+    const password = formData.password;
+    const confirmPassword = formData.confirmPassword;
 
-  const handleSubmit = () => {
-    signupUser(formData);
+    if (password === "") {
+      setErrorPassword(true);
+      toast.error("Please enter a password");
+      return false;
+    } else if (confirmPassword === "") {
+      setErrorConfirmPassword(true);
+      toast.error("Please confirm your password");
+      return false;
+    }
+    if (password !== confirmPassword) {
+      setErrorConfirmPassword(true);
+      toast.error("Passwords not matching");
+      return false;
+    }
+
+    setErrorPassword(false);
+    setErrorConfirmPassword(false);
+    return true;
+  };
+
+  const validateFullName = () => {
+    const fullName = formData.fullName;
+    if (fullName == "") {
+      toast.error("Please enter your fullname");
+      setErrorFullname(true);
+      return false;
+    }
+    setErrorFullname(false);
+    return true;
+  };
+
+  const validateEmail = async () => {
+    const email = formData.email;
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (email === "") {
+      toast.error("Please enter your email and fullname");
+      setErrorEmail(true);
+      return false;
+    }
+    if (!regex.test(email)) {
+      toast.error("Please enter valid email");
+      setErrorEmail(true);
+      return false;
+    }
+    if ((await checkEmail(email)) == false) {
+      toast.error("Email already taken");
+      setErrorEmail(true);
+      return false;
+    }
+    setErrorEmail(false);
+    return true;
+  };
+
+  const validateTag = async () => {
+    const tag = formData.tag;
+    if (tag.length < 1 || tag.length > 15) {
+      toast.error("Tag length must be between 1 and 15 ");
+      setErrorTag(true);
+      return false;
+    } else if (!/^[a-zA-Z0-9_]+$/.test(tag)) {
+      toast.error("Only character alphabetic, numbers and _ is valid");
+      setErrorTag(true);
+      return false;
+    } else if ((await checkTag(formData.tag)) == false) {
+      toast.error("Tag already use");
+      setErrorTag(true);
+      return false;
+    }
+    setErrorTag(false);
+    return true;
+  };
+
+  const handleSubmit = async () => {
+    const input = {
+      email: formData.email,
+      password: formData.password,
+    };
+
+    if (await signupUser(formData)) {
+      toast.success("New account successfully created");
+      auth.loginAction(input);
+    }
   };
 
   const FormTitles = ["Sign Up", "Personal Info", "Other"];
 
   const StepContent = {
-    0: <SignUpInfo formData={formData} setFormData={setFormData} />,
-    1: <OtherInfo formData={formData} setFormData={setFormData} />,
-    2: <PersonalInfo formData={formData} setFormData={setFormData} />,
+    0: (
+      <SignUpInfo
+        formData={formData}
+        setFormData={setFormData}
+        errorEmail={errorEmail}
+        errorFullname={errorFullname}
+      />
+    ),
+    1: (
+      <OtherInfo
+        formData={formData}
+        setFormData={setFormData}
+        errorPassword={errorPassword}
+        errorConfirmPassword={errorConfirmPassword}
+      />
+    ),
+    2: (
+      <PersonalInfo
+        formData={formData}
+        setFormData={setFormData}
+        errorTag={errorTag}
+      />
+    ),
   };
 
   return (

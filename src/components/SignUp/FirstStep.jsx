@@ -2,35 +2,37 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-function SignUpInfo({ formData, setFormData }) {
+const SignUpInfo = (props) => {
   const [dob, setDob] = useState(null);
 
   const handleDateChange = (date) => {
     setDob(date);
-    setFormData({ ...formData, dob: date });
+    props.setFormData({ ...props.formData, dob: date });
   };
 
   return (
     <div>
       <input
         type="text"
-        className="block border border-grey-light w-full p-3 rounded mb-2"
+        className="block border border-gray-300 w-full p-3 rounded mb-2"
+        style={{ borderColor: props.errorFullname ? "red" : "#d1d5db" }}
         name="fullname"
         placeholder="Full Name"
-        value={formData.fullname}
+        value={props.formData.fullName}
         onChange={(e) => {
-          setFormData({ ...formData, fullName: e.target.value });
+          props.setFormData({ ...props.formData, fullName: e.target.value });
         }}
       />
 
       <input
         type="text"
-        className="block border border-grey-light w-full p-3 rounded mb-10"
+        className="block border border-gray-300 w-full p-3 rounded mb-10"
+        style={{ borderColor: props.errorEmail ? "red" : "#d1d5db" }}
         name="email"
         placeholder="Email"
-        value={formData.email}
+        value={props.formData.email}
         onChange={(e) => {
-          setFormData({ ...formData, email: e.target.value });
+          props.setFormData({ ...props.formData, email: e.target.value });
         }}
       />
 
@@ -50,5 +52,5 @@ function SignUpInfo({ formData, setFormData }) {
       />
     </div>
   );
-}
+};
 export default SignUpInfo;
