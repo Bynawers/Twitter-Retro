@@ -1,3 +1,6 @@
 {
-  "tweet_limite_size": 200
+  "tweet_limite_size": 200,
+  "BASE_URL_ONLINE": "https://api.twitter-retro.fr",
+  "BASE_URL_LOCAL": "http://localhost:3001",
+  "local": false
 }

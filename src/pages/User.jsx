@@ -11,7 +11,11 @@ import TabNavigator from "../components/navigation/TabNavigator";
 
 import ReduceBigNumbers from "../utils/ReduceBigNumbers";
 
-const BASE_URL_IMAGE = "http://localhost:3001/images/";
+import twitterConfig from "../../twitterConfig.json";
+
+const BASE_URL_IMAGE = twitterConfig.local
+  ? twitterConfig.BASE_URL_LOCAL + "/images/"
+  : twitterConfig.BASE_URL_ONLINE + "/images/";
 
 function User() {
   const [init, setInit] = useState(false);

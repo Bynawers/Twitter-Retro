@@ -3,7 +3,11 @@ import IconButton from "./button/IconButton";
 
 import ActionButtons from "./ActionsButtons";
 
-const BASE_URL = "http://localhost:3001/images";
+import twitterConfig from "../../twitterConfig.json";
+
+const BASE_URL = twitterConfig.local
+  ? twitterConfig.BASE_URL_LOCAL + "/images"
+  : twitterConfig.BASE_URL_ONLINE + "/images";
 
 const Post = (props) => {
   const navigate = useNavigate();

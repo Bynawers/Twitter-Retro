@@ -7,8 +7,11 @@ import { getMe } from "../services/RequestUsers";
 
 const AuthContext = createContext();
 
-//const BASE_URL = "https://api.twitter-retro.fr";
-const BASE_URL = "http://localhost:3001";
+import twitterConfig from "../../twitterConfig.json";
+
+const BASE_URL = twitterConfig.local
+  ? twitterConfig.BASE_URL_LOCAL
+  : twitterConfig.BASE_URL_ONLINE;
 
 const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(Cookies.get("token") || "");
