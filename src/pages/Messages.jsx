@@ -22,6 +22,12 @@ function Messages() {
     }
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSendMessage();
+    }
+  };
+
   return (
     <div className="flex w-full h-full">
       {/* User section */}
@@ -67,9 +73,16 @@ function Messages() {
         <div className="flex flex-col flex-grow overflow-y-auto">
           {/* Messages container */}
           <div className="flex flex-col gap-2 p-4">
+            <MessageComponent text="Hello" sender="sender" />
+            <MessageComponent text="How are you?" sender="sender" />
             {messagesList.map((message, index) => (
-              <MessageComponent key={index} text={message.text} sender={message.sender} />
+              <MessageComponent
+                key={index}
+                text={message.text}
+                sender={message.sender}
+              />
             ))}
+            
           </div>
         </div>
         <div className="flex items-center h-16 p-2 border-t-[1px]">
@@ -84,6 +97,7 @@ function Messages() {
             placeholder="Type your message..."
             value={message}
             onChange={handleMessageChange}
+            onKeyPress={handleKeyPress}
             className="ml-3 flex-grow h-full px-4 rounded-lg"
           />
           <button
