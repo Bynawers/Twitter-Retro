@@ -1,14 +1,17 @@
 [
   {
-    "user": "Actu Foot",
     "id": 652346581767546,
-    "username": "ActuFoot_",
     "langage": "fr",
     "certified": false,
-    "content": "Le Real Madrid a promis à Kylian Mbappé une prime pouvant aller jusqu’à 15 M€ s’il remporte le Ballon d’Or sous le maillot merengue. ",
+    "body": "Le Real Madrid a promis à Kylian Mbappé une prime pouvant aller jusqu’à 15 M€ s’il remporte le Ballon d’Or sous le maillot merengue. ",
     "date": "22 février 2024 3:11 PM",
     "imageProfile": "actuFoot.jpg",
     "imageContent": "mbappe.jpeg",
+    "author": {
+      "tag": "ActuFoot_",
+      "fullName": "Actu Foot",
+      "id": 652346581767546
+    },
     "stat": {
       "view": 11893800,
       "retweet": 656,
@@ -19,12 +22,15 @@
     "comment": []
   },
   {
-    "user": "La Sueur",
     "id": 65234658125417246,
-    "username": "La_Sueur",
     "langage": "fr",
     "certified": false,
-    "content": "🚨 MORGAN CHARRIERE A TROUVÉ UN NOUVEL ADVERSAIRE POUR LE 6 AVRIL ! 🏴‍☠️ \n\nLe nom de son adversaire n’est pas encore connu mais son combat est bien maintenu. 🇫🇷\n\n(via IG / Morgan Charriere)",
+    "author": {
+      "tag": "La Sueur",
+      "fullName": "La_Sueur",
+      "id": 652346581767546
+    },
+    "body": "🚨 MORGAN CHARRIERE A TROUVÉ UN NOUVEL ADVERSAIRE POUR LE 6 AVRIL ! 🏴‍☠️ \n\nLe nom de son adversaire n’est pas encore connu mais son combat est bien maintenu. 🇫🇷\n\n(via IG / Morgan Charriere)",
     "date": "22 février 2024 3:11 PM",
     "imageProfile": "laSueur.jpg",
     "imageContent": "charriere.jpeg",
@@ -35,58 +41,18 @@
       "bookmark": 6,
       "comment": 10
     },
-    "comment": [
-      {
-        "user": "Creme",
-        "username": "@kittymicropig",
-        "authentified": false,
-        "content": "Poirier va lui envoyer une grande sifflante en un round ça va être nimp",
-        "stat": {
-          "view": 1000,
-          "retweet": 0,
-          "like": 8,
-          "bookmark": 1,
-          "comment": 0
-        },
-        "comment": []
-      },
-      {
-        "user": "Creme",
-        "username": "@kittymicropig",
-        "authentified": false,
-        "content": "Poirier va lui envoyer une grande sifflante en un round ça va être nimp",
-        "stat": {
-          "view": 3000,
-          "retweet": 0,
-          "like": 1,
-          "bookmark": 2,
-          "comment": 0
-        },
-        "comment": []
-      },
-      {
-        "user": "Creme",
-        "username": "@kittymicropig",
-        "authentified": false,
-        "content": "Poirier va lui envoyer une grande sifflante en un round ça va être nimp",
-        "stat": {
-          "view": 2000,
-          "retweet": 2,
-          "like": 4,
-          "bookmark": 3,
-          "comment": 0
-        },
-        "comment": []
-      }
-    ]
+    "comment": []
   },
   {
-    "user": "Inter FR",
     "id": 652454795495456,
-    "username": "@InterMilanFRA",
     "langage": "fr",
     "certified": false,
-    "content": "Hier, l’Inter a gagné 4-0. Aujourd’hui, l’Atletico de Madrid a gagné 5-0. Le match de mardi s’annonce électrique ⚫️🔵",
+    "author": {
+      "tag": "InterMilanFRA",
+      "fullName": "Inter FR",
+      "id": 652346581767546
+    },
+    "body": "Hier, l’Inter a gagné 4-0. Aujourd’hui, l’Atletico de Madrid a gagné 5-0. Le match de mardi s’annonce électrique ⚫️🔵",
     "date": "22 février 2024 3:11 PM",
     "imageProfile": "logoInter.jpg",
     "imageContent": "inter.jpeg",

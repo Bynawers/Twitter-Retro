@@ -22,6 +22,7 @@ export default {
         text: "#4e5255",
         textLight: "#697883",
         iconBackgroundHover: "#dae8f0",
+        banner: "#cfd9de",
         icon: {
           default: {
             color: "#536471",

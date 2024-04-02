@@ -3,11 +3,12 @@ import IconButton from "./button/IconButton";
 
 import ActionButtons from "./ActionsButtons";
 
+const BASE_URL = "http://localhost:3001/images";
+
 const Post = (props) => {
   const navigate = useNavigate();
 
-  const handleMoreDetail = (e) => {
-    e.preventDefault();
+  const handleMoreDetail = () => {
     props.setSelectedPost(props.data);
   };
 
@@ -27,17 +28,17 @@ const Post = (props) => {
       <div className="flex w-[40px] mr-2" onClick={handleGoToUserProfile}>
         <img
           className="flex h-[40px] w-[40px] rounded-full object-cover"
-          src={`./src/services/images-profile/${props.data.imageProfile}`}
+          src={BASE_URL + "/profile/" + props.data.author.tag}
         />
       </div>
       <main className="flex flex-[15] flex-col">
         <div className="">
           <div className="flex h-[20px] w-full justify-between">
             <p onClick={handleGoToUserProfile} className="font-bold text-sm">
-              {props.data.user}
+              {props.data.author.fullName}
               <span className="text-icon-default-color font-normal">
                 {" "}
-                @{props.data.username}
+                @{props.data.author.tag}
               </span>
             </p>
             <div />
@@ -52,7 +53,7 @@ const Post = (props) => {
             />
           </div>
           <div className="flex flex-col mt-1">
-            <p className="text-left text-sm">{props.data.content}</p>
+            <p className="text-left text-sm">{props.data.body}</p>
             <Link
               to={
                 "/" +
@@ -60,13 +61,15 @@ const Post = (props) => {
                 "/status/" +
                 props.data.id +
                 "/photo/"
-              } // TODO multiple photo
+              }
               state={{ image: props.data.imageContent }}
             >
-              <img
-                className="flex rounded-xl object-cover mt-3"
-                src={"./src/services/images-content/" + props.data.imageContent}
-              />
+              {props.data.postImage && (
+                <img
+                  className="flex rounded-xl object-cover mt-3"
+                  src={BASE_URL + props.data.postImage}
+                />
+              )}
             </Link>
             <ActionButtons view="menu" data={props.data.stat} />
           </div>
