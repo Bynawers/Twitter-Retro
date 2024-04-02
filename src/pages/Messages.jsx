@@ -6,13 +6,16 @@ import { MdGif, MdOutlineEmojiEmotions } from "react-icons/md";
 import { IoImageOutline } from "react-icons/io5";
 import MessageComponent from "../components/Messages/MessageComponent";
 import { IoMdInformationCircleOutline } from "react-icons/io";
+import EmojiPicker from "emoji-picker-react";
 
 function Messages() {
   const [message, setMessage] = useState("");
   const [messagesList, setMessagesList] = useState([]);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const handleMessageChange = (event) => {
     setMessage(event.target.value);
+    console.log(event.target.value);
   };
 
   const handleSendMessage = () => {
@@ -23,9 +26,13 @@ function Messages() {
   };
 
   const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       handleSendMessage();
     }
+  };
+
+  const handleEmojiSelect = (emoji) => {
+    setMessage((prevMessage) => prevMessage + emoji.emoji);
   };
 
   return (
@@ -74,7 +81,6 @@ function Messages() {
           {/* Messages container */}
           <div className="flex flex-col gap-2 p-4">
             <MessageComponent text="Hello" sender="sender" />
-            <MessageComponent text="How are you?" sender="sender" />
             {messagesList.map((message, index) => (
               <MessageComponent
                 key={index}
@@ -82,14 +88,17 @@ function Messages() {
                 sender={message.sender}
               />
             ))}
-            
           </div>
         </div>
         <div className="flex items-center h-16 p-2 border-t-[1px]">
           <div className="flex items-center space-x-3 h-full">
             <IoImageOutline size="1.5em" className="text-blue-500" />
             <MdGif size="2em" className="text-blue-500" />
-            <MdOutlineEmojiEmotions size="1.5em" className="text-blue-500" />
+            <MdOutlineEmojiEmotions
+              size="1.5em"
+              className="text-blue-500"
+              onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+            />
           </div>
           {/* Input area */}
           <input
@@ -98,7 +107,7 @@ function Messages() {
             value={message}
             onChange={handleMessageChange}
             onKeyPress={handleKeyPress}
-            className="ml-3 flex-grow h-full px-4 rounded-lg"
+            className="ml-3 flex-grow h-full px-4 rounded-lg border-2 border-gray-300"
           />
           <button
             className="text-blue-500 rounded-full font-semibold ml-2"
@@ -107,6 +116,11 @@ function Messages() {
             <IoMdSend size="1.5em" />
           </button>
         </div>
+        {showEmojiPicker && (
+          <div className="absolute bottom-16 right-2">
+            <EmojiPicker onEmojiClick={handleEmojiSelect} />
+          </div>
+        )}
       </div>
     </div>
   );
