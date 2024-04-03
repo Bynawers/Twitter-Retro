@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 import SignUpInfo from "./FirstStep";
 import PersonalInfo from "./ThirdStep";
@@ -135,10 +136,19 @@ const SignUpForm = (props) => {
       email: formData.email,
       password: formData.password,
     };
-
-    if (await signupUser(formData)) {
-      toast.success("New account successfully created");
-      auth.loginAction(input);
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/auth/register",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      //auth.loginAction(input);
+    } catch (error) {
+      console.error("Error uploading file:", error);
     }
   };
 

@@ -17,6 +17,7 @@ import {
   IoCloseOutline,
   IoMailOutline,
   IoArrowBackOutline,
+  IoImageOutline,
 } from "react-icons/io5";
 
 const IconButton = (props) => {
@@ -108,6 +109,11 @@ const IconButton = (props) => {
     ),
     message: (
       <IoMailOutline className={styles + animation} style={{ color: color }} />
+    ),
+    image: (
+      <IoImageOutline
+        style={{ color: "#00ADED", fontSize: props.size ? props.size : 19 }}
+      />
     ),
     user: (
       <img

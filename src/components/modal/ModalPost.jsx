@@ -1,7 +1,12 @@
 import { useState, useEffect, useRef } from "react";
+import { useAuth } from "../../hooks/AuthProvider";
+
 import Modal from "react-modal";
 import IconButton from "../button/IconButton";
 import config from "../../../twitterConfig.json";
+
+import { createTweet } from "../../services/RequestTweets";
+import { ToastContainer, toast } from "react-toastify";
 
 const customStyles = {
   content: {
@@ -22,8 +27,11 @@ const customStyles = {
 };
 
 const ModalPost = (props) => {
+  const auth = useAuth();
   const postRef = useRef(null);
+  const fileInputRef = useRef(null);
   const [text, setText] = useState("");
+  const [image, setImage] = useState(null);
 
   useEffect(() => {
     if (postRef.current == null) {
@@ -39,14 +47,29 @@ const ModalPost = (props) => {
     adjustHeight();
   }, [text]);
 
-  function openModal() {
-    props.setIsOpen(true);
-  }
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const deleteImage = () => {
+    setImage(null);
+  };
 
   function closeModal() {
     setText("");
     props.setIsOpen(false);
   }
+
+  const selectImage = () => {
+    fileInputRef.current.click();
+  };
 
   const handleChange = (e) => {
     if (e.target.value.length <= config.tweet_limite_size) {
@@ -54,8 +77,19 @@ const ModalPost = (props) => {
     }
   };
 
-  const handlePost = () => {
-    alert("post");
+  const handlePost = async () => {
+    const formData = new FormData();
+    formData.append("body", text);
+    formData.append("type", "tweet");
+    formData.append("author", auth.user._id);
+    formData.append("tag", auth.user.tag);
+    formData.append("image", image);
+    if (await createTweet(formData)) {
+      toast.success("Tweet posted successfully");
+    } else {
+      toast.error("An error has occurred");
+    }
+    closeModal();
   };
 
   return (
@@ -102,10 +136,32 @@ const ModalPost = (props) => {
                 >
                   {text.length}/{config.tweet_limite_size}
                 </span>
+                <img src={image} className="rounded-2xl object-cover" />
+                {image && (
+                  <button
+                    className="text-sm mt-2 mr-3 px-3 py-1 rounded-xl bg-transparent hover:text-red-400 transition-colors duration-300"
+                    onClick={deleteImage}
+                  >
+                    Effacer
+                  </button>
+                )}
               </div>
             </div>
             <div className="w-full">
-              <div className="flex justify-end py-2 w-full h-[55px] border-t-[1px]">
+              <div className="flex justify-between py-2 w-full h-[55px] border-t-[1px]">
+                <input
+                  type="file"
+                  accept="image/jpeg, image/png"
+                  ref={fileInputRef}
+                  onChange={handleImageChange}
+                  style={{ display: "none" }}
+                />
+                <IconButton
+                  name="image"
+                  color="#00ADED"
+                  background={"#e9f6fd"}
+                  event={selectImage}
+                />
                 <button
                   className="bg-twitter hover:bg-twitterDark px-5 rounded-3xl font-bold text-white text-medium"
                   onClick={handlePost}
@@ -117,6 +173,7 @@ const ModalPost = (props) => {
           </div>
         </div>
       </Modal>
+      <ToastContainer />
     </div>
   );
 };

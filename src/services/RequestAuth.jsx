@@ -1,16 +1,18 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const BASE_URL = "http://localhost:3001";
-//const BASE_URL = "https://api.twitter-retro.fr";
+import twitterConfig from "../../twitterConfig.json";
+
+const BASE_URL = twitterConfig.local
+  ? twitterConfig.BASE_URL_LOCAL
+  : twitterConfig.BASE_URL_ONLINE;
 
 const signupUser = async (data) => {
   try {
     console.log(data);
-    const response = await axios.post(BASE_URL + "/auth/register", data, {
+    const response = await axios.post("http://localhost:3001", data, {
       headers: {
-        "Content-Type": "application/json",
-        accept: "*/*",
+        "Content-Type": "multipart/form-data",
       },
     });
     console.log(response);

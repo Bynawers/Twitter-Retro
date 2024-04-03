@@ -31,11 +31,14 @@ const Sidebar = () => {
           <SideBarElement name="Notifications" path="/notifications" />
           <SideBarElement name="Messages" path="/messages" />
           <SideBarElement name="Signets" path="/not-found" />
-          <SideBarElement name="Profiles" path={"/" + "undefined"} />
+          <SideBarElement name="Profiles" path={"/" + auth.user.tag} />
           <SideBarElement name="Plus" path="/not-found" />
           <div className="pb-5" />
           <ButtonPost handleToggleModal={handleToggleModal} />
-          <Avatar username={"undefined"} tag={"undefined"} />
+          <Avatar
+            username={auth.user ? auth.user.fullName : "undefined"}
+            tag={auth.user ? auth.user.tag : "undefined"}
+          />
         </div>
       </div>
     </div>

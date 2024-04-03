@@ -3,13 +3,24 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import Cookies from "js-cookie";
 
+import { getMe } from "../services/RequestUsers";
+
 const AuthContext = createContext();
 
-const BASE_URL = "https://api.twitter-retro.fr";
+import twitterConfig from "../../twitterConfig.json";
+
+const BASE_URL = twitterConfig.local
+  ? twitterConfig.BASE_URL_LOCAL
+  : twitterConfig.BASE_URL_ONLINE;
 
 const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(Cookies.get("token") || "");
   const [user, setUser] = useState(localStorage.getItem("user") || "");
+
+  const getUserData = async () => {
+    const data = await getMe();
+    setUser(data);
+  };
 
   const loginAction = async (data) => {
     const ERROR_MESSAGE = {
@@ -22,6 +33,7 @@ const AuthProvider = ({ children }) => {
         .post(`${BASE_URL}/auth/login`, data)
         .then((response) => {
           setUser(response.data.user);
+          console.log(response.data.user);
           Cookies.set("token", response.data.token, { expires: 7 });
           setToken(response.data.token);
           localStorage.setItem("user", response.data.user);
@@ -39,13 +51,15 @@ const AuthProvider = ({ children }) => {
 
   const logOut = () => {
     setUser(null);
-    Cookies.remove("token");
     setToken("");
+    Cookies.remove("token");
     localStorage.removeItem("user");
   };
 
   return (
-    <AuthContext.Provider value={{ token, user, loginAction, logOut }}>
+    <AuthContext.Provider
+      value={{ token, user, loginAction, logOut, getUserData }}
+    >
       {children}
     </AuthContext.Provider>
   );
