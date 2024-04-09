@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { LuMailPlus } from "react-icons/lu";
 import { RiSettings3Fill } from "react-icons/ri";
 import { IoMdSend } from "react-icons/io";
@@ -7,11 +7,40 @@ import { IoImageOutline } from "react-icons/io5";
 import MessageComponent from "../components/Messages/MessageComponent";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import EmojiPicker from "emoji-picker-react";
+import UserItem from "../components/Messages/UserItem";
+import axios from "axios"; // Import Axios for making HTTP requests
+import { useAuth } from "../hooks/AuthProvider"; // Import useAuth hook to access auth context
+import { getSender } from "../utils/ChatLogics";
+import { useChat} from "../hooks/ChatP";
+
 
 function Messages() {
+  const { selectedChat, setSelectedChat,  chats, setChats } = useChat();
+  const auth = useAuth();
   const [message, setMessage] = useState("");
   const [messagesList, setMessagesList] = useState([]);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+  useEffect(() => {
+    console.log(auth.user._id);
+    console.log(auth.token);
+    // Fetch user items when component mounts
+    fetchUserItems();
+  }, []); // Empty dependency array ensures the effect runs only once when component mounts
+
+  // Function to fetch user items
+  const fetchUserItems = async () => {
+    try {
+      const response = await axios.get("http://localhost:3001/api/chat", {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      }); // Make GET request to fetch user items
+      setChats(response.data); // Update user items state with response data
+    } catch (error) {
+      console.error("Error fetching user items:", error);
+    }
+  };
 
   const handleMessageChange = (event) => {
     setMessage(event.target.value);
@@ -55,14 +84,28 @@ function Messages() {
               </div>
             </div>
           </div>
-          <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 bg-gray-400 rounded-full"></div>
-            <div>
-              <h2 className="font-bold">Username</h2>
-              <p>User status or additional information</p>
-            </div>
-          </div>
-          {/* Additional users*/}
+          {/* Map over user items to render UserItem components */}
+          {chats.map((userItem, index) => (
+
+            console.log(userItem),
+              // Log user item to console
+              <UserItem
+              key={index}
+              username={!userItem.isGroupChat
+                ? getSender(auth.user, userItem.users)
+                : userItem.chatName}
+              lastMessage={userItem.latestMessage?.content
+                ? userItem.latestMessage.content.length > 50
+                  ? userItem.latestMessage.content.substring(0, 51) + "..."
+                  : userItem.latestMessage.content
+                : ''}
+                onClick={() => {
+                  setSelectedChat(userItem);
+                  console.log("Selected Chat:", userItem);
+                }}
+            />
+            ))}
+            {/* Additional users*/}
         </div>
       </div>
       {/* Chat section */}

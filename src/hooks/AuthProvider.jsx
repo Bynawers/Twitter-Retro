@@ -15,7 +15,7 @@ const BASE_URL = twitterConfig.local
 
 const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(Cookies.get("token") || "");
-  const [user, setUser] = useState(localStorage.getItem("user") || "");
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || "");
 
   const getUserData = async () => {
     const data = await getMe();
@@ -32,11 +32,14 @@ const AuthProvider = ({ children }) => {
       await axios
         .post(`${BASE_URL}/auth/login`, data)
         .then((response) => {
-          setUser(response.data.user);
+          const data = JSON.stringify(response.data.user)
+          //const datatoken = JSON.stringify(response.data.token)
+          setUser(JSON.parse(data));
           console.log(response.data.user);
+          console.log(response.data.token);
           Cookies.set("token", response.data.token, { expires: 7 });
           setToken(response.data.token);
-          localStorage.setItem("user", response.data.user);
+          localStorage.setItem("user", data );
           toast.success("Logged in successfully");
         })
         .catch((error) => {
