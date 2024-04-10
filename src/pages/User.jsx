@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 import { useAuth } from "../hooks/AuthProvider";
 
@@ -8,12 +9,18 @@ import ClassicButton from "../components/button/ClassicButton";
 
 import HeaderBack from "../components/header/HeaderBack";
 import TabNavigator from "../components/navigation/TabNavigator";
+import ModalEdit from "../components/modal/ModalEdit";
 
 import ReduceBigNumbers from "../utils/ReduceBigNumbers";
-
 import twitterConfig from "../../twitterConfig.json";
+import {
+  getUserByTag,
+  followUser,
+  unfollowUser,
+} from "../services/RequestUsers";
 
-import { getUserByTag } from "../services/RequestUsers";
+import Feed from "../components/Feed";
+import FeedUser from "../components/FeedUser";
 
 const BASE_URL_IMAGE = twitterConfig.local
   ? twitterConfig.BASE_URL_LOCAL + "/images/"
@@ -22,20 +29,25 @@ const BASE_URL_IMAGE = twitterConfig.local
 function User() {
   const [init, setInit] = useState(false);
   const [view, setView] = useState("Posts");
-  const [profilePath, setProfilePath] = useState("Posts");
   const [user, setUser] = useState([]);
+
+  const [isFollow, setIsFollow] = useState(null);
+
+  const [modalEdit, setModalEdit] = useState(false);
+
   const [me, setMe] = useState(null);
   const location = useLocation();
 
   const parts = location.pathname.split("/");
   const username = parts[parts.length - 1];
 
-  const data = location.state ? location.state.data : null;
-
   const auth = useAuth();
 
   useEffect(() => {
     const myTag = auth.user.tag;
+    if (myTag == undefined) {
+      return;
+    }
     setMe(username === myTag);
   }, [auth]);
 
@@ -48,6 +60,10 @@ function User() {
       try {
         const data = await getUserByTag(username);
         setUser(data);
+        if (auth.user.following) {
+          let isFollowing = auth.user.following.includes(data._id);
+          setIsFollow(isFollowing);
+        }
       } catch (error) {
         console.error("Erreur lors de la récupération des tweets:", error);
       }
@@ -58,32 +74,54 @@ function User() {
     }
   }, [me]);
 
-  const handleFollow = () => {};
+  const handleFollow = async () => {
+    let response;
+    if (!isFollow) {
+      response = await followUser(user._id);
+    } else {
+      response = await unfollowUser(user._id);
+    }
+
+    if (response) {
+      toast.success("Operation success");
+
+      setIsFollow(!isFollow);
+    } else {
+      toast.error("An error has occurred");
+    }
+  };
 
   if (!me && user.tag == null) {
     return <AccountNotExist name={username} />;
   }
 
+  const handleOpenEdit = () => {
+    setModalEdit(true);
+  };
+
   return (
     <div className="flex flex-col h-screen">
-      <HeaderBack view="user" name={me ? auth.user.fullName : user.fullName} />
-      <main className="flex flex-col h-full w-full overflow-y-auto">
-        <div className="w-full h-[200px] bg-banner">
-          {auth.user.bannerImage && (
-            <img
-              src={BASE_URL_IMAGE + "banner/" + (me ? auth.user.tag : user.tag)}
-              className="w-full h-[200px] object-cover"
-            />
-          )}
+      <HeaderBack
+        view="user"
+        name={me ? auth.user.fullName : user.fullName}
+        post={me ? auth.user.stat.postCount : user.postCount}
+      />
+      <ModalEdit modalIsOpen={modalEdit} setIsOpen={setModalEdit} />
+      <main className="flex flex-1 flex-col h-full w-full">
+        <div className="w-full min-h-[200px] bg-banner">
+          <img
+            src={BASE_URL_IMAGE + "banner/" + (me ? auth.user._id : user._id)}
+            className="w-full h-[200px] object-cover"
+          />
         </div>
-        <div className="w-full px-4 pt-3 mb-4">
+        <div className=" w-full px-4 pt-3 mb-4">
           <div className="flex justify-between w-full h-[70px]">
-            <div className="relative h-[140px] bottom-[85px] w-[140px] rounded-full bg-foreground border-4 border-white">
+            <div className="relative h-[140px] bottom-[85px] w-[140px] rounded-full bg-foreground border-4 border-white z-0">
               <img
                 src={
-                  BASE_URL_IMAGE + "profile/" + (me ? auth.user.tag : user.tag)
+                  BASE_URL_IMAGE + "profile/" + (me ? auth.user._id : user._id)
                 }
-                className="rounded-full w-full object-cove"
+                className="rounded-full w-full object-cover"
               />
             </div>
             {init && (
@@ -92,7 +130,7 @@ function User() {
                   <ClassicButton
                     text="Edit Profile"
                     color="white"
-                    event={handleFollow}
+                    event={handleOpenEdit}
                   />
                 )}
                 {!me && (
@@ -102,8 +140,8 @@ function User() {
                       <IconButton name="message" styles="border-[1px]" />
                     </div>
                     <ClassicButton
-                      text="Follow"
-                      color="black"
+                      text={isFollow ? "Following" : "Follow"}
+                      color={isFollow ? "white" : "black"}
                       type="full"
                       event={handleFollow}
                     />
@@ -121,20 +159,34 @@ function User() {
             </span>
           </div>
           <div className="h-auto w-full mb-3 overflow-x-hidden break-words">
-            {me ? auth.user.description : user.description}
+            {me ? auth.user.bio : user.bio}
           </div>
           <div className="flex h-[20px] w-full space-x-4 text-sm">
-            <p className="">
-              <span className="font-bold">{ReduceBigNumbers(315)} </span>
-              <span className="font-normal text-icon-default-color">
+            <p className="hover:underline">
+              <span className="font-bold">
+                {ReduceBigNumbers(
+                  me ? auth.user.stat.followingCount : user.stat.followingCount
+                )}{" "}
+              </span>
+              <a
+                className="font-normal text-icon-default-color"
+                href={(me ? auth.user.tag : user.tag) + "/follow"}
+              >
                 Following
-              </span>
+              </a>
             </p>
-            <p>
-              <span className="font-bold">{ReduceBigNumbers(2800070)} </span>
-              <span className="font-normal text-icon-default-color">
-                Followers
+            <p className="hover:underline">
+              <span className="font-bold">
+                {ReduceBigNumbers(
+                  me ? auth.user.stat.followersCount : user.stat.followersCount
+                )}{" "}
               </span>
+              <a
+                className="font-normal text-icon-default-color"
+                href={(me ? auth.user.tag : user.tag) + "/follow"}
+              >
+                Followers
+              </a>
             </p>
           </div>
         </div>
@@ -142,10 +194,10 @@ function User() {
           <TabNavigator
             view={view}
             setView={setView}
-            data={["Posts", "Retweets", "likes"]}
+            data={["Posts", "Retweets", "Likes"]}
           />
         </nav>
-        <div className="flex flex-1"></div>
+        {me && <FeedUser me={me} view={view} user={user} />}
       </main>
     </div>
   );

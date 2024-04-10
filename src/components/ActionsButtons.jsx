@@ -1,26 +1,103 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 import ReduceBigNumber from "../utils/ReduceBigNumbers";
 
+import {
+  likeTweet,
+  unlikeTweet,
+  retweetTweet,
+  unretweetTweet,
+  bookmarkTweet,
+  unbookmarkTweet,
+} from "../services/RequestTweets";
 import IconButton from "./button/IconButton";
 
+import { useAuth } from "../hooks/AuthProvider";
+
 const ActionButtons = (props) => {
-  const [like, setLike] = useState(false);
-  const [retweet, setRetweet] = useState(false);
-  const [bookmark, setBookmark] = useState(false);
+  const auth = useAuth();
+  const { user, updateUser } = useAuth();
 
-  const handleDefault = (e) => {};
+  const [like, setLike] = useState(
+    auth.user.likes ? auth.user.likes.includes(props.id) : false
+  );
+  const [retweet, setRetweet] = useState(
+    auth.user.retweets ? auth.user.retweets.includes(props.id) : false
+  );
+  const [bookmark, setBookmark] = useState(
+    auth.user.bookmarks ? auth.user.bookmarks.includes(props.id) : false
+  );
 
-  const handleLike = (e) => {
-    setLike(!like);
+  const handleDefault = async (e) => {};
+
+  const handleLike = async (e) => {
+    e.preventDefault();
+
+    let response;
+    if (!like) {
+      response = await likeTweet(props.id);
+    } else {
+      response = await unlikeTweet(props.id);
+    }
+
+    if (response) {
+      let updatedLikes;
+      if (like) {
+        updatedLikes = auth.user.likes.filter((likeId) => likeId !== props.id);
+      } else {
+        updatedLikes = [...auth.user.likes, props.id];
+      }
+
+      const updatedUser = {
+        ...auth.user,
+        likes: updatedLikes,
+        stat: {
+          ...auth.user.stat,
+          likeCount: auth.user.stat.likeCount + (like ? -1 : 1),
+        },
+      };
+
+      updateUser(updatedUser);
+      setLike(!like);
+    } else {
+      toast.error("An error has occurred");
+    }
   };
 
-  const handleRetweet = (e) => {
-    setRetweet(!retweet);
+  const handleRetweet = async (e) => {
+    e.preventDefault();
+
+    let response;
+    if (!retweet) {
+      response = await retweetTweet(props.id);
+    } else {
+      response = await unretweetTweet(props.id);
+    }
+
+    if (response) {
+      setRetweet(!retweet);
+    } else {
+      toast.error("An error has occurred");
+    }
   };
 
-  const handleBookmark = (e) => {
-    setBookmark(!bookmark);
+  const handleBookmark = async (e) => {
+    e.preventDefault();
+
+    let response;
+    if (!bookmark) {
+      response = await bookmarkTweet(props.id);
+    } else {
+      response = await unbookmarkTweet(props.id);
+    }
+
+    if (response) {
+      toast.success("Operation success");
+      setBookmark(!bookmark);
+    } else {
+      toast.error("An error has occurred");
+    }
   };
 
   const handleShare = (e) => {};
@@ -34,23 +111,23 @@ const ActionButtons = (props) => {
       <IconButton
         event={handleDefault}
         value={ReduceBigNumber(props.data ? props.data.comment : -1)}
-        color={"#54b3f3"}
-        background={"#e9f6fd"}
+        colorHover={"#54b3f3"}
+        backgroundHover={"#e9f6fd"}
         name="chat"
       />
       <IconButton
         event={handleRetweet}
         value={ReduceBigNumber(props.data ? props.data.retweet : -1)}
-        color={"#13ba82"}
-        background={"#def1eb"}
+        colorHover={"#13ba82"}
+        backgroundHover={"#def1eb"}
         state={retweet}
         name="retweet"
       />
       <IconButton
         event={handleLike}
         value={ReduceBigNumber(props.data ? props.data.like : -1)}
-        color={"#fa2c8b"}
-        background={"#fee7f2"}
+        colorHover={"#fa2c8b"}
+        backgroundHover={"#fee7f2"}
         state={like}
         name="like"
       />
@@ -59,8 +136,8 @@ const ActionButtons = (props) => {
         <IconButton
           event={handleDefault}
           value={ReduceBigNumber(props.data ? props.data.view : -1)}
-          color={"#54b3f3"}
-          background={"#e9f6fd"}
+          colorHover={"#54b3f3"}
+          backgroundHover={"#e9f6fd"}
           name="view"
         />
       )}
@@ -68,8 +145,8 @@ const ActionButtons = (props) => {
         <IconButton
           event={handleBookmark}
           value={ReduceBigNumber(props.data ? props.data.bookmark : -1)}
-          color={"#54b3f3"}
-          background={"#e9f6fd"}
+          colorHover={"#54b3f3"}
+          backgroundHover={"#e9f6fd"}
           state={bookmark}
           name="bookmark"
         />
@@ -81,14 +158,14 @@ const ActionButtons = (props) => {
             event={handleBookmark}
             state={bookmark}
             name="bookmark"
-            color={"#54b3f3"}
-            background={"#e9f6fd"}
+            colorHover={"#54b3f3"}
+            backgroundHover={"#e9f6fd"}
           />
           <IconButton
             event={handleShare}
             name="share"
-            color={"#54b3f3"}
-            background={"#e9f6fd"}
+            colorHover={"#54b3f3"}
+            backgroundHover={"#e9f6fd"}
           />
         </div>
       )}

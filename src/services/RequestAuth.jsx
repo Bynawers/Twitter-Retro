@@ -9,14 +9,12 @@ const BASE_URL = twitterConfig.local
 
 const signupUser = async (data) => {
   try {
-    console.log(data);
     const response = await axios.post(BASE_URL + "/auth/register", data, {
       headers: {
         "Content-Type": "application/json",
         accept: "*/*",
       },
     });
-    console.log(response);
     return true;
   } catch (error) {
     if (error.response) {

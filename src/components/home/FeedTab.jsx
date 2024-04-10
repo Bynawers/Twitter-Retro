@@ -4,7 +4,7 @@ import Post from "../Post.jsx";
 
 import data from "../../services/FeedExample.json";
 
-import TooltipMoreDetails from "../tooltip/TooltipMoreDetails";
+import TooltipMoreDetails from "../tooltip/TooltipMoreDetails.jsx";
 
 function Feed() {
   const [selectedPost, setSelectedPost] = useState([]);
@@ -13,7 +13,6 @@ function Feed() {
     <div className="flex flex-col">
       <TooltipMoreDetails data={selectedPost} />
       {data.map((elem, index) => {
-        console.log(elem.user);
         return (
           <React.Fragment key={index}>
             <Post data={elem} setSelectedPost={setSelectedPost} />

@@ -9,12 +9,11 @@ const BASE_URL = twitterConfig.local
 const getTweets = async () => {
   const token = Cookies.get("token");
   try {
-    const response = await axios.get(BASE_URL + "/tweets", {
+    const response = await axios.get(BASE_URL + "/tweets/feed", {
       headers: {
         Auth: token,
       },
     });
-    //console.log(response.data.tweets);
     return response.data.tweets;
   } catch (error) {
     console.error("Erreur lors de la récupération des utilisateurs:", error);
@@ -22,20 +21,35 @@ const getTweets = async () => {
   }
 };
 
-const createTweet = async (data) => {
+const getTweetsPerIds = async (ids) => {
   const token = Cookies.get("token");
-  console.log(data);
   try {
-    const response = await axios.post(BASE_URL + "/tweets", data, {
+    const response = await axios.get(BASE_URL + "/tweets", {
+      params: { ids },
+      headers: {
+        Auth: token,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des utilisateurs:", error);
+    throw error;
+  }
+};
+
+const createTweet = async (formData) => {
+  const token = Cookies.get("token");
+  try {
+    const response = await axios.post(BASE_URL + "/tweets", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
         Auth: token,
       },
     });
-    return true;
+    return response;
   } catch (error) {
     console.error("Erreur lors de la récupération des utilisateurs:", error);
-    return false;
+    return null;
   }
 };
 
@@ -55,4 +69,129 @@ const deleteTweet = async (id) => {
   }
 };
 
-export { getTweets, createTweet, deleteTweet };
+const likeTweet = async (id) => {
+  const token = Cookies.get("token");
+  try {
+    const response = await axios.post(
+      BASE_URL + "/tweets/" + id + "/like",
+      {},
+      {
+        headers: {
+          Auth: token,
+        },
+      }
+    );
+    return true;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des utilisateurs:", error);
+    return false;
+  }
+};
+
+const unlikeTweet = async (id) => {
+  const token = Cookies.get("token");
+  try {
+    const response = await axios.post(
+      BASE_URL + "/tweets/" + id + "/unlike",
+      {},
+      {
+        headers: {
+          Auth: token,
+        },
+      }
+    );
+    return true;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des utilisateurs:", error);
+    return false;
+  }
+};
+
+const retweetTweet = async (id) => {
+  const token = Cookies.get("token");
+  try {
+    const response = await axios.post(
+      BASE_URL + "/tweets/" + id + "/retweet",
+      {},
+      {
+        headers: {
+          Auth: token,
+        },
+      }
+    );
+    return true;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des utilisateurs:", error);
+    return false;
+  }
+};
+
+const unretweetTweet = async (id) => {
+  const token = Cookies.get("token");
+  try {
+    const response = await axios.post(
+      BASE_URL + "/tweets/" + id + "/unretweet",
+      {},
+      {
+        headers: {
+          Auth: token,
+        },
+      }
+    );
+    return true;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des utilisateurs:", error);
+    return false;
+  }
+};
+
+const bookmarkTweet = async (id) => {
+  const token = Cookies.get("token");
+  try {
+    const response = await axios.post(
+      BASE_URL + "/tweets/" + id + "/bookmark",
+      {},
+      {
+        headers: {
+          Auth: token,
+        },
+      }
+    );
+    return true;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des utilisateurs:", error);
+    return false;
+  }
+};
+
+const unbookmarkTweet = async (id) => {
+  const token = Cookies.get("token");
+  try {
+    const response = await axios.post(
+      BASE_URL + "/tweets/" + id + "/unbookmark",
+      {},
+      {
+        headers: {
+          Auth: token,
+        },
+      }
+    );
+    return true;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des utilisateurs:", error);
+    return false;
+  }
+};
+
+export {
+  getTweets,
+  createTweet,
+  deleteTweet,
+  getTweetsPerIds,
+  likeTweet,
+  unlikeTweet,
+  retweetTweet,
+  unretweetTweet,
+  bookmarkTweet,
+  unbookmarkTweet,
+};

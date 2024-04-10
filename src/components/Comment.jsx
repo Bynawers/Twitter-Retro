@@ -24,7 +24,7 @@ const Comment = (props) => {
         </div>
       </main>
       <div className="pl-3 pr-3">
-        <ActionButtons view="menu" data={props.data.stat} />
+        <ActionButtons view="menu" data={props.data.stat} id={props.data._id} />
       </div>
     </button>
   );

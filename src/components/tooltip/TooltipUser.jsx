@@ -6,12 +6,9 @@ const TooltipUser = (props) => {
   const { logOut } = useAuth();
 
   const handleDisconnect = () => {
-    console.log("Disconnect..");
     logOut();
   };
-  const handleAddAccount = () => {
-    console.log("AddAccount..");
-  };
+  const handleAddAccount = () => {};
 
   return (
     <ReactTooltip
@@ -24,13 +21,13 @@ const TooltipUser = (props) => {
             className="flex text-left items-center h-[44px]"
             onClick={handleAddAccount}
           >
-            <a>Ajoutez un compte existant</a>
+            <p>Ajoutez un compte existant</p>
           </button>
           <button
             className="flex text-left items-center h-[44px]"
             onClick={handleDisconnect}
           >
-            <a>Se déconnecter de @Bynawers</a>
+            <p>Se déconnecter de @{props.tag}</p>
           </button>
         </div>
       )}

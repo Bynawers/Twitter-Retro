@@ -10,16 +10,15 @@ import { ToastContainer, toast } from "react-toastify";
 
 const customStyles = {
   content: {
-    top: "30%",
     left: "50%",
     right: "auto",
     bottom: "auto",
+    maxHeight: "90%",
     marginRight: "-50%",
     width: 600,
-    transform: "translate(-50%, -50%)",
+    transform: "translate(-50%, 0%)",
     padding: 0,
     borderRadius: 10,
-    overflow: "hidden",
   },
   overlay: {
     backgroundColor: "rgba(0, 0, 0, 0.4)",
@@ -32,6 +31,7 @@ const ModalPost = (props) => {
   const fileInputRef = useRef(null);
   const [text, setText] = useState("");
   const [image, setImage] = useState(null);
+  const [file, setFile] = useState(null);
 
   useEffect(() => {
     if (postRef.current == null) {
@@ -56,6 +56,7 @@ const ModalPost = (props) => {
       };
       reader.readAsDataURL(file);
     }
+    setFile(file);
   };
 
   const deleteImage = () => {
@@ -77,14 +78,34 @@ const ModalPost = (props) => {
     }
   };
 
-  const handlePost = async () => {
+  const handleCreateTweet = async () => {
+    if (text === "") {
+      toast.error("Text is empty");
+      return;
+    }
     const formData = new FormData();
     formData.append("body", text);
     formData.append("type", "tweet");
-    formData.append("author", auth.user._id);
-    formData.append("tag", auth.user.tag);
-    formData.append("image", image);
-    if (await createTweet(formData)) {
+    formData.append("image", file);
+
+    const newTweet = await createTweet(formData);
+
+    if (newTweet) {
+      /*
+      console.log("Update : ");
+      console.log("> previous list");
+      console.log(auth.user.tweets);
+      console.log("> new element");
+      console.log(newTweet.data.tweetId);*/
+      const updatedUser = {
+        ...auth.user,
+        tweets: [...auth.user.tweets, newTweet.data.tweetId],
+        stat: {
+          ...auth.user.stat,
+          postCount: auth.user.stat.postCount + 1,
+        },
+      };
+      auth.updateUser(updatedUser);
       toast.success("Tweet posted successfully");
     } else {
       toast.error("An error has occurred");
@@ -93,14 +114,14 @@ const ModalPost = (props) => {
   };
 
   return (
-    <div>
+    <>
       <Modal
         isOpen={props.modalIsOpen}
         onRequestClose={closeModal}
         style={customStyles}
         contentLabel="Post"
       >
-        <div className="flex h-[53px] px-4">
+        <div className="sticky h-[53px] pt-4 px-4 bg-opacity-70 bg-white backdrop-filter backdrop-blur-md">
           <div className="w-full">
             <IconButton
               name="close"
@@ -109,9 +130,9 @@ const ModalPost = (props) => {
             />
           </div>
         </div>
-        <div className="flex px-3 pt-1 h-auto">
+        <div className="flex px-3 pt-1">
           <div className="flex flex-col px-4 w-full">
-            <div className="flex w-full">
+            <main className="flex flex-1 w-full h-auto">
               <div className="w-[40px] pt-3 mr-2 h-full">
                 <img
                   src="/src/assets/defaultAvatar.png"
@@ -146,8 +167,9 @@ const ModalPost = (props) => {
                   </button>
                 )}
               </div>
-            </div>
-            <div className="w-full">
+            </main>
+
+            <div className="sticky w-full">
               <div className="flex justify-between py-2 w-full h-[55px] border-t-[1px]">
                 <input
                   type="file"
@@ -164,7 +186,7 @@ const ModalPost = (props) => {
                 />
                 <button
                   className="bg-twitter hover:bg-twitterDark px-5 rounded-3xl font-bold text-white text-medium"
-                  onClick={handlePost}
+                  onClick={handleCreateTweet}
                 >
                   <span>Post</span>
                 </button>
@@ -174,7 +196,7 @@ const ModalPost = (props) => {
         </div>
       </Modal>
       <ToastContainer />
-    </div>
+    </>
   );
 };
 

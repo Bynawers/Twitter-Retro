@@ -22,6 +22,11 @@ const AuthProvider = ({ children }) => {
     setUser(data);
   };
 
+  const updateUser = (userData) => {
+    setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
+  };
+
   const loginAction = async (data) => {
     const ERROR_MESSAGE = {
       401: "Unknow User, please retry",
@@ -33,7 +38,6 @@ const AuthProvider = ({ children }) => {
         .post(`${BASE_URL}/auth/login`, data)
         .then((response) => {
           setUser(response.data.user);
-          console.log(response.data.user);
           Cookies.set("token", response.data.token, { expires: 7 });
           setToken(response.data.token);
           localStorage.setItem("user", response.data.user);
@@ -58,7 +62,14 @@ const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ token, user, loginAction, logOut, getUserData }}
+      value={{
+        token,
+        user,
+        loginAction,
+        logOut,
+        getUserData,
+        updateUser,
+      }}
     >
       {children}
     </AuthContext.Provider>
