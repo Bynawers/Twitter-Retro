@@ -9,7 +9,7 @@ const UserItem = ({ username, lastMessage, onClick }) => {
       <div className="w-12 h-12 bg-gray-400 rounded-full"></div>
       <div>
         <h2 className="font-bold">{username}</h2>
-        <p>{lastMessage}</p>
+        <p className="text-gray-500">{lastMessage}</p>
       </div>
     </div>
   );

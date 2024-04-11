@@ -25,6 +25,22 @@ const getUser = async (userId) => {
   }
 };
 
+const getUserByTag = async (tag) => {
+  const token = Cookies.get("token");
+
+  try {
+    const response = await axios.get(BASE_URL + "/users/by/tag/" + tag, {
+      headers: {
+        Auth: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des utilisateurs:", error);
+    throw error;
+  }
+};
+
 const getUsers = async (ids) => {
   const token = Cookies.get("token");
 
@@ -58,4 +74,4 @@ const getMe = async () => {
   }
 };
 
-export { getUser, getUsers, getMe };
+export { getUser, getUsers, getMe, getUserByTag };

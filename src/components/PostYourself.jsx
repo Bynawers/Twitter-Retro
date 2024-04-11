@@ -19,7 +19,7 @@ const PostYourself = () => {
 
 const Button = () => {
   return (
-    <div className="bg-twitter text-white p-3 h-9 rounded-2xl">
+    <div className="bg-twitter text-white px-4 py-2 rounded-3xl">
       <span className="">Répondre</span>
     </div>
   );

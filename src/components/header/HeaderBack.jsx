@@ -1,7 +1,4 @@
-import React, { useState, useEffect } from "react";
-
-import { FiSettings } from "react-icons/fi";
-import { FaTwitter, FaArrowLeft } from "react-icons/fa";
+import React from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -29,13 +26,13 @@ const HeaderBack = (props) => {
           <IconButton name="back" event={handleGoBack} />
         </div>
         {props.view == "post" && (
-          <span className="text-xl font-bold">Poster</span>
+          <span className="text-xl font-base">Poster</span>
         )}
         {props.view == "user" && (
           <div className="flex flex-col">
-            <span className="font-bold text-xl">Bynawers</span>
+            <span className="font-bold text-xl">{props.name}</span>
             <span className="font-normal text-sm text-icon-default-color">
-              9,536 posts
+              {props.post} {props.post ? "posts :" : ""}
             </span>
           </div>
         )}
