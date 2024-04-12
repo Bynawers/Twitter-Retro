@@ -12,13 +12,6 @@ function Feed() {
   return (
     <div className="flex flex-col">
       <TooltipMoreDetails data={selectedPost} />
-      {data.map((elem, index) => {
-        return (
-          <React.Fragment key={index}>
-            <Post data={elem} setSelectedPost={setSelectedPost} />
-          </React.Fragment>
-        );
-      })}
     </div>
   );
 }

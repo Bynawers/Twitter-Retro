@@ -33,7 +33,8 @@ const Post = (props) => {
     }
   }, []);
 
-  const handleMoreDetail = () => {
+  const handleMoreDetail = (e) => {
+    e.preventDefault();
     props.setSelectedPost(props.data);
   };
 
