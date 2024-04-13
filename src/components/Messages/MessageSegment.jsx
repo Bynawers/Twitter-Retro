@@ -32,6 +32,7 @@ function MessageSegment() {
     }, [selectedChat]);
 
     useEffect(() => {
+        console.log(messagesList);
         // Scroll to bottom when messagesList changes
         if (messagesContainerRef.current) {
             messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
@@ -119,14 +120,14 @@ function MessageSegment() {
                         {/* Messages container */}
                         <div className="flex flex-col gap-2 p-4">
                             {messagesList.map((message, index) => {
-                                const sameUser = index > 0 && isSameUser(messagesList, message, index);
-                                const senderName = sameUser ? "user" : message.sender;
+                                const sameUser = isSameUser(message, user._id);                            
+                                const senderName = sameUser ? "user" : "other";
+                                console.log(senderName);
                                 return (
                                     <MessageComponent
                                         key={index}
                                         text={message.content}
                                         sender={senderName}
-                                        sameUser={sameUser}
                                     />
                                 );
                             })}
