@@ -62,10 +62,10 @@ const deleteTweet = async (id) => {
         Auth: token,
       },
     });
-    return true;
+    return response;
   } catch (error) {
     console.error("Erreur lors de la récupération des utilisateurs:", error);
-    return false;
+    return null;
   }
 };
 
@@ -81,10 +81,10 @@ const likeTweet = async (id) => {
         },
       }
     );
-    return true;
+    return response;
   } catch (error) {
     console.error("Erreur lors de la récupération des utilisateurs:", error);
-    return false;
+    return null;
   }
 };
 
@@ -100,10 +100,10 @@ const unlikeTweet = async (id) => {
         },
       }
     );
-    return true;
+    return response;
   } catch (error) {
     console.error("Erreur lors de la récupération des utilisateurs:", error);
-    return false;
+    return null;
   }
 };
 
@@ -119,10 +119,10 @@ const retweetTweet = async (id) => {
         },
       }
     );
-    return true;
+    return response;
   } catch (error) {
     console.error("Erreur lors de la récupération des utilisateurs:", error);
-    return false;
+    return null;
   }
 };
 
@@ -138,10 +138,10 @@ const unretweetTweet = async (id) => {
         },
       }
     );
-    return true;
+    return response;
   } catch (error) {
     console.error("Erreur lors de la récupération des utilisateurs:", error);
-    return false;
+    return null;
   }
 };
 
@@ -157,10 +157,10 @@ const bookmarkTweet = async (id) => {
         },
       }
     );
-    return true;
+    return response;
   } catch (error) {
     console.error("Erreur lors de la récupération des utilisateurs:", error);
-    return false;
+    return null;
   }
 };
 
@@ -176,10 +176,10 @@ const unbookmarkTweet = async (id) => {
         },
       }
     );
-    return true;
+    return response;
   } catch (error) {
     console.error("Erreur lors de la récupération des utilisateurs:", error);
-    return false;
+    return null;
   }
 };
 

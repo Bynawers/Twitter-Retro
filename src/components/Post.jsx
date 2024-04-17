@@ -14,11 +14,10 @@ const BASE_URL = twitterConfig.local
 
 const Post = (props) => {
   const navigate = useNavigate();
+  const auth = useAuth();
   const textareaRef = useRef(null);
 
   const [imageError, setImageError] = useState(false);
-
-  const auth = useAuth();
 
   useEffect(() => {
     adjustTextareaHeight();
@@ -32,11 +31,6 @@ const Post = (props) => {
       return;
     }
   }, []);
-
-  const handleMoreDetail = (e) => {
-    e.preventDefault();
-    props.setSelectedPost(props.data);
-  };
 
   const toParametersPost =
     "/" +
@@ -53,6 +47,11 @@ const Post = (props) => {
     "/status/" +
     props.data._id +
     "/photo/";
+
+  const handleMoreDetail = (e) => {
+    e.preventDefault();
+    props.setSelectedPost(props.data);
+  };
 
   const handleGoToUserProfile = (e) => {
     e.preventDefault();
@@ -133,8 +132,10 @@ const Post = (props) => {
             </Link>
             <ActionButtons
               view="menu"
+              post={props.data}
               data={props.data.stat}
               id={props.data._id}
+              handleModifyStat={props.handleModifyStat}
             />
           </div>
         </div>

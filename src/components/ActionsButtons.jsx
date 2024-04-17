@@ -14,10 +14,19 @@ import {
 import IconButton from "./button/IconButton";
 
 import { useAuth } from "../hooks/AuthProvider";
+import { useProfile } from "../hooks/ProfileProvider";
 
 const ActionButtons = (props) => {
   const auth = useAuth();
-  const { user, updateUser } = useAuth();
+  const { updateUser } = useAuth();
+  const {
+    addLikedTweet,
+    addRetweetedTweet,
+    addBookmarkedTweet,
+    removeLikedTweet,
+    removeRetweetedTweet,
+    removeBookmarkedTweet,
+  } = useProfile();
 
   const [like, setLike] = useState(
     auth.user.likes ? auth.user.likes.includes(props.id) : false
@@ -37,29 +46,26 @@ const ActionButtons = (props) => {
     let response;
     if (!like) {
       response = await likeTweet(props.id);
+      response.status === 200
+        ? addLikedTweet(props.post, response.data.tweetStat)
+        : "";
     } else {
       response = await unlikeTweet(props.id);
+      response.status === 200
+        ? removeLikedTweet(props.id, response.data.tweetStat)
+        : "";
     }
 
-    if (response) {
-      let updatedLikes;
-      if (like) {
-        updatedLikes = auth.user.likes.filter((likeId) => likeId !== props.id);
-      } else {
-        updatedLikes = [...auth.user.likes, props.id];
-      }
+    if (response.status == 200) {
+      setLike(!like);
 
       const updatedUser = {
         ...auth.user,
-        likes: updatedLikes,
-        stat: {
-          ...auth.user.stat,
-          likeCount: auth.user.stat.likeCount + (like ? -1 : 1),
-        },
+        likes: response.data.likes,
+        stat: response.data.userStat,
       };
 
       updateUser(updatedUser);
-      setLike(!like);
     } else {
       toast.error("An error has occurred");
     }
@@ -71,12 +77,26 @@ const ActionButtons = (props) => {
     let response;
     if (!retweet) {
       response = await retweetTweet(props.id);
+      response.status === 200
+        ? addRetweetedTweet(props.post, response.data.tweetStat)
+        : "";
     } else {
       response = await unretweetTweet(props.id);
+      response.status === 200
+        ? removeRetweetedTweet(props.id, response.data.tweetStat)
+        : "";
     }
 
-    if (response) {
+    if (response.status == 200) {
       setRetweet(!retweet);
+
+      const updatedUser = {
+        ...auth.user,
+        retweets: response.data.retweets,
+        stat: response.data.userStat,
+      };
+
+      updateUser(updatedUser);
     } else {
       toast.error("An error has occurred");
     }
@@ -88,13 +108,21 @@ const ActionButtons = (props) => {
     let response;
     if (!bookmark) {
       response = await bookmarkTweet(props.id);
+      response.status === 200 ? addBookmarkedTweet(props.post) : "";
     } else {
       response = await unbookmarkTweet(props.id);
+      response.status === 200 ? removeBookmarkedTweet(props.id) : "";
     }
 
-    if (response) {
-      toast.success("Operation success");
+    if (response.status == 200) {
       setBookmark(!bookmark);
+      const updatedUser = {
+        ...auth.user,
+        bookmarks: response.data.bookmarks,
+        stat: response.data.userStat,
+      };
+
+      updateUser(updatedUser);
     } else {
       toast.error("An error has occurred");
     }

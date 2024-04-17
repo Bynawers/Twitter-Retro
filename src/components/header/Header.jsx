@@ -23,6 +23,14 @@ const Header = (props) => {
             </span>
           </div>
         )}
+        {props.view == "bookmark" && (
+          <div className="flex flex-col">
+            <span className="font-bold text-xl">{props.name}</span>
+            <span className="font-normal text-sm text-icon-default-color">
+              @{props.user}
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );

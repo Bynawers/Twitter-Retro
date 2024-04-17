@@ -64,7 +64,7 @@ const Layout = ({ children }) => {
             </div>
             <main className="flex flex-3 overflow-x-hidden overflow-y-hidden">
               <div
-                className="flex flex-2 flex-col max-w-[600px] lg:min-w-[600px] relative overflow-y-scroll no-scrollbar scrollbar-none"
+                className="flex flex-2 flex-col sm:min-w-[500px] md:min-w-[600px] max-w-[600px] lg:min-w-[600px] relative overflow-y-scroll no-scrollbar scrollbar-none"
                 ref={mainRef}
                 onScroll={handleScroll}
               >

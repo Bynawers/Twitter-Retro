@@ -103,8 +103,8 @@ function User() {
     <div className="flex flex-col h-screen">
       <HeaderBack
         view="user"
-        name={me ? auth.user.fullName : user.fullName}
-        post={me ? auth.user.stat.postCount : user.postCount}
+        name={me ? (auth.user ? auth.user.fullName : user.fullName) : ""}
+        post={me ? (auth.user ? auth.user.stat.postCount : user.postCount) : []}
       />
       <ModalEdit modalIsOpen={modalEdit} setIsOpen={setModalEdit} />
       <main className="flex flex-1 flex-col h-full w-full">

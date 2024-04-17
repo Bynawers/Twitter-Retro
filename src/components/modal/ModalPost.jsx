@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../hooks/AuthProvider";
+import { useProfile } from "../../hooks/ProfileProvider";
 
 import Modal from "react-modal";
 import IconButton from "../button/IconButton";
@@ -32,6 +33,9 @@ const ModalPost = (props) => {
   const [text, setText] = useState("");
   const [image, setImage] = useState(null);
   const [file, setFile] = useState(null);
+
+  const { updateUser } = useAuth();
+  const { addPostedTweet } = useProfile();
 
   useEffect(() => {
     if (postRef.current == null) {
@@ -88,24 +92,30 @@ const ModalPost = (props) => {
     formData.append("type", "tweet");
     formData.append("image", file);
 
-    const newTweet = await createTweet(formData);
+    const response = await createTweet(formData);
 
-    if (newTweet) {
-      /*
-      console.log("Update : ");
-      console.log("> previous list");
-      console.log(auth.user.tweets);
-      console.log("> new element");
-      console.log(newTweet.data.tweetId);*/
-      const updatedUser = {
-        ...auth.user,
-        tweets: [...auth.user.tweets, newTweet.data.tweetId],
+    if (response.status === 201) {
+      const newTweet = {
+        author: auth.user,
+        body: text,
+        type: "tweet",
+        _id: response.data.tweetId,
         stat: {
-          ...auth.user.stat,
-          postCount: auth.user.stat.postCount + 1,
+          view: 0,
+          retweet: 0,
+          like: 0,
+          bookmark: 0,
+          comment: 0,
         },
       };
-      auth.updateUser(updatedUser);
+
+      const updatedUser = {
+        ...auth.user,
+        tweets: response.data.userTweets,
+        stat: response.data.userStat,
+      };
+      updateUser(updatedUser);
+      addPostedTweet(newTweet);
       toast.success("Tweet posted successfully");
     } else {
       toast.error("An error has occurred");

@@ -6,7 +6,7 @@ function Suscription() {
   const [feed, setFeed] = useState([]);
   return (
     <div className="flex flex-col">
-      <Feed value={feed} setValue={setFeed} />
+      <Feed value={feed} />
     </div>
   );
 }

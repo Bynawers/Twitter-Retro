@@ -2,12 +2,11 @@ import { useContext, createContext, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import Cookies from "js-cookie";
+import twitterConfig from "../../twitterConfig.json";
 
 import { getMe } from "../services/RequestUsers";
 
 const AuthContext = createContext();
-
-import twitterConfig from "../../twitterConfig.json";
 
 const BASE_URL = twitterConfig.local
   ? twitterConfig.BASE_URL_LOCAL
