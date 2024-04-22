@@ -63,7 +63,7 @@ function UserItemSegment() {
           time="testo"
           onClick={() => {
             setSelectedChat(userItem);
-            console.log(selectedChat);
+          //  console.log(selectedChat);
           }}
         />
       ))}
