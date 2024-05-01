@@ -67,14 +67,14 @@ function MessageSegment() {
         !selectedChatCompare || // if chat is not selected or doesn't match current chat
         selectedChatCompare._id !== newMessageRecieved.chat._id
       ) {
-        //toast.info("New message recieved");
+        toast.info("New message recieved");
       } else {
         console.log("new message recieved", newMessageRecieved.content);
 
         setMessagesList([...messagesList, newMessageRecieved]);
       }
     });
-  }); // Dependency array ensures this effect runs only when selectedChatCompare changes
+  });
 
   useEffect(() => {
     if (selectedChat) {

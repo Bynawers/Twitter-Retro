@@ -123,7 +123,7 @@ function GroupChatModal({ isOpen, onRequestClose }) {
       >
         <div className="flex-col">
           <div className="flex justify-between">
-            <div>icon</div>
+            <div onClick={onRequestClose()}>icon</div>
             <div className="flex-col">
               <div>Create a group</div>
               <div>add People</div>

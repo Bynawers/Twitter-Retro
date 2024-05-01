@@ -43,9 +43,8 @@ function UserItemSegment() {
   };
 
   return (
-    <div className="w-5/12 h-full border-r border-gray-300">
-      <div className="p-4">
-        <div className="flex items-end justify-between">
+    <div className="w-5/12 h-screen border-r border-gray-300 overflow-hidden">
+        <div className="flex items-end justify-between p-4">
           <h1 className="text-2xl font-bold mb-4">Messages</h1>
           <div className="flex items-end mb-4">
             <div className="cursor-pointer items-center space-x-1 rounded-full font-san transition-all duration-20">
@@ -60,9 +59,9 @@ function UserItemSegment() {
             </div>
           </div>
         </div>
-      </div>
-      {/* Map over user items to render UserItem components */}
-      {chats.map((userItem, index) => (
+        <div className="overflow-y-auto max-h-screen">   
+     {/* Map over user items to render UserItem components */}
+     {chats.map((userItem, index) => (
         <UserItem
           item={userItem}
           selected={selectedChat && selectedChat._id === userItem._id}
@@ -73,6 +72,9 @@ function UserItemSegment() {
           }}
         />
       ))}
+
+       </div>
+ 
       {/* Modal */}
       <GroupChatModal isOpen={modalIsOpen} onRequestClose={closeModal} />
     </div>
