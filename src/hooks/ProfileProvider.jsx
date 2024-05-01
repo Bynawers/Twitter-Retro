@@ -10,6 +10,11 @@ const ProfileContext = createContext();
 const ProfileProvider = ({ children }) => {
   const auth = useAuth();
 
+  const [latestSearch, setLatestSearch] = useState(() => {
+    const storedLatestSearch = localStorage.getItem("latestSearch");
+    return storedLatestSearch ? JSON.parse(storedLatestSearch) : [];
+  });
+
   const [likes, setLikes] = useState([]);
   const [retweets, setRetweets] = useState([]);
   const [posts, setPosts] = useState([]);
@@ -32,6 +37,10 @@ const ProfileProvider = ({ children }) => {
       setAuthInit(true);
     }
   }, [auth.user]);
+
+  useEffect(() => {
+    localStorage.setItem("latestSearch", JSON.stringify(latestSearch));
+  }, [latestSearch]);
 
   useEffect(() => {
     if (loading || !authInit) {
@@ -107,8 +116,6 @@ const ProfileProvider = ({ children }) => {
     setPosts(mergedPosts);
     setBookmarks(mergedBookmarks);
 
-    console.log("FETCH PROFILE USER");
-
     setLoading(false);
   }, [loadingUsers]);
 
@@ -175,11 +182,32 @@ const ProfileProvider = ({ children }) => {
     setBookmarks(newBookmarks);
   };
 
+  const addLatestSearch = (search) => {
+    if (latestSearch.includes(search)) {
+      const index = latestSearch.indexOf(search);
+      const updatedLatestSearch = [...latestSearch];
+      updatedLatestSearch.splice(index, 1);
+      updatedLatestSearch.unshift(search);
+      setLatestSearch(updatedLatestSearch);
+      return;
+    }
+    setLatestSearch([search, ...latestSearch]);
+  };
+
+  const removeLatestSearch = (search) => {
+    setLatestSearch(latestSearch.filter((item) => item != search));
+  };
+
+  const removeAllLatestSearch = () => {
+    setLatestSearch([]);
+  };
+
   const value = {
     likes,
     retweets,
     posts,
     bookmarks,
+    latestSearch,
     addLikedTweet,
     addRetweetedTweet,
     addPostedTweet,
@@ -188,6 +216,9 @@ const ProfileProvider = ({ children }) => {
     removeRetweetedTweet,
     removePostedTweet,
     removeBookmarkedTweet,
+    addLatestSearch,
+    removeLatestSearch,
+    removeAllLatestSearch,
   };
 
   return (

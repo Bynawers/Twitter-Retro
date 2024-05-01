@@ -4,7 +4,6 @@ import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import Login from "../pages/Login";
 import Home from "../pages/Home";
 import Explorer from "../pages/Explorer";
-import Notifications from "../pages/Notifications";
 import NotFound from "../pages/NotFound";
 import User from "../pages/User.jsx";
 import Lists from "../pages/Lists.jsx";
@@ -31,10 +30,6 @@ const RoutesContainer = () => {
         <Route element={<PrivateRoutes />}>
           <Route path="/home" element={<Layout children={<Home />} />} />
           <Route path="/explore" element={<Layout children={<Explorer />} />} />
-          <Route
-            path="/notifications"
-            element={<Layout children={<Notifications />} />}
-          />
           <Route
             path="/messages"
             element={<LayoutMessages children={<Messages />} />}

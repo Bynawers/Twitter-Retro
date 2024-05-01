@@ -7,11 +7,11 @@ const Header = (props) => {
 
   return (
     <div
-      className={`z-10 pl-3 m-x-4 border-b-[1px] sticky w-full bg-opacity-70 bg-white backdrop-filter backdrop-blur-md transition-all duration-500 sm:top-0 ${
+      className={`z-10 m-x-4 border-b-[1px] sticky w-full bg-opacity-70 bg-white backdrop-filter backdrop-blur-md transition-all duration-500 sm:top-0 ${
         scrollDirection === "down" ? "-top-24" : "top-0"
       }`}
     >
-      <div className="flex flex-row p-5 pl-0 flex-1 h-14 items-center">
+      <div className="flex flex-row pl-0 flex-1 h-14 items-center">
         {props.view == "post" && (
           <span className="text-xl font-base">{props.text}</span>
         )}

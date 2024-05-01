@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 import { useAuth } from "../hooks/AuthProvider";
 
@@ -19,7 +19,6 @@ import {
   unfollowUser,
 } from "../services/RequestUsers";
 
-import Feed from "../components/Feed";
 import FeedUser from "../components/FeedUser";
 
 const BASE_URL_IMAGE = twitterConfig.local
@@ -100,11 +99,13 @@ function User() {
   };
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col">
       <HeaderBack
         view="user"
-        name={me ? (auth.user ? auth.user.fullName : user.fullName) : ""}
-        post={me ? (auth.user ? auth.user.stat.postCount : user.postCount) : []}
+        name={me ? (auth.user ? auth.user.fullName : "") : user.fullName}
+        post={
+          me ? (auth.user ? auth.user.stat.postCount : []) : user.stat.postCount
+        }
       />
       <ModalEdit modalIsOpen={modalEdit} setIsOpen={setModalEdit} />
       <main className="flex flex-1 flex-col h-full w-full">
@@ -170,7 +171,7 @@ function User() {
               </span>
               <a
                 className="font-normal text-icon-default-color"
-                href={(me ? auth.user.tag : user.tag) + "/follow"}
+                href={(me ? auth.user.tag : user.tag) + "/follow?src=following"}
               >
                 Following
               </a>
@@ -183,7 +184,7 @@ function User() {
               </span>
               <a
                 className="font-normal text-icon-default-color"
-                href={(me ? auth.user.tag : user.tag) + "/follow"}
+                href={(me ? auth.user.tag : user.tag) + "/follow?src=followers"}
               >
                 Followers
               </a>
@@ -198,6 +199,9 @@ function User() {
           />
         </nav>
         {me && <FeedUser me={me} view={view} user={user} />}
+        {user.tag !== undefined && !me && (
+          <FeedUser me={me} view={view} user={user} />
+        )}
       </main>
     </div>
   );

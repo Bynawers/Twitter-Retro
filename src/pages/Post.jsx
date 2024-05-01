@@ -55,13 +55,11 @@ const Post = (props) => {
             />
           </div>
           <div className="flex mt-3 w-full">
-            {bannerError && (
-              <img
-                className="flex rounded-xl object-cover mt-3"
-                src={BASE_URL + "post/" + data._id}
-                onError={handleImageError}
-              />
-            )}
+            <img
+              className="flex rounded-xl object-cover mt-3"
+              src={BASE_URL + "post/" + data._id}
+              onError={handleImageError}
+            />
           </div>
           <div className="flex w-full h-5 mt-4 mb-4 space-x-1">
             <time className="text-sm text-textLight">{data.date}</time>
@@ -79,15 +77,3 @@ const Post = (props) => {
 };
 
 export default Post;
-
-/*
-<div className="mb-10">
-        {data.comment.map((item, index) => {
-          return (
-            <React.Fragment key={index}>
-              <Comment data={item} />
-            </React.Fragment>
-          );
-        })}
-      </div>
-      */

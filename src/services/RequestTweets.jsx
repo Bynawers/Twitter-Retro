@@ -183,6 +183,21 @@ const unbookmarkTweet = async (id) => {
   }
 };
 
+const searchLatestTweet = async (search) => {
+  const token = Cookies.get("token");
+  try {
+    const response = await axios.get(BASE_URL + "/tweets/latest/" + search, {
+      headers: {
+        Auth: token,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des utilisateurs:", error);
+    return null;
+  }
+};
+
 export {
   getTweets,
   createTweet,
@@ -194,4 +209,5 @@ export {
   unretweetTweet,
   bookmarkTweet,
   unbookmarkTweet,
+  searchLatestTweet,
 };

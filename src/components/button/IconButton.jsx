@@ -21,6 +21,8 @@ import {
   IoCameraOutline,
 } from "react-icons/io5";
 
+import { HiSearch, HiOutlineSearch } from "react-icons/hi";
+
 const IconButton = (props) => {
   const inputRef = useRef(null);
 
@@ -159,6 +161,23 @@ const IconButton = (props) => {
         style={{
           color: hover ? props.colorHover : color,
           fontSize: props.size ? props.size : 25,
+        }}
+      />
+    ),
+    search: props.state ? (
+      <HiSearch
+        className={animation}
+        style={{
+          color: props.colorHover,
+          fontSize: props.size ? props.size : 19,
+        }}
+      />
+    ) : (
+      <HiOutlineSearch
+        className={animation}
+        style={{
+          color: hover ? props.colorHover : color,
+          fontSize: props.size ? props.size : 19,
         }}
       />
     ),
