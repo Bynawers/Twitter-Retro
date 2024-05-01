@@ -1,27 +1,26 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../../hooks/AuthProvider";
 import UserItem from "./UserItem";
-import { getSender } from "../../utils/ChatLogics";
 import { useChat } from "../../hooks/ChatP";
 import { RiSettings3Fill } from "react-icons/ri";
 import { LuMailPlus } from "react-icons/lu";
 import twitterConfig from "../../../twitterConfig.json";
+import GroupChatModal from "../modal/GroupChatModal";
 
 const BASE_URL = twitterConfig.local
-? twitterConfig.BASE_URL_LOCAL
-: twitterConfig.BASE_URL_ONLINE;
+  ? twitterConfig.BASE_URL_LOCAL
+  : twitterConfig.BASE_URL_ONLINE;
 
 function UserItemSegment() {
-
-
   const { selectedChat, setSelectedChat, chats, setChats } = useChat();
   const auth = useAuth();
+  const [modalIsOpen, setModalIsOpen] = useState(false); // State for modal visibility
 
   useEffect(() => {
     const fetchUserItems = async () => {
       try {
-        const response = await axios.get(BASE_URL+"/api/chat", {
+        const response = await axios.get(BASE_URL + "/api/chat", {
           headers: {
             Authorization: `Bearer ${auth.token}`,
           },
@@ -34,6 +33,14 @@ function UserItemSegment() {
 
     fetchUserItems();
   }, [auth.token, setChats]);
+
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
 
   return (
     <div className="w-5/12 h-full border-r border-gray-300">
@@ -48,8 +55,8 @@ function UserItemSegment() {
                 style={{ marginRight: "1em" }}
               />
             </div>
-            <div>
-              <LuMailPlus size="1.5em" className="text-blue-500" />
+            <div onClick={openModal}>
+              <LuMailPlus size="1.5em" className="text-blue-500 cursor-pointer" />
             </div>
           </div>
         </div>
@@ -57,16 +64,17 @@ function UserItemSegment() {
       {/* Map over user items to render UserItem components */}
       {chats.map((userItem, index) => (
         <UserItem
-        item={userItem}
+          item={userItem}
           selected={selectedChat && selectedChat._id === userItem._id}
           key={index}
           time="testo"
           onClick={() => {
             setSelectedChat(userItem);
-          //  console.log(selectedChat);
           }}
         />
       ))}
+      {/* Modal */}
+      <GroupChatModal isOpen={modalIsOpen} onRequestClose={closeModal} />
     </div>
   );
 }
