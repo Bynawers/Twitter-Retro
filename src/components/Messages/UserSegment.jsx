@@ -5,12 +5,8 @@ import UserItem from "./UserItem";
 import { useChat } from "../../hooks/ChatP";
 import { RiSettings3Fill } from "react-icons/ri";
 import { LuMailPlus } from "react-icons/lu";
-import twitterConfig from "../../../twitterConfig.json";
 import GroupChatModal from "../modal/GroupChatModal";
-
-const BASE_URL = twitterConfig.local
-  ? twitterConfig.BASE_URL_LOCAL
-  : twitterConfig.BASE_URL_ONLINE;
+import { getChat } from "../../services/RequestMessages";
 
 function UserItemSegment() {
   const { selectedChat, setSelectedChat, chats, setChats } = useChat();
@@ -19,16 +15,7 @@ function UserItemSegment() {
 
   useEffect(() => {
     const fetchUserItems = async () => {
-      try {
-        const response = await axios.get(BASE_URL + "/api/chat", {
-          headers: {
-            Auth: auth.token,
-          },
-        });
-        setChats(response.data);
-      } catch (error) {
-        console.error("Error fetching user items:", error);
-      }
+      setChats(await getChat());
     };
 
     fetchUserItems();

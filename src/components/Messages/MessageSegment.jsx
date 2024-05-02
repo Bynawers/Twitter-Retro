@@ -15,6 +15,7 @@ import twitterConfig from "../../../twitterConfig.json";
 import io from "socket.io-client";
 import Lottie from "lottie-react";
 import animationData from "../../animations/typing.json";
+import { getMessages, sendMessage } from "../../services/RequestMessages";
 
 var socket, selectedChatCompare;
 
@@ -120,38 +121,19 @@ function MessageSegment() {
     return () => clearTimeout(typingTimer);
   };
 
-  const sendMessage = async () => {
+  const sendMessageHandler = async () => {
     if (message.trim() !== "") {
       socket.emit("stop typing", selectedChat._id);
-      try {
-        const config = {
-          headers: {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        setMessage("");
-        const { data } = await axios.post(
-          BASE_URL + "/api/message",
-          {
-            content: message,
-            chatId: selectedChat._id,
-          },
-          config
-        );
-        //console.log("data", data);
-        socket.emit("new message", data);
-        setMessagesList([...messagesList, data]);
-      } catch (error) {
-        console.log(error);
-        toast.error("Error sending message");
-      }
+      const data = await sendMessage(message, selectedChat._id);
+      socket.emit("new message", data);
+      setMessage("");
+      setMessagesList([...messagesList, data]);
     }
   };
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
-      sendMessage();
+      sendMessageHandler();
     }
   };
 
@@ -161,22 +143,10 @@ function MessageSegment() {
 
   const fetchMessages = async () => {
     if (!selectedChat) return;
-    try {
-      const config = {
-        headers: {
-          Auth: token,
-        },
-      };
-      const response = await axios.get(
-        `http://localhost:3001/api/message/${selectedChat._id}`,
-        config
-      );
-      setMessagesList(response.data);
 
-      socket.emit("join chat", selectedChat._id);
-    } catch (error) {
-      console.error("Error fetching messages:", error);
-    }
+    setMessagesList(await getMessages(selectedChat._id));
+
+    socket.emit("join chat", selectedChat._id);
   };
 
   return (
@@ -204,18 +174,19 @@ function MessageSegment() {
           >
             {/* Messages container */}
             <div className="flex flex-col gap-2 p-4">
-              {messagesList.map((message, index) => {
-                const sameUser = isSameUser(message, user._id);
-                const senderName = sameUser ? "user" : "other";
-                // console.log(senderName);
-                return (
-                  <MessageComponent
-                    key={index}
-                    text={message.content}
-                    sender={senderName}
-                  />
-                );
-              })}
+              {messagesList.length > 0 &&
+                messagesList.map((message, index) => {
+                  const sameUser = isSameUser(message, user._id);
+                  const senderName = sameUser ? "user" : "other";
+                  // console.log(senderName);
+                  return (
+                    <MessageComponent
+                      key={index}
+                      text={message.content}
+                      sender={senderName}
+                    />
+                  );
+                })}
             </div>
           </div>
           {istyping ? (
@@ -244,7 +215,7 @@ function MessageSegment() {
             />
             <button
               className="text-blue-500 rounded-full font-semibold ml-2"
-              onClick={sendMessage}
+              onClick={sendMessageHandler}
             >
               <IoMdSend size="1.5em" />
             </button>
