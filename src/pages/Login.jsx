@@ -50,7 +50,7 @@ function Login() {
               <input
                 value={input.email}
                 onChange={handleInput}
-                className="shadow appearance-none h-12 border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="border-2  border-gray-300 appearance-none h-12 rounded w-full py-2 px-3 text-gray-700 leading-tight"
                 id="email"
                 type="text"
                 name="email"
@@ -67,11 +67,11 @@ function Login() {
               <input
                 onChange={handleInput}
                 value={input.password}
-                className="shadow h-12 appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                className="border-2  border-gray-300 appearance-none h-12 rounded w-full py-2 px-3 text-gray-700 leading-tight"
                 id="password"
                 type="password"
                 name="password"
-                placeholder="******************"
+                placeholder="Password"
               />
             </div>
             <div className="mb-2">

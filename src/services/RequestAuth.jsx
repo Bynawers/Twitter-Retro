@@ -11,8 +11,7 @@ const signupUser = async (data) => {
   try {
     const response = await axios.post(BASE_URL + "/auth/register", data, {
       headers: {
-        "Content-Type": "application/json",
-        accept: "*/*",
+        "Content-Type": "multipart/form-data",
       },
     });
     return true;
