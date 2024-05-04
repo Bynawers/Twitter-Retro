@@ -29,7 +29,6 @@ const SideBarElement = (props) => {
   return (
     <Link
       to={props.path}
-      onClick={() => props.setSelected(props.name)}
       className="group flex max-w-fit 
       cursor-pointer items-center space-x-1 rounded-full px-4 py-3 font-san
       transition-all duration-200 hover:bg-gray-200 mb-1 border-white"
@@ -85,7 +84,10 @@ const SideBarElement = (props) => {
         ))}
 
       {props.name !== "Twitter" && (
-        <span className="hidden xl:inline 2xl:inline text-xl font-medium pl-3 pr-4 ">
+        <span
+          className="hidden xl:inline 2xl:inline text-xl font-medium pl-3 pr-4 "
+          style={{ fontWeight: isSelected ? "bold" : "normal" }}
+        >
           {props.name}
         </span>
       )}

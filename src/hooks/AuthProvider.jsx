@@ -2,12 +2,11 @@ import { useContext, createContext, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import Cookies from "js-cookie";
+import twitterConfig from "../../twitterConfig.json";
 
 import { getMe } from "../services/RequestUsers";
 
 const AuthContext = createContext();
-
-import twitterConfig from "../../twitterConfig.json";
 
 const BASE_URL = twitterConfig.local
   ? twitterConfig.BASE_URL_LOCAL
@@ -15,11 +14,18 @@ const BASE_URL = twitterConfig.local
 
 const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(Cookies.get("token") || "");
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || "");
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("user")) || ""
+  );
 
   const getUserData = async () => {
     const data = await getMe();
     setUser(data);
+  };
+
+  const updateUser = (userData) => {
+    setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
   };
 
   const loginAction = async (data) => {
@@ -32,14 +38,11 @@ const AuthProvider = ({ children }) => {
       await axios
         .post(`${BASE_URL}/auth/login`, data)
         .then((response) => {
-          const data = JSON.stringify(response.data.user)
-          //const datatoken = JSON.stringify(response.data.token)
+          const data = JSON.stringify(response.data.user);
           setUser(JSON.parse(data));
-          console.log(response.data.user);
-          console.log(response.data.token);
           Cookies.set("token", response.data.token, { expires: 7 });
           setToken(response.data.token);
-          localStorage.setItem("user", data );
+          localStorage.setItem("user", data);
           toast.success("Logged in successfully");
         })
         .catch((error) => {
@@ -53,7 +56,6 @@ const AuthProvider = ({ children }) => {
   };
 
   const logOut = () => {
-    setUser(null);
     setToken("");
     Cookies.remove("token");
     localStorage.removeItem("user");
@@ -61,7 +63,14 @@ const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ token, user, loginAction, logOut, getUserData }}
+      value={{
+        token,
+        user,
+        loginAction,
+        logOut,
+        getUserData,
+        updateUser,
+      }}
     >
       {children}
     </AuthContext.Provider>

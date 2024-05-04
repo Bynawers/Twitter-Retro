@@ -17,6 +17,7 @@ import { IoPencil, IoTrashBin } from "react-icons/io5";
 const TooltipMoreDetails = (props) => {
   const tooltipRef = useRef(null);
   const name = props.data.author ? props.data.author.fullName : "";
+
   const other = [
     {
       icon: <IoMdSad size={20} />,

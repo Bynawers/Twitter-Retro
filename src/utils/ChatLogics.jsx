@@ -47,6 +47,16 @@ export const isSameSenderMargin = (messages, m, i, userId) => {
         return "Unknown";
     }
 };
+
+export const getSenderid = (loggedUser, users) => {
+  if (users.length >= 2 && users[0] && users[1]) {
+      return users[0]._id === loggedUser._id ? users[1]._id : users[0]._id;
+  } else {
+      // Handle the case where there are not enough users
+      return "Unknown";
+  }
+};
+
   
   export const getSenderFull = (loggedUser, users) => {
     return users[0]._id === loggedUser._id ? users[1] : users[0];

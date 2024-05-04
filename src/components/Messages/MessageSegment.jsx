@@ -67,7 +67,7 @@ function MessageSegment() {
         !selectedChatCompare || // if chat is not selected or doesn't match current chat
         selectedChatCompare._id !== newMessageRecieved.chat._id
       ) {
-        toast.info("New message recieved");
+        //toast.info("New message recieved");
       } else {
         console.log("new message recieved", newMessageRecieved.content);
 
@@ -130,7 +130,7 @@ function MessageSegment() {
         const config = {
           headers: {
             "Content-type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Auth: token,
           },
         };
         setMessage("");
@@ -167,7 +167,7 @@ function MessageSegment() {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Auth: token,
         },
       };
       const response = await axios.get(

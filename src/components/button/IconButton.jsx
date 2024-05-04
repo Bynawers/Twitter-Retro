@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 
 import { FiSettings } from "react-icons/fi";
 import { FaTwitter } from "react-icons/fa";
@@ -18,11 +18,18 @@ import {
   IoMailOutline,
   IoArrowBackOutline,
   IoImageOutline,
+  IoCameraOutline,
 } from "react-icons/io5";
 
 const IconButton = (props) => {
-  const [color, setColor] = useState("#4e5255");
-  const [background, setBackground] = useState("");
+  const inputRef = useRef(null);
+
+  const [hover, setHover] = useState(false);
+  const color = props.color ? props.color : "#4e5255";
+  const background = props.background ? props.background : "";
+  const backgroundHover = props.backgroundHover
+    ? props.backgroundHover
+    : "#eff1f1";
 
   const styles = "size-[19px] ";
   const animation = "transition-all duration-300";
@@ -30,7 +37,10 @@ const IconButton = (props) => {
   const iconDataSet = {
     back: (
       <IoArrowBackOutline
-        style={{ color: color, fontSize: props.size ? props.size : 17 }}
+        style={{
+          color: hover ? props.colorHover : color,
+          fontSize: props.size ? props.size : 17,
+        }}
       />
     ),
     twitter: (
@@ -41,70 +51,115 @@ const IconButton = (props) => {
     ),
     setting: (
       <FiSettings
-        style={{ color: color, fontSize: props.size ? props.size : 17 }}
+        style={{
+          color: hover ? props.colorHover : color,
+          fontSize: props.size ? props.size : 17,
+        }}
       />
     ),
     chat: (
       <IoChatbubbleOutline
         className={styles + animation}
-        style={{ color: color, fontSize: props.size ? props.size : 17 }}
+        style={{
+          color: hover ? props.colorHover : color,
+          fontSize: props.size ? props.size : 17,
+        }}
       />
     ),
     retweet: props.state ? (
       <IoRepeat
         className={styles + animation}
-        style={{ color: color, fontSize: props.size ? props.size : 17 }}
+        style={{
+          color: props.colorHover,
+          fontSize: props.size ? props.size : 17,
+        }}
       />
     ) : (
       <IoRepeatOutline
         className={styles + animation}
-        style={{ color: color, fontSize: props.size ? props.size : 17 }}
+        style={{
+          color: hover ? props.colorHover : color,
+          fontSize: props.size ? props.size : 17,
+        }}
       />
     ),
     like: props.state ? (
       <IoHeart
         className={animation}
-        style={{ color: color, fontSize: props.size ? props.size : 19 }}
+        style={{
+          color: props.colorHover,
+          fontSize: props.size ? props.size : 19,
+        }}
       />
     ) : (
       <IoHeartOutline
         className={animation}
-        style={{ color: color, fontSize: props.size ? props.size : 19 }}
+        style={{
+          color: hover ? props.colorHover : color,
+          fontSize: props.size ? props.size : 19,
+        }}
       />
     ),
     view: (
       <IoStatsChart
         className={animation}
-        style={{ color: color, fontSize: props.size ? props.size : 19 }}
+        style={{
+          color: hover ? props.colorHover : color,
+          fontSize: props.size ? props.size : 19,
+        }}
       />
     ),
     bookmark: props.state ? (
       <IoBookmark
         className={animation}
-        style={{ color: color, fontSize: props.size ? props.size : 19 }}
+        style={{
+          color: props.colorHover,
+          fontSize: props.size ? props.size : 19,
+        }}
       />
     ) : (
       <IoBookmarkOutline
         className={animation}
-        style={{ color: color, fontSize: props.size ? props.size : 19 }}
+        style={{
+          color: hover ? props.colorHover : color,
+          fontSize: props.size ? props.size : 19,
+        }}
       />
     ),
     share: (
       <IoShareSocialOutline
         className={animation}
-        style={{ color: color, fontSize: props.size ? props.size : 19 }}
+        style={{
+          color: hover ? props.colorHover : color,
+          fontSize: props.size ? props.size : 19,
+        }}
+      />
+    ),
+    camera: (
+      <IoCameraOutline
+        className={animation}
+        style={{
+          color: hover ? props.colorHover : color,
+          fontSize: props.size ? props.size : 19,
+        }}
       />
     ),
     more: (
       <IoEllipsisHorizontal
         className={animation}
-        style={{ color: color, fontSize: props.size ? props.size : 19 }}
+        style={{
+          color: hover ? props.colorHover : color,
+          fontSize: props.size ? props.size : 19,
+        }}
       />
     ),
     close: (
       <IoCloseOutline
         className={animation}
-        style={{ color: color, fontSize: props.size ? props.size : 25 }}
+        style={{
+          color: hover ? props.colorHover : color,
+          fontSize: props.size ? props.size : 25,
+        }}
       />
     ),
     message: (
@@ -123,23 +178,38 @@ const IconButton = (props) => {
     ),
   };
 
+  const handleProfileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        props.setImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+    props.setFile(file);
+  };
+
+  const openFileInput = () => {
+    if (inputRef.current) {
+      inputRef.current.click();
+    }
+  };
+
   const handleClick = (e) => {
-    e.preventDefault();
-    props.event();
+    if (props.type == "input") {
+      openFileInput();
+      return;
+    }
+    props.event(e);
   };
 
   const handleHover = () => {
-    if (props.hover == null) {
-      setColor(props.color != null ? props.color : "#4e5255");
-      setBackground(props.background != null ? props.background : "#e7e7e8");
-    }
+    setHover(true);
   };
 
   const handleUnHover = () => {
-    if (!props.state) {
-      setColor("#4e5255");
-    }
-    setBackground("");
+    setHover(false);
   };
 
   return (
@@ -149,20 +219,35 @@ const IconButton = (props) => {
       onMouseEnter={handleHover}
       onMouseLeave={handleUnHover}
     >
+      <input
+        type="file"
+        accept="image/jpeg, image/png"
+        onChange={handleProfileChange}
+        style={{ display: "none" }}
+        ref={inputRef}
+      />
+
       <div
         data-tooltip-id={props.tooltip}
         className={
-          `rounded-3xl p-2 bg-icon-` +
-          background +
-          ` transition-all duration-300 cursor-pointer ` +
+          `rounded-3xl p-2 transition-all duration-300 cursor-pointer ` +
           props.styles
         }
-        style={{ backgroundColor: background }}
+        style={{
+          backgroundColor: hover
+            ? backgroundHover
+            : background
+            ? background
+            : "",
+        }}
       >
         {iconDataSet[props.name]}
       </div>
       {props.value !== null && (
-        <span className={` text-sm ` + animation} style={{ color: color }}>
+        <span
+          className={` text-sm ` + animation}
+          style={{ color: hover ? props.colorHover : color }}
+        >
           {props.value != 0 ? props.value : ""}
         </span>
       )}

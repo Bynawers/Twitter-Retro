@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { useLocation, Link } from "react-router-dom";
 
@@ -17,11 +17,14 @@ const BASE_URL = twitterConfig.local
   : twitterConfig.BASE_URL_ONLINE + "/images/";
 
 const Post = (props) => {
+  const [bannerError, setBannerError] = useState(false);
   const location = useLocation();
 
-  const postId = location.pathname;
-
   const data = location.state.data;
+
+  const handleImageError = () => {
+    setBannerError(true);
+  };
 
   return (
     <div className="flex flex-col h-screen">
@@ -31,7 +34,7 @@ const Post = (props) => {
         <div className="flex flex-row h-[42px] bg-red">
           <img
             className="flex h-[40px] w-[40px] rounded-full object-cover mr-2"
-            src={BASE_URL + "profile/" + data.author.tag}
+            src={BASE_URL + "profile/" + data.author._id}
           />
           <div className="w-full h-full flex flex-col">
             <span className="text-sm font-bold">{data.author.fullName}</span>
@@ -45,13 +48,18 @@ const Post = (props) => {
         </div>
         <main className="flex w-full flex-col">
           <div className="mt-3 flex w-full">
-            <p className="text-left text-md">{data.body}</p>
+            <textarea
+              readOnly
+              value={data.body}
+              className="w-full outline-none overflow-hidden resize-none text-blackLight"
+            />
           </div>
           <div className="flex mt-3 w-full">
-            {data.postImage && (
+            {bannerError && (
               <img
                 className="flex rounded-xl object-cover mt-3"
                 src={BASE_URL + "post/" + data._id}
+                onError={handleImageError}
               />
             )}
           </div>
@@ -62,7 +70,7 @@ const Post = (props) => {
               <span className="text-black font-bold">61,6 k</span> vues
             </span>
           </div>
-          <ActionButtons view="main" data={data.stat} />
+          <ActionButtons view="main" data={data.stat} id={data._id} />
           <PostYourself />
         </main>
       </div>

@@ -22,7 +22,7 @@ function UserItemSegment() {
       try {
         const response = await axios.get(BASE_URL + "/api/chat", {
           headers: {
-            Authorization: `Bearer ${auth.token}`,
+            Auth: auth.token,
           },
         });
         setChats(response.data);
@@ -35,6 +35,7 @@ function UserItemSegment() {
   }, [auth.token, setChats]);
 
   const openModal = () => {
+    console.log("Open modal");
     setModalIsOpen(true);
   };
 
@@ -76,7 +77,7 @@ function UserItemSegment() {
        </div>
  
       {/* Modal */}
-      <GroupChatModal isOpen={modalIsOpen} onRequestClose={closeModal} />
+      <GroupChatModal isOpen={modalIsOpen} onRequestClose={closeModal}  />
     </div>
   );
 }

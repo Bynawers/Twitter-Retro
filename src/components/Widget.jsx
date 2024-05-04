@@ -18,8 +18,8 @@ const Widget = () => {
         {currentPath !== "/messages" && (
           <>
             <Trends />
-            <Trends />
             <RefLink />
+            <div className="pb-10" />
           </>
         )}
       </main>
@@ -39,11 +39,31 @@ const Trends = () => {
     },
     {
       name: "Cryptographie",
-      stat: 4034823,
+      stat: 403823,
     },
     {
       name: "Champions League",
       stat: 2234234,
+    },
+    {
+      name: "Twitter Retro",
+      stat: 23424,
+    },
+    {
+      name: "JO 2024",
+      stat: 924234,
+    },
+    {
+      name: "PSG - BARCA",
+      stat: 53492,
+    },
+    {
+      name: "Orages",
+      stat: 91492,
+    },
+    {
+      name: "PSG - BARCA",
+      stat: 23492,
     },
   ];
   return (
@@ -80,8 +100,8 @@ const TrendsElement = (props) => {
         <IconButton
           name="more"
           styles="hover:bg-iconBackgroundHover"
-          color={"#229df0"}
-          background={"#dae8f0"}
+          colorHover={"#229df0"}
+          backgroundHover={"#dae8f0"}
           event={handleTooltip}
           value={null}
         />

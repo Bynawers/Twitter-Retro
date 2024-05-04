@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 
 import Widget from "./Widget";
 import Sidebar from "./navigation/SideBar";
@@ -12,16 +12,46 @@ const Layout = ({ children }) => {
   const widgetRef = useRef(null);
   const mainRef = useRef(null);
 
-  const handleWidgetScroll = () => {
-    if (mainRef.current && widgetRef.current) {
-      mainRef.current.scrollTop = widgetRef.current.scrollTop;
-    }
+  let prevMainScrollTop = 0;
+  let prevWidgetScrollTop = 0;
+
+  const getScrollDirection = (prevScrollTop, currentScrollTop) => {
+    return currentScrollTop > prevScrollTop
+      ? "down"
+      : currentScrollTop < prevScrollTop
+      ? "up"
+      : "none";
   };
 
-  const handleMainScroll = () => {
-    if (mainRef.current && widgetRef.current) {
-      widgetRef.current.scrollTop = mainRef.current.scrollTop;
+  const handleScroll = (event) => {
+    const currentMainScrollTop = mainRef.current.scrollTop;
+    const currentWidgetScrollTop = widgetRef.current.scrollTop;
+
+    const mainScrollDirection = getScrollDirection(
+      prevMainScrollTop,
+      currentMainScrollTop
+    );
+    const widgetScrollDirection = getScrollDirection(
+      prevWidgetScrollTop,
+      currentWidgetScrollTop
+    );
+
+    if (mainScrollDirection === "down") {
+      const scrollDiff = (currentMainScrollTop - prevMainScrollTop) / 2;
+      widgetRef.current.scrollTop += scrollDiff;
+    } else if (mainScrollDirection === "up") {
+      const scrollDiff = (currentMainScrollTop - prevMainScrollTop) / 2;
+      widgetRef.current.scrollTop += scrollDiff;
+    } else if (widgetScrollDirection === "up") {
+      const scrollDiff = (currentWidgetScrollTop - prevWidgetScrollTop) / 2;
+      mainRef.current.scrollTop += scrollDiff;
+    } else if (widgetScrollDirection === "down") {
+      const scrollDiff = (currentWidgetScrollTop - prevWidgetScrollTop) / 2;
+      mainRef.current.scrollTop += scrollDiff;
     }
+
+    prevMainScrollTop = currentMainScrollTop;
+    prevWidgetScrollTop = currentWidgetScrollTop;
   };
 
   return (
@@ -34,9 +64,9 @@ const Layout = ({ children }) => {
             </div>
             <main className="flex flex-3 overflow-x-hidden overflow-y-hidden">
               <div
-                className="flex flex-2 flex-col max-w-[600px] lg:min-w-[600px] relative overflow-y-scroll no-scrollbar scrollbar-none"
+                className="flex flex-2 flex-col sm:min-w-[500px] md:min-w-[600px] max-w-[600px] lg:min-w-[600px] relative overflow-y-scroll no-scrollbar scrollbar-none"
                 ref={mainRef}
-                onScroll={handleMainScroll}
+                onScroll={handleScroll}
               >
                 {children}
                 <BottomBar />
@@ -46,7 +76,7 @@ const Layout = ({ children }) => {
                   <div
                     className="hidden md:block w-full overflow-y-scroll no-scrollbar scrollbar-none"
                     ref={widgetRef}
-                    onScroll={handleWidgetScroll}
+                    onScroll={handleScroll}
                   >
                     <Widget />
                   </div>
@@ -61,10 +91,3 @@ const Layout = ({ children }) => {
   );
 };
 export default Layout;
-
-/* Responsive DEBUG
-sm:bg-green-300
-md:bg-blue-300
-lg:bg-red-400
-xl:bg-yellow-400
-*/

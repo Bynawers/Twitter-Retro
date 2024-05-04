@@ -74,4 +74,84 @@ const getMe = async () => {
   }
 };
 
-export { getUser, getUsers, getMe, getUserByTag };
+const setUser = async (formData) => {
+  const token = Cookies.get("token");
+
+  try {
+    const response = await axios.patch(BASE_URL + "/users/", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Auth: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const setBanner = async (formData) => {
+  const token = Cookies.get("token");
+
+  try {
+    const response = await axios.post(BASE_URL + "/images/banner", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Auth: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const followUser = async (userId) => {
+  const token = Cookies.get("token");
+
+  try {
+    const response = await axios.post(
+      BASE_URL + "/users/" + userId + "/following",
+      {},
+      {
+        headers: {
+          Auth: `Bearer ${token}`,
+        },
+      }
+    );
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
+const unfollowUser = async (userId) => {
+  const token = Cookies.get("token");
+
+  try {
+    const response = await axios.delete(
+      BASE_URL + "/users/" + userId + "/following",
+      {
+        headers: {
+          Auth: `Bearer ${token}`,
+        },
+      }
+    );
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
+export {
+  getUser,
+  getUsers,
+  getMe,
+  getUserByTag,
+  setUser,
+  setBanner,
+  followUser,
+  unfollowUser,
+};

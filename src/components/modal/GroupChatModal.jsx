@@ -30,7 +30,7 @@ const customStyles = {
   },
 };
 
-function GroupChatModal({ isOpen, onRequestClose }) {
+function GroupChatModal({ isOpen , onRequestClose}) {
   let subtitle;
   const { chats, setChats } = useChat(); 
   const { user, token } = useAuth();
@@ -43,6 +43,7 @@ function GroupChatModal({ isOpen, onRequestClose }) {
 
   const handleGroup = (userToAdd) => {
     if (selectedUsers.includes(userToAdd)) {
+      console.log(userToAdd);
       toast.error("User already added");
       return;
     }
@@ -60,10 +61,10 @@ function GroupChatModal({ isOpen, onRequestClose }) {
       setLoading(true);
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Auth: token,
         },
       };
-      const { data } = await axios.get(BASE_URL+`/users?search=${search}`, config);
+      const { data } = await axios.get(BASE_URL+`/search?search=${search}`, config);
       console.log(data);
       setLoading(false);
       console.log(data);
@@ -86,7 +87,7 @@ function GroupChatModal({ isOpen, onRequestClose }) {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Auth: token,
         },
       };
       const { data } = await axios.post(
@@ -117,13 +118,13 @@ function GroupChatModal({ isOpen, onRequestClose }) {
       <Modal
         isOpen={isOpen}
         onAfterOpen={afterOpenModal}
-        onRequestClose={onRequestClose}
         style={customStyles}
+        onRequestClose={onRequestClose}
         contentLabel="Example Modal"
       >
         <div className="flex-col">
           <div className="flex justify-between">
-            <div onClick={onRequestClose()}>icon</div>
+            
             <div className="flex-col">
               <div>Create a group</div>
               <div>add People</div>

@@ -1,19 +1,9 @@
 import React from "react";
 
-import { useNavigate } from "react-router-dom";
-
 import useScrollDirection from "../../utils/ScrollDirection";
 
-import IconButton from "../button/IconButton";
-
-const HeaderBack = (props) => {
+const Header = (props) => {
   const scrollDirection = useScrollDirection();
-
-  const navigate = useNavigate();
-
-  const handleGoBack = () => {
-    navigate(-1);
-  };
 
   return (
     <div
@@ -22,11 +12,8 @@ const HeaderBack = (props) => {
       }`}
     >
       <div className="flex flex-row p-5 pl-0 flex-1 h-14 items-center">
-        <div className="w-[56px]">
-          <IconButton name="back" event={handleGoBack} />
-        </div>
         {props.view == "post" && (
-          <span className="text-xl font-base">Poster</span>
+          <span className="text-xl font-base">{props.text}</span>
         )}
         {props.view == "user" && (
           <div className="flex flex-col">
@@ -36,9 +23,17 @@ const HeaderBack = (props) => {
             </span>
           </div>
         )}
+        {props.view == "bookmark" && (
+          <div className="flex flex-col">
+            <span className="font-bold text-xl">{props.name}</span>
+            <span className="font-normal text-sm text-icon-default-color">
+              @{props.user}
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default HeaderBack;
+export default Header;

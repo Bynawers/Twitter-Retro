@@ -5,7 +5,6 @@ function PostPhoto() {
 
   const image = location.state.image;
 
-  console.log(image);
   return (
     <div className="flex h-screen">
       <main className="flex h-screen w-screen">

@@ -6,13 +6,16 @@ import SideBarElement from "./SideBarElement";
 import TooltipUser from "../tooltip/TooltipUser";
 import ModalPost from "../modal/ModalPost";
 
+import twitterConfig from "../../../twitterConfig.json";
+
 import { useAuth } from "../../hooks/AuthProvider";
+
+const BASE_URL = twitterConfig.local
+  ? twitterConfig.BASE_URL_LOCAL
+  : twitterConfig.BASE_URL_ONLINE;
 
 const Sidebar = () => {
   const auth = useAuth();
-
-  const tag = "@Bynawers";
-  const username = "Bynawers";
 
   const [modalPost, setModalPost] = useState(false);
 
@@ -30,14 +33,14 @@ const Sidebar = () => {
           <SideBarElement name="Explorer" path="/explore" />
           <SideBarElement name="Notifications" path="/notifications" />
           <SideBarElement name="Messages" path="/messages" />
-          <SideBarElement name="Signets" path="/not-found" />
+          <SideBarElement name="Signets" path="/bookmark" />
           <SideBarElement name="Profiles" path={"/" + auth.user.tag} />
-          <SideBarElement name="Plus" path="/not-found" />
           <div className="pb-5" />
           <ButtonPost handleToggleModal={handleToggleModal} />
           <Avatar
             username={auth.user ? auth.user.fullName : "undefined"}
             tag={auth.user ? auth.user.tag : "undefined"}
+            id={auth.user ? auth.user._id : null}
           />
         </div>
       </div>
@@ -70,7 +73,7 @@ const Avatar = (props) => {
       className="flex flex-col items-center absolute bottom-5 w-full"
       data-tooltip-id="signup"
     >
-      <TooltipUser />
+      <TooltipUser tag={props.tag} />
       <div
         className="flex
       cursor-pointer items-center rounded-full xl:px-4 xl:py-3 font-sans w-[85px] xl:w-full hover:bg-gray-200 xl:justify-between justify-center"
@@ -78,7 +81,7 @@ const Avatar = (props) => {
         <div className="flex flex-row items-center">
           <img
             className="flex h-[50px] w-[50px] rounded-full object-cover"
-            src="/src/assets/defaultAvatar.png"
+            src={BASE_URL + "/images/profile/" + props.id}
           />
           <div className="hidden flex-col items-start xl:flex 2xl:flex">
             <span className="text-sm pl-3 font-bold">{props.username}</span>
