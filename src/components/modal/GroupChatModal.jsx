@@ -115,6 +115,7 @@ function GroupChatModal({ isOpen , onRequestClose}) {
 
   return (
     <div>
+      <ToastContainer />
       <Modal
         isOpen={isOpen}
         onAfterOpen={afterOpenModal}
@@ -152,8 +153,9 @@ function GroupChatModal({ isOpen , onRequestClose}) {
                 ))}
             </div>
         </div>
+        
       </Modal>
-      <ToastContainer />
+      
     </div>
   );
 }

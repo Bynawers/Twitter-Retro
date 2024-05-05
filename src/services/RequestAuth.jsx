@@ -1,11 +1,15 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
+
 import twitterConfig from "../../twitterConfig.json";
 
 const BASE_URL = twitterConfig.local
   ? twitterConfig.BASE_URL_LOCAL
   : twitterConfig.BASE_URL_ONLINE;
+
+
+
 
 const signupUser = async (data) => {
   try {

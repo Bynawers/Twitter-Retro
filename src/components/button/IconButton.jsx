@@ -21,6 +21,12 @@ import {
   IoCameraOutline,
 } from "react-icons/io5";
 
+
+import axios from "axios";
+
+import { useAuth } from "../../hooks/AuthProvider";
+
+
 const IconButton = (props) => {
   const inputRef = useRef(null);
 
@@ -200,6 +206,7 @@ const IconButton = (props) => {
     if (props.type == "input") {
       openFileInput();
       return;
+      
     }
     props.event(e);
   };
