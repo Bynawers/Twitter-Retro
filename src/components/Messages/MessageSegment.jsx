@@ -208,14 +208,14 @@ function MessageSegment() {
             {/* Messages container */}
             <div className="flex flex-col gap-2 p-4">
               {messagesList.map((message, index) => {
-                const sameUser = isSameUser(message, user._id);
-                const senderName = sameUser ? "user" : "other";
-                // console.log(senderName);
+                const sameUser = isSameUser(message, user._id);;
                 return (
                   <MessageComponent
                     key={index}
                     text={message.content}
-                    sender={senderName}
+                    sameUser={sameUser}
+                    userId={message.sender._id}
+                    isGroupChat={selectedChat.isGroupChat}
                   />
                 );
               })}
