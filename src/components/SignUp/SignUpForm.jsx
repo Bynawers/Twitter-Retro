@@ -11,6 +11,11 @@ import { signupUser, checkEmail, checkTag } from "../../services/RequestAuth";
 
 import { useAuth } from "../../hooks/AuthProvider";
 
+
+const BASE_URL = twitterConfig.local
+  ? twitterConfig.BASE_URL_LOCAL
+  : twitterConfig.BASE_URL_ONLINE;
+  
 const SignUpForm = (props) => {
   const auth = useAuth();
 
@@ -144,7 +149,7 @@ const SignUpForm = (props) => {
 
     try {
       const response1 = await axios.post(
-        "http://localhost:3001/auth/register",
+        BASE_URL+"/auth/register",
         formData,
         {
           headers: {
@@ -157,7 +162,7 @@ const SignUpForm = (props) => {
         data.append("profile",profilepicture)
         try {
           const response = await axios.patch(
-              "http://localhost:3001/users",
+              BASE_URL+"/users",
               data,
               {
                   headers: {
