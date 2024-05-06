@@ -1,7 +1,7 @@
 import RoutesContainer from "./containers/RoutesContainer";
 import AuthProvider from "./hooks/AuthProvider";
 import ProfileProvider from "./hooks/ProfileProvider";
-
+import ScrollProvider from "./hooks/ScrollProvider";
 import ChatProvider from "./hooks/ChatP";
 import Modal from "react-modal";
 import { ToastContainer } from "react-toastify";
@@ -12,8 +12,10 @@ function App() {
     <AuthProvider>
       <ProfileProvider>
         <ChatProvider>
-          <ToastContainer />
-          <RoutesContainer />
+          <ScrollProvider>
+            <ToastContainer />
+            <RoutesContainer />
+          </ScrollProvider>
         </ChatProvider>
       </ProfileProvider>
     </AuthProvider>

@@ -30,6 +30,8 @@ function User() {
   const [view, setView] = useState("Posts");
   const [user, setUser] = useState([]);
 
+  const [bannerError, setBannerError] = useState(false);
+
   const [isFollow, setIsFollow] = useState(null);
 
   const [modalEdit, setModalEdit] = useState(false);
@@ -98,6 +100,10 @@ function User() {
     setModalEdit(true);
   };
 
+  const handleBannerError = () => {
+    setBannerError(true);
+  };
+
   return (
     <div className="flex flex-col">
       <HeaderBack
@@ -110,10 +116,13 @@ function User() {
       <ModalEdit modalIsOpen={modalEdit} setIsOpen={setModalEdit} />
       <main className="flex flex-1 flex-col h-full w-full">
         <div className="w-full min-h-[200px] bg-banner">
-          <img
-            src={BASE_URL_IMAGE + "banner/" + (me ? auth.user._id : user._id)}
-            className="w-full h-[200px] object-cover"
-          />
+          {!bannerError && (
+            <img
+              src={BASE_URL_IMAGE + "banner/" + (me ? auth.user._id : user._id)}
+              className="w-full h-[200px] object-cover"
+              onError={handleBannerError}
+            />
+          )}
         </div>
         <div className=" w-full px-4 pt-3 mb-4">
           <div className="flex justify-between w-full h-[70px]">
@@ -195,7 +204,7 @@ function User() {
           <TabNavigator
             view={view}
             setView={setView}
-            data={["Posts", "Retweets", "Likes"]}
+            data={["Posts", "Replies", "Retweets", "Likes"]}
           />
         </nav>
         {me && <FeedUser me={me} view={view} user={user} />}

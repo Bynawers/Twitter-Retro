@@ -23,6 +23,8 @@ import {
 
 import { HiSearch, HiOutlineSearch } from "react-icons/hi";
 
+import { MdGif, MdOutlineEmojiEmotions } from "react-icons/md";
+
 const IconButton = (props) => {
   const inputRef = useRef(null);
 
@@ -195,6 +197,16 @@ const IconButton = (props) => {
         src="./src/assets/defaultAvatar.jpg"
       />
     ),
+    emojis: (
+      <MdOutlineEmojiEmotions
+        style={{ color: "#00ADED", fontSize: props.size ? props.size : 19 }}
+      />
+    ),
+    gif: (
+      <MdGif
+        style={{ color: "#00ADED", fontSize: props.size ? props.size : 25 }}
+      />
+    ),
   };
 
   const handleProfileChange = (event) => {
@@ -233,7 +245,7 @@ const IconButton = (props) => {
 
   return (
     <button
-      className="flex h-full items-center justify-end rounded-xl"
+      className={`flex h-full items-center justify-end rounded-xl`}
       onClick={handleClick}
       onMouseEnter={handleHover}
       onMouseLeave={handleUnHover}

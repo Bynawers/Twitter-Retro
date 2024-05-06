@@ -199,15 +199,24 @@ const getFollowers = async (tag) => {
   }
 };
 
-const getUserPosts = async (tag) => {
+const getUserPosts = async (tag, page, type) => {
   const token = Cookies.get("token");
 
   try {
-    const response = await axios.get(BASE_URL + "/users/" + tag + "/posts", {
-      headers: {
-        Auth: `Bearer ${token}`,
-      },
-    });
+    let response = await axios.get(
+      BASE_URL + "/users/" + tag + "/posts?page=" + page,
+      {
+        headers: {
+          Auth: token,
+        },
+        params: {
+          cacheBuster: Date.now(),
+          type: type ? type : "tweet",
+        },
+      }
+    );
+    response.data.data.reverse();
+
     return response.data;
   } catch (error) {
     console.error(error);
@@ -224,6 +233,7 @@ const getUserRetweets = async (tag) => {
         Auth: `Bearer ${token}`,
       },
     });
+    response.data.data.reverse();
     return response.data;
   } catch (error) {
     console.error(error);
@@ -231,15 +241,41 @@ const getUserRetweets = async (tag) => {
   }
 };
 
-const getUserLikes = async (tag) => {
+const getUserLikes = async (tag, page) => {
   const token = Cookies.get("token");
 
   try {
-    const response = await axios.get(BASE_URL + "/users/" + tag + "/likes", {
-      headers: {
-        Auth: `Bearer ${token}`,
-      },
-    });
+    const response = await axios.get(
+      BASE_URL + "/users/" + tag + "/likes?page=" + page,
+      {
+        headers: {
+          Auth: `Bearer ${token}`,
+        },
+        params: {
+          cacheBuster: Date.now(),
+        },
+      }
+    );
+    response.data.data.reverse();
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
+const getUserBookmarks = async (tag) => {
+  const token = Cookies.get("token");
+
+  try {
+    const response = await axios.get(
+      BASE_URL + "/users/" + tag + "/bookmarks",
+      {
+        headers: {
+          Auth: `Bearer ${token}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error(error);
@@ -262,4 +298,5 @@ export {
   getUserPosts,
   getUserLikes,
   getUserRetweets,
+  getUserBookmarks,
 };

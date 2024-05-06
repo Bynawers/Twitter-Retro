@@ -7,7 +7,7 @@ const Header = (props) => {
 
   return (
     <div
-      className={`z-10 m-x-4 border-b-[1px] sticky w-full bg-opacity-70 bg-white backdrop-filter backdrop-blur-md transition-all duration-500 sm:top-0 ${
+      className={`z-50 m-x-4 border-b-[1px] sticky w-full bg-opacity-70 bg-white backdrop-filter backdrop-blur-md transition-all duration-500 sm:top-0 ${
         scrollDirection === "down" ? "-top-24" : "top-0"
       }`}
     >
@@ -24,7 +24,7 @@ const Header = (props) => {
           </div>
         )}
         {props.view == "bookmark" && (
-          <div className="flex flex-col">
+          <div className="flex pl-8 flex-col">
             <span className="font-bold text-xl">{props.name}</span>
             <span className="font-normal text-sm text-icon-default-color">
               @{props.user}

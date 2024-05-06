@@ -18,40 +18,7 @@ const TooltipMoreDetails = (props) => {
   const tooltipRef = useRef(null);
   const name = props.data.author ? props.data.author.fullName : "";
 
-  const other = [
-    {
-      icon: <IoMdSad size={20} />,
-      text: "Ce post ne m'intéresse pas",
-    },
-    {
-      icon: <IoMdPersonAdd size={20} />,
-      text: "Suivre " + name,
-    },
-    {
-      icon: <IoMdListBox size={20} />,
-      text: "Ajouter " + name + " à des Listes/ le retirer de Listes",
-    },
-    {
-      icon: <IoMdVolumeOff size={20} />,
-      text: "Masquer " + name,
-    },
-    {
-      icon: <IoIosCloseCircle size={20} />,
-      text: "Bloquer " + name,
-    },
-    {
-      icon: <IoIosStats size={20} />,
-      text: "Voir les engagements avec le post",
-    },
-    {
-      icon: <IoIosCode size={20} />,
-      text: "Intégrer post",
-    },
-    {
-      icon: <IoIosFlag size={20} />,
-      text: "Signaler post",
-    },
-  ];
+  const other = [];
 
   const closeTooltip = () => {
     tooltipRef.current?.close();
@@ -88,34 +55,7 @@ const TooltipMoreDetails = (props) => {
       opacity={1}
       isCapture={true}
       render={() => (
-        <div className="font-bold text-base">
-          {!isMe &&
-            other.map((item, index) => {
-              const styles =
-                index == 0
-                  ? "rounded-t-xl"
-                  : index == other.length - 1
-                  ? "rounded-b-xl"
-                  : "";
-              return (
-                <React.Fragment key={index}>
-                  <button
-                    className={
-                      `flex w-full py-3 items-center pl-3 hover:bg-gray-100 text-left space-x-2 ` +
-                      styles
-                    }
-                    onClick={() => {
-                      closeTooltip();
-                      item.event();
-                    }}
-                  >
-                    {item.icon}
-                    <span>{item.text}</span>
-                  </button>
-                </React.Fragment>
-              );
-            })}
-
+        <div className="font-bold text-base" style={{ zIndex: 9999 }}>
           {isMe &&
             me.map((item, index) => {
               const styles =
@@ -151,6 +91,7 @@ const TooltipMoreDetails = (props) => {
         width: isMe ? 200 : 384,
         borderRadius: 12,
         padding: 0,
+        zIndex: 9999,
       }}
     />
   );

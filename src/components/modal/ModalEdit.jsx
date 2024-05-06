@@ -39,8 +39,8 @@ const ModalEdit = (props) => {
 
   const [newBanner, setNewBanner] = useState(null);
   const [newProfile, setNewProfile] = useState(null);
-  const [newName, setNewName] = useState("");
-  const [newBio, setNewBio] = useState("");
+  const [newName, setNewName] = useState(auth.user.fullName);
+  const [newBio, setNewBio] = useState(auth.user.bio);
 
   function closeModal() {
     setNewName("");
@@ -79,6 +79,12 @@ const ModalEdit = (props) => {
     }
   };
 
+  console.log(
+    newBanner
+      ? newBanner
+      : BASE_URL_IMAGE + "banner/" + (auth.user ? auth.user._id : "undefined")
+  );
+
   return (
     <>
       <Modal
@@ -104,19 +110,17 @@ const ModalEdit = (props) => {
           <div className="flex flex-col px-4 w-full">
             <div className="flex flex-1 flex-col w-full h-auto">
               <div className="relative w-full min-h-[200px] bg-banner">
-                {auth.user.bannerImage ||
-                  (newBanner && (
-                    <img
-                      src={
-                        newBanner
-                          ? newBanner
-                          : BASE_URL_IMAGE +
-                            "banner/" +
-                            (props.data ? props.data.tag : "undefined")
-                      }
-                      className="w-full h-[200px] object-cover"
-                    />
-                  ))}
+                <img
+                  src={
+                    newBanner
+                      ? newBanner
+                      : BASE_URL_IMAGE +
+                        "banner/" +
+                        (auth.user ? auth.user._id : "undefined")
+                  }
+                  className="w-full h-[200px] object-cover"
+                />
+
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                   <IconButton
                     name="camera"
@@ -141,7 +145,7 @@ const ModalEdit = (props) => {
                           ? newProfile
                           : BASE_URL_IMAGE +
                             "profile/" +
-                            (props.data ? props.data._id : "undefined")
+                            (auth.user ? auth.user._id : "undefined")
                       }
                       className="rounded-full w-full object-cover"
                     />

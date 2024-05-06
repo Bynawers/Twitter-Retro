@@ -7,8 +7,7 @@ import IconButton from "../button/IconButton";
 import config from "../../../twitterConfig.json";
 
 import { createTweet } from "../../services/RequestTweets";
-import { ToastContainer, toast } from "react-toastify";
-
+import { toast } from "react-toastify";
 const customStyles = {
   content: {
     left: "50%",
@@ -22,7 +21,7 @@ const customStyles = {
     borderRadius: 10,
   },
   overlay: {
-    backgroundColor: "rgba(0, 0, 0, 0.4)",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
 };
 
@@ -127,9 +126,9 @@ const ModalPost = (props) => {
     <>
       <Modal
         isOpen={props.modalIsOpen}
-        onRequestClose={closeModal}
         style={customStyles}
         contentLabel="Post"
+        onRequestClose={closeModal}
       >
         <div className="sticky h-[53px] pt-4 px-4 bg-opacity-70 bg-white backdrop-filter backdrop-blur-md">
           <div className="w-full">
@@ -188,12 +187,14 @@ const ModalPost = (props) => {
                   onChange={handleImageChange}
                   style={{ display: "none" }}
                 />
-                <IconButton
-                  name="image"
-                  color="#00ADED"
-                  background={"#e9f6fd"}
-                  event={selectImage}
-                />
+                <div className="flex justify-center items-center">
+                  <IconButton
+                    name="image"
+                    color="#00ADED"
+                    backgroundHover={"#e9f6fd"}
+                    event={selectImage}
+                  />
+                </div>
                 <button
                   className="bg-twitter hover:bg-twitterDark px-5 rounded-3xl font-bold text-white text-medium"
                   onClick={handleCreateTweet}
@@ -205,7 +206,6 @@ const ModalPost = (props) => {
           </div>
         </div>
       </Modal>
-      <ToastContainer />
     </>
   );
 };

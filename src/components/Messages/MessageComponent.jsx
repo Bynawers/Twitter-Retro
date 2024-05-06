@@ -11,7 +11,9 @@ const MessageComponent = ({ text, sender }) => {
   return (
     <div className={`flex items-center ${justifyContent}`}>
       <div className="max-w-xs">
-        <span className={`px-4 py-2 rounded-lg inline-block ${backgroundColor} ${textColor}`}>
+        <span
+          className={`px-4 py-2 rounded-lg inline-block ${backgroundColor} ${textColor}`}
+        >
           {text}
         </span>
       </div>

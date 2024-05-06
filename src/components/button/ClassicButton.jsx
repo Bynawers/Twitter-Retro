@@ -12,7 +12,7 @@ const ClassicButton = (props) => {
 
   const textColor = {
     black: "white",
-    twitter: "black",
+    twitter: "white",
     twitter_text: "#00ADED",
     white: "black",
   };
@@ -65,6 +65,7 @@ const ClassicButton = (props) => {
           : color[props.color],
         color: textColor[props.color],
         borderWidth: props.textButton ? 0 : 1,
+        fontSize: 15,
       }}
     >
       {props.text}

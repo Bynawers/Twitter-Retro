@@ -9,22 +9,26 @@ import {
 } from "../services/RequestUsers";
 
 const FeedUser = (props) => {
-  const { likes, retweets, posts } = useProfile();
+  const { likes, retweets, posts, replies } = useProfile();
   const [userLikes, setUserLikes] = useState([]);
   const [userRetweets, setUserRetweets] = useState([]);
   const [userPosts, setUserPosts] = useState([]);
+  const [userReplies, setUserReplies] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const userPosts = await getUserPosts(props.user.tag);
-      const userRetweets = await getUserRetweets(props.user.tag);
-      const userLikes = await getUserLikes(props.user.tag);
+    const fetchData = async (user) => {
+      const userPosts = await getUserPosts(user, 1, "tweet");
+      const userReplies = await getUserLikes(user, 1, "reply");
+      const userRetweets = await getUserRetweets(user, 1);
+      const userLikes = await getUserLikes(user, 1);
       setUserPosts(userPosts.data);
+      setUserPosts(userReplies.data);
       setUserRetweets(userRetweets.data);
       setUserLikes(userLikes.data);
     };
+
     if (!props.me) {
-      fetchData();
+      fetchData(props.user.tag);
     }
   }, []);
 
@@ -34,6 +38,14 @@ const FeedUser = (props) => {
         <Feed
           value={props.me ? posts : userPosts}
           view="Posts"
+          me={props.me}
+          tag={props.user.tag}
+        />
+      )}
+      {props.view == "Replies" && (
+        <Feed
+          value={props.me ? replies : userReplies}
+          view="Replies"
           me={props.me}
           tag={props.user.tag}
         />

@@ -1,7 +1,7 @@
 import React from "react";
 import Modal from "react-modal";
 import { useState } from "react";
-import {toast ,ToastContainer}from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { useAuth } from "../../hooks/AuthProvider";
 import axios from "axios";
 import { useChat } from "../../hooks/ChatP";
@@ -32,14 +32,13 @@ const customStyles = {
 
 function GroupChatModal({ isOpen, onRequestClose }) {
   let subtitle;
-  const { chats, setChats } = useChat(); 
+  const { chats, setChats } = useChat();
   const { user, token } = useAuth();
   const [groupChatName, setGroupChatName] = useState();
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
-
 
   const handleGroup = (userToAdd) => {
     if (selectedUsers.includes(userToAdd)) {
@@ -63,7 +62,10 @@ function GroupChatModal({ isOpen, onRequestClose }) {
           Authorization: `Bearer ${token}`,
         },
       };
-      const { data } = await axios.get(BASE_URL+`/users?search=${search}`, config);
+      const { data } = await axios.get(
+        BASE_URL + `/users?search=${search}`,
+        config
+      );
       console.log(data);
       setLoading(false);
       console.log(data);
@@ -90,7 +92,7 @@ function GroupChatModal({ isOpen, onRequestClose }) {
         },
       };
       const { data } = await axios.post(
-        BASE_URL+`/api/chat/group`,
+        BASE_URL + `/api/chat/group`,
         {
           name: groupChatName,
           users: JSON.stringify(selectedUsers.map((u) => u._id)),
@@ -101,7 +103,7 @@ function GroupChatModal({ isOpen, onRequestClose }) {
       onRequestClose();
       toast.success("Group chat created successfully");
     } catch (error) {
-        console.log(error); 
+      console.log(error);
       toast.error("Error creating group chat");
     }
   };
@@ -131,25 +133,40 @@ function GroupChatModal({ isOpen, onRequestClose }) {
 
             <div onClick={handleSubmit}>create</div>
           </div>
-          <input type="text" placeholder="groupchatname" className="w-full m-4 h-10" onChange={(e) => setGroupChatName(e.target.value)}/>
+          <input
+            type="text"
+            placeholder="groupchatname"
+            className="w-full m-4 h-10"
+            onChange={(e) => setGroupChatName(e.target.value)}
+          />
           <div className="flex m-4  ">
             <div>icon</div>
-            <input type="text" placeholder="search" className="w-full ml-2 h-10" onChange={(e) => handleSearch(e.target.value)} />
+            <input
+              type="text"
+              placeholder="search"
+              className="w-full ml-2 h-10"
+              onChange={(e) => handleSearch(e.target.value)}
+            />
           </div>
           <div>
-              {selectedUsers.map((u) => (
-                <UserBadgeItem
-                  key={u._id}
-                  user={u}
-                  handleFunction={() => handleDelete(u)}
-                />
-              ))}
+            {selectedUsers.map((u) => (
+              <UserBadgeItem
+                key={u._id}
+                user={u}
+                handleFunction={() => handleDelete(u)}
+              />
+            ))}
           </div>
-            <div>
-                {searchResult.map((user) => (
-                <UserListItem user={user} handleFunction={() => handleGroup(user)} />
-                ))}
-            </div>
+          <div>
+            {searchResult.map((user, index) => (
+              <React.Fragment key={index}>
+                <UserListItem
+                  user={user}
+                  handleFunction={() => handleGroup(user)}
+                />
+              </React.Fragment>
+            ))}
+          </div>
         </div>
       </Modal>
       <ToastContainer />

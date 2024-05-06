@@ -37,6 +37,21 @@ const getTweetsPerIds = async (ids) => {
   }
 };
 
+const getTweetPerId = async (id) => {
+  const token = Cookies.get("token");
+  try {
+    const response = await axios.get(BASE_URL + "/tweets/" + id, {
+      headers: {
+        Auth: token,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des utilisateurs:", error);
+    return null;
+  }
+};
+
 const createTweet = async (formData) => {
   const token = Cookies.get("token");
   try {
@@ -63,6 +78,25 @@ const deleteTweet = async (id) => {
       },
     });
     return response;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des utilisateurs:", error);
+    return null;
+  }
+};
+
+const getComments = async (id, page) => {
+  const token = Cookies.get("token");
+  try {
+    const response = await axios.get(
+      BASE_URL + "/tweets/" + id + "/comment?page=" + page,
+      {
+        headers: {
+          Auth: token,
+        },
+      }
+    );
+    console.log(response.data);
+    return response.data;
   } catch (error) {
     console.error("Erreur lors de la récupération des utilisateurs:", error);
     return null;
@@ -210,4 +244,6 @@ export {
   bookmarkTweet,
   unbookmarkTweet,
   searchLatestTweet,
+  getTweetPerId,
+  getComments,
 };
