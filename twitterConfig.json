@@ -4,5 +4,5 @@
   "bio_limite_size": 160,
   "BASE_URL_ONLINE": "https://api.twitter-retro.fr",
   "BASE_URL_LOCAL": "http://localhost:3001",
-  "local": true
+  "local": false
 }
