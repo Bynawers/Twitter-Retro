@@ -79,6 +79,7 @@ function MessageSegment() {
   useEffect(() => {
     if (selectedChat) {
       fetchMessages();
+      console.log("selected chat", selectedChat);
       selectedChatCompare = selectedChat;
       setIsTyping(false)
     }

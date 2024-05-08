@@ -6,6 +6,7 @@ import axios from "axios";
 import SignUpInfo from "./FirstStep";
 import PersonalInfo from "./ThirdStep";
 import OtherInfo from "./SecondStep";
+import twitterConfig from "../../../twitterConfig.json";
 
 import { signupUser, checkEmail, checkTag } from "../../services/RequestAuth";
 
