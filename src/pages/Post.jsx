@@ -44,25 +44,14 @@ const Post = () => {
       }
       setTweet(data);
     };
-    if (!tweet) {
-      fetchData();
-    }
-  }, []);
+    fetchData();
+  }, [id]);
 
   useEffect(() => {
     const fetchData = async () => {
       const tweets = await getComments(tweet._id, 1);
       setComments(tweets.data);
     };
-    if (!tweet) {
-      return;
-    }
-    if (!tweet.replies) {
-      return;
-    }
-    if (tweet.replies.length === 0) {
-      return;
-    }
     fetchData();
   }, [tweet]);
 
@@ -75,9 +64,10 @@ const Post = () => {
   };
 
   const handleAddComment = (comment) => {
-    console.log(comments);
-    console.log([...comments, comment]);
-    setComments([...comments, comment]);
+    if (!comment) {
+      return;
+    }
+    setComments([comment, ...comments]);
   };
 
   if (error && !tweet) {
@@ -94,6 +84,7 @@ const Post = () => {
   if (!tweet) {
     return;
   }
+
   return (
     <div className="flex flex-col h-screen">
       <HeaderBack view="post" />

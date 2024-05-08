@@ -56,18 +56,18 @@ const ProfileProvider = ({ children }) => {
 
     const fetchTweets = async () => {
       const userPosts = await getUserPosts(auth.user.tag, postsPages, "tweet");
+      setPosts(userPosts.data);
       const userReplies = await getUserPosts(
         auth.user.tag,
         repliesPages,
         "reply"
       );
-      const userRetweets = await getUserRetweets(auth.user.tag);
-      const userLikes = await getUserLikes(auth.user.tag);
-      const userBookmarks = await getUserBookmarks(auth.user.tag);
-      setPosts(userPosts.data);
       setReplies(userReplies.data);
-      setLikes(userLikes.data);
+      const userRetweets = await getUserRetweets(auth.user.tag);
       setRetweets(userRetweets.data);
+      const userLikes = await getUserLikes(auth.user.tag);
+      setLikes(userLikes.data);
+      const userBookmarks = await getUserBookmarks(auth.user.tag);
       setBookmarks(userBookmarks.data);
       setPostsPages(postsPages + 1);
       setMaxRepliesPages(userReplies.totalPages);

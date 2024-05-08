@@ -72,6 +72,10 @@ const Post = (props) => {
     navigate(toParametersPost, { state: { data: props.data } });
   };
 
+  if (!props.data.author) {
+    return;
+  }
+
   return (
     <>
       <div className="flex w-full flex-row pr-4 pl-4 pt-3 font-sans border-b-[1px] cursor-pointer">

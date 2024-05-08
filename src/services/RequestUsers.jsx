@@ -199,8 +199,10 @@ const getFollowers = async (tag) => {
   }
 };
 
-const getUserPosts = async (tag, page, type) => {
+const getUserPosts = async (tag, pageTmp, type) => {
   const token = Cookies.get("token");
+
+  const page = pageTmp ? pageTmp : 1;
 
   try {
     let response = await axios.get(
@@ -210,12 +212,11 @@ const getUserPosts = async (tag, page, type) => {
           Auth: token,
         },
         params: {
-          cacheBuster: Date.now(),
           type: type ? type : "tweet",
         },
       }
     );
-    response.data.data.reverse();
+    response.data.data;
 
     return response.data;
   } catch (error) {
@@ -224,8 +225,10 @@ const getUserPosts = async (tag, page, type) => {
   }
 };
 
-const getUserRetweets = async (tag) => {
+const getUserRetweets = async (tag, pageTmp) => {
   const token = Cookies.get("token");
+
+  const page = pageTmp ? pageTmp : 1;
 
   try {
     const response = await axios.get(BASE_URL + "/users/" + tag + "/retweets", {
@@ -241,8 +244,10 @@ const getUserRetweets = async (tag) => {
   }
 };
 
-const getUserLikes = async (tag, page) => {
+const getUserLikes = async (tag, pageTmp) => {
   const token = Cookies.get("token");
+
+  const page = pageTmp ? pageTmp : 1;
 
   try {
     const response = await axios.get(
@@ -264,8 +269,10 @@ const getUserLikes = async (tag, page) => {
   }
 };
 
-const getUserBookmarks = async (tag) => {
+const getUserBookmarks = async (tag, pageTmp) => {
   const token = Cookies.get("token");
+
+  const page = pageTmp ? pageTmp : 1;
 
   try {
     const response = await axios.get(

@@ -101,7 +101,7 @@ function User() {
     if (!me) {
       fetchData();
     }
-  }, [me]);
+  }, [username]);
 
   const handleFollow = async () => {
     let response;
