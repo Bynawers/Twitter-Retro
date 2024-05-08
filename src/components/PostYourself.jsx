@@ -4,6 +4,12 @@ import IconButton from "./button/IconButton";
 import ClassicButton from "../components/button/ClassicButton";
 import { createTweet } from "../services/RequestTweets";
 
+import twitterConfig from "../../twitterConfig.json";
+
+const BASE_URL = twitterConfig.local
+  ? twitterConfig.BASE_URL_LOCAL
+  : twitterConfig.BASE_URL_ONLINE;
+
 const PostYourself = (props) => {
   const postRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -75,47 +81,24 @@ const PostYourself = (props) => {
     formData.append("replyId", props.id);
 
     const response = await createTweet(formData);
-    setText("");
-    setImage(null);
-    setFocus(false);
-    setFile(null);
 
-    /*
-    if (response.status === 201) {
-      const newTweet = {
-        author: auth.user,
-        body: text,
-        type: "tweet",
-        _id: response.data.tweetId,
-        stat: {
-          view: 0,
-          retweet: 0,
-          like: 0,
-          bookmark: 0,
-          comment: 0,
-        },
-      };
-
-      const updatedUser = {
-        ...auth.user,
-        tweets: response.data.userTweets,
-        stat: response.data.userStat,
-      };
-      updateUser(updatedUser);
-      addPostedTweet(newTweet);
-      toast.success("Tweet posted successfully");
+    if (response.status === 200) {
+      props.handleAddComment(response.data.tweet);
+      setText("");
+      setImage(null);
+      setFocus(false);
+      setFile(null);
     } else {
-      toast.error("An error has occurred");
-    }*/
-    //closeModal();
+      // error
+    }
   };
 
   return (
     <div className="flex h-auto pt-1 pl-4 pr-4 border-b">
-      <div className="flex h-full w-[40px] mr-2 pt-4">
+      <div className="flex h-full w-[50px] mr-2 pt-4">
         <img
           className="flex h-[40px] w-[40px] rounded-full object-cover"
-          src="/src/assets/defaultAvatar.png"
+          src={BASE_URL + "/images/profile/" + props.userId}
         />
       </div>
       <div className="flex w-full h-auto justify-between items-center outline-none">

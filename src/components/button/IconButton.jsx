@@ -20,10 +20,11 @@ import {
   IoImageOutline,
   IoCameraOutline,
 } from "react-icons/io5";
-
+import { IoMdInformationCircleOutline } from "react-icons/io";
 import { HiSearch, HiOutlineSearch } from "react-icons/hi";
-
 import { MdGif, MdOutlineEmojiEmotions } from "react-icons/md";
+import { RiSettings3Fill } from "react-icons/ri";
+import { LuMailPlus } from "react-icons/lu";
 
 const IconButton = (props) => {
   const inputRef = useRef(null);
@@ -51,14 +52,6 @@ const IconButton = (props) => {
       <FaTwitter
         color="#00ADED"
         style={{ fontSize: props.size ? props.size : 35 }}
-      />
-    ),
-    setting: (
-      <FiSettings
-        style={{
-          color: hover ? props.colorHover : color,
-          fontSize: props.size ? props.size : 17,
-        }}
       />
     ),
     chat: (
@@ -204,6 +197,21 @@ const IconButton = (props) => {
     ),
     gif: (
       <MdGif
+        style={{ color: "#00ADED", fontSize: props.size ? props.size : 25 }}
+      />
+    ),
+    info: (
+      <IoMdInformationCircleOutline
+        style={{ color: "#00ADED", fontSize: props.size ? props.size : 25 }}
+      />
+    ),
+    setting: (
+      <RiSettings3Fill
+        style={{ color: "#00ADED", fontSize: props.size ? props.size : 25 }}
+      />
+    ),
+    group: (
+      <LuMailPlus
         style={{ color: "#00ADED", fontSize: props.size ? props.size : 25 }}
       />
     ),

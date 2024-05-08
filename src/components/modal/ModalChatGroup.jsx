@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Modal from "react-modal";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
@@ -13,6 +13,8 @@ import ClassicButton from "../button/ClassicButton";
 import { HiSearch } from "react-icons/hi";
 import SearchBar from "../SearchBar";
 import Avatar from "../Avatar";
+
+import { useNavigate } from "react-router-dom";
 
 const BASE_URL = twitterConfig.local
   ? twitterConfig.BASE_URL_LOCAL
@@ -40,16 +42,24 @@ const customStyles = {
   },
 };
 
-function GroupChatModal({ isOpen, onRequestClose }) {
+function ModalChatGroup({ isOpen, onRequestClose, chatName, users }) {
+  const navigate = useNavigate();
   let subtitle;
   const { chats, setChats } = useChat();
   const { user, token } = useAuth();
   const [step, setStep] = useState(1);
   const [groupChatName, setGroupChatName] = useState("");
-  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState(
+    users ? (users.length > 0 ? users : []) : []
+  );
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  console.log(users);
+  useEffect(() => {
+    console.log(selectedUsers);
+  }, [selectedUsers]);
 
   const handleGroup = (userToAdd) => {
     if (selectedUsers.includes(userToAdd)) {
@@ -124,17 +134,6 @@ function GroupChatModal({ isOpen, onRequestClose }) {
     }
   }
 
-  const handleNext = () => {
-    if (selectedUsers.length === 0) {
-      return;
-    }
-    setStep(step + 1);
-  };
-
-  const handleBack = () => {
-    setStep(step - 1);
-  };
-
   return (
     <>
       <ToastContainer />
@@ -146,82 +145,59 @@ function GroupChatModal({ isOpen, onRequestClose }) {
         contentLabel="GroupChat Modal"
       >
         <div className="relative flex-col">
-          <div className="sticky">
+          <div>
             <div className="flex items-center justify-between px-3 py-2">
               <div className="flex items-center space-x-4 ">
-                <IconButton
-                  name={step == 1 ? "close" : "back"}
-                  event={step == 1 ? onRequestClose : handleBack}
-                />
+                <IconButton name="close" event={onRequestClose} />
 
                 <span className="text-xl font-bold text-gray-800">
-                  New message
+                  Manage group "{chatName}"
                 </span>
               </div>
 
-              {step == 1 && (
-                <ClassicButton
-                  text="Next"
-                  color={selectedUsers.length !== 0 ? "black" : "lock"}
-                  event={handleNext}
-                />
-              )}
-              {step == 2 && <IconButton name="close" event={onRequestClose} />}
-            </div>
-            {step == 1 && (
-              <div className="flex items-center border-b">
-                <HiSearch className="absolute ml-4 text-twitter" size={25} />
-                <input
-                  type="text"
-                  placeholder="Search people"
-                  className="w-[90%] ml-[10%] h-10 pr-4 outline-none"
-                  onChange={(e) => handleSearch(e.target.value)}
-                />
-              </div>
-            )}
-          </div>
-          {step == 1 && (
-            <div className="">
-              {selectedUsers.map((u) => (
-                <UserBadgeItem
-                  key={u._id}
-                  user={u}
-                  handleFunction={() => handleDelete(u)}
-                />
-              ))}
-            </div>
-          )}
-          {step == 1 && (
-            <div>
-              {searchResult.map((user, index) => (
-                <React.Fragment key={index}>
-                  <UserElement data={user} event={() => handleGroup(user)} />
-                </React.Fragment>
-              ))}
-            </div>
-          )}
-
-          {step == 2 && (
-            <div className="flex flex-col ml-2 pt-8 w-[90%] px-8">
-              <span className="text-xl text-gray-600">Nom du groupe</span>
-              <input
-                type="text"
-                placeholder=""
-                className="w-full h-10 text-md outline-none border-2 rounded-lg border-gray-200 p-4 mt-2"
-                onChange={(e) => setGroupChatName(e.target.value)}
-              />
-            </div>
-          )}
-
-          {step == 2 && (
-            <div className="w-full flex justify-center pt-10">
               <ClassicButton
-                text="Submit"
-                color={groupChatName.length !== 0 ? "twitter" : "lock"}
+                text="Modify"
+                color={selectedUsers.length !== 0 ? "black" : "lock"}
                 event={handleSubmit}
               />
             </div>
-          )}
+            <div className="flex ml-2 space-between w-[100%] px-4 items-center space-x-4 border-b pb-4">
+              <span className="text-lg text-gray-600">Modifier le nom</span>
+              <input
+                type="text"
+                placeholder={chatName}
+                className="w-[70%] h-10 text-md outline-none border-2 rounded-lg border-gray-200 p-4 mt-2"
+                onChange={(e) => setGroupChatName(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div>
+            {selectedUsers.map((u, index) => {
+              console.log("---------------");
+              return (
+                <React.Fragment key={index}>
+                  <UserHandler data={u} navigate={navigate} />
+                </React.Fragment>
+              );
+            })}
+            <ClassicButton text="Leave group" color="red" textButton={true} />
+          </div>
+
+          <div className="flex items-center border-b">
+            <HiSearch className="absolute ml-4 text-twitter" size={25} />
+            <input
+              type="text"
+              placeholder="Search people"
+              className="w-[90%] ml-[10%] h-10 pr-4 outline-none"
+              onChange={(e) => handleSearch(e.target.value)}
+            />
+          </div>
+          {searchResult.map((user, index) => (
+            <React.Fragment key={index}>
+              <UserElement data={user} event={() => handleGroup(user)} />
+            </React.Fragment>
+          ))}
         </div>
       </Modal>
     </>
@@ -242,4 +218,43 @@ const UserElement = (props) => {
   );
 };
 
-export default GroupChatModal;
+const UserHandler = (props) => {
+  const goProfile = () => {
+    props.navigate("/" + props.data.tag);
+  };
+  return (
+    <button
+      className="flex flex-col items-center w-full"
+      to={"/" + props.data.tag}
+      onClick={goProfile}
+    >
+      <div
+        className="flex
+      cursor-pointer items-center xl:px-4 xl:py-3 font-sans w-[85px] xl:w-full hover:bg-gray-100 xl:justify-between justify-center"
+      >
+        <div className="flex flex-row items-center w-full justify-between">
+          <div className="flex">
+            <img
+              className="flex h-[40px] w-[40px] rounded-full object-cover"
+              src={BASE_URL + "/images/profile/" + props.data._id}
+            />
+            <div className="hidden flex-col items-start xl:flex 2xl:flex">
+              <span className="text-md pl-3 font-bold">
+                {props.data.fullName}
+              </span>
+              <span className="text-md pl-3 font-light">@{props.data.tag}</span>
+            </div>
+          </div>
+          <ClassicButton
+            text="remove"
+            color="red"
+            textButton={true}
+            event={() => alert("remove")}
+          />
+        </div>
+      </div>
+    </button>
+  );
+};
+
+export default ModalChatGroup;

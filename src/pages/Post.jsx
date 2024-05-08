@@ -74,6 +74,12 @@ const Post = () => {
     window.location.reload();
   };
 
+  const handleAddComment = (comment) => {
+    console.log(comments);
+    console.log([...comments, comment]);
+    setComments([...comments, comment]);
+  };
+
   if (error && !tweet) {
     return (
       <div className="flex flex-col space-y-5 w-full justify-center items-center h-[200px]">
@@ -150,7 +156,12 @@ const Post = () => {
           <ActionButtons view="main" data={tweet.stat} id={tweet._id} />
         </main>
       </div>
-      <PostYourself id={tweet._id} isComment={isComment} />
+      <PostYourself
+        id={tweet._id}
+        isComment={isComment}
+        userId={auth.user._id}
+        handleAddComment={handleAddComment}
+      />
       <Feed value={comments} />
       <ModalPhoto
         modalIsOpen={modalPhoto}

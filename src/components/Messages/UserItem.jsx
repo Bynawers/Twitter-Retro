@@ -1,14 +1,20 @@
 import React from "react";
 import { useAuth } from "../../hooks/AuthProvider";
-import { getSender } from "../../utils/ChatLogics";
-import { format } from 'date-fns';
+import { getSender, getSenderid } from "../../utils/ChatLogics";
+import { format } from "date-fns";
+import twitterConfig from "../../../twitterConfig.json";
+import groupimage from "../../services/images-group/group-chat.png";
+
+const BASE_URL = twitterConfig.local
+  ? twitterConfig.BASE_URL_LOCAL
+  : twitterConfig.BASE_URL_ONLINE;
 
 const UserItem = ({ item, username, lastMessage, onClick, selected }) => {
   const auth = useAuth();
 
   // Function to format timestamp
   const formatTimestamp = (timestamp) => {
-    const formattedDate = format(new Date(timestamp), 'MMM d, yyyy h:mm a');
+    const formattedDate = format(new Date(timestamp), "MMM d, yyyy h:mm a");
     return formattedDate;
   };
 
@@ -19,18 +25,36 @@ const UserItem = ({ item, username, lastMessage, onClick, selected }) => {
       }`}
       onClick={onClick}
     >
-      <div className="w-12 h-12 bg-gray-400 rounded-full"></div>
+      {!item.isGroupChat ? (
+        <img
+          src={`${BASE_URL}/images/profile/${getSenderid(
+            auth.user,
+            item.users
+          )}`}
+          alt=""
+          className="w-12 h-12 rounded-full"
+        />
+      ) : (
+        <img
+          src={groupimage}
+          alt=""
+          className="w-12 h-12 rounded-full bg-slate-300"
+        />
+        // Content for group chat can be added here if needed
+      )}
+
       <div className="flex flex-col flex-grow">
         <div className="flex justify-between items-center">
           <div className="font-bold">
             {/* Truncate long names */}
             {!item.isGroupChat
-              ? getSender(auth.user, item.users)
+              ? getSender(auth.user, item.users).fullName
               : item.chatName}
           </div>
           <div className="text-sm text-gray-500 whitespace-nowrap">
             {/* Format the timestamp */}
-            {item.latestMessage?.createdAt && formatTimestamp(item.latestMessage.createdAt)}
+            {item.latestMessage?.createdAt &&
+              formatTimestamp(item.latestMessage.createdAt)}
           </div>
         </div>
 

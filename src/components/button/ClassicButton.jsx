@@ -8,6 +8,8 @@ const ClassicButton = (props) => {
     twitter: "#00ADED",
     twitter_text: "#00ADED",
     white: "white",
+    lock: "gray",
+    red: "red",
   };
 
   const textColor = {
@@ -15,6 +17,8 @@ const ClassicButton = (props) => {
     twitter: "white",
     twitter_text: "#00ADED",
     white: "black",
+    lock: "white",
+    red: "red",
   };
 
   const hoverColor = {
@@ -22,6 +26,8 @@ const ClassicButton = (props) => {
     twitter: "#1a8cd8",
     twitter_text: "#d5e5eb",
     white: "#eff1f1",
+    lock: "gray",
+    red: "",
   };
 
   const handleMouseEnter = () => {
@@ -54,7 +60,7 @@ const ClassicButton = (props) => {
   return (
     <button
       onClick={props.event}
-      className="flex px-4 py-3 h-[34px] rounded-3xl items-center font-semibold border-[1px]"
+      className={`flex px-4 py-3 h-[34px] rounded-3xl items-center font-semibold border-[1px]`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       style={{

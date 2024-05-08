@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, Link } from "react-router-dom";
-import { toast } from "react-toastify";
+import { useLocation, Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import { useChat } from "../hooks/ChatP";
 
 import { useAuth } from "../hooks/AuthProvider";
 
@@ -20,12 +21,19 @@ import {
 } from "../services/RequestUsers";
 
 import FeedUser from "../components/FeedUser";
+import axios from "axios";
 
 const BASE_URL_IMAGE = twitterConfig.local
   ? twitterConfig.BASE_URL_LOCAL + "/images/"
   : twitterConfig.BASE_URL_ONLINE + "/images/";
 
+const BASE_URL = twitterConfig.local
+  ? twitterConfig.BASE_URL_LOCAL
+  : twitterConfig.BASE_URL_ONLINE;
+
 function User() {
+  const navigate = useNavigate();
+  const setSelectedChat = useChat().setSelectedChat;
   const [init, setInit] = useState(false);
   const [view, setView] = useState("Posts");
   const [user, setUser] = useState([]);
@@ -43,6 +51,26 @@ function User() {
   const username = parts[parts.length - 1];
 
   const auth = useAuth();
+
+  const handleClickMessage = async () => {
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Auth: auth.token,
+      },
+    };
+    const { data } = await axios.post(
+      BASE_URL + "/api/chat",
+      {
+        userId: user._id,
+      },
+      config
+    );
+    setSelectedChat(data);
+    navigate("/messages");
+
+    console.log("data", data);
+  };
 
   useEffect(() => {
     const myTag = auth.user.tag;
@@ -147,7 +175,9 @@ function User() {
                   <>
                     <div className="flex space-x-2">
                       <IconButton name="more" styles="border-[1px]" />
-                      <IconButton name="message" styles="border-[1px]" />
+                      <div onClick={handleClickMessage}>
+                        <IconButton name="message" styles="border-[1px]" />
+                      </div>
                     </div>
                     <ClassicButton
                       text={isFollow ? "Following" : "Follow"}
