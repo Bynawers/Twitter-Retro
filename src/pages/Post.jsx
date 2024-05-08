@@ -44,6 +44,9 @@ const Post = () => {
       }
       setTweet(data);
     };
+    if (!id) {
+      return;
+    }
     fetchData();
   }, [id]);
 
@@ -52,6 +55,9 @@ const Post = () => {
       const tweets = await getComments(tweet._id, 1);
       setComments(tweets.data);
     };
+    if (!tweet) {
+      return;
+    }
     fetchData();
   }, [tweet]);
 
