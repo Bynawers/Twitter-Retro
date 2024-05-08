@@ -7,7 +7,8 @@ const PersonalInfo = (props) => {
     const file = e.target.files[0];
     setAvatar(file);
 
-    props.setFormData({ ...props.formData, avatar: file });
+    props.setProfilePicture(file);
+    console.log(file);
   };
 
   return (

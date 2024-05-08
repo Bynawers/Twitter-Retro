@@ -11,6 +11,11 @@ import { signupUser, checkEmail, checkTag } from "../../services/RequestAuth";
 
 import { useAuth } from "../../hooks/AuthProvider";
 
+
+const BASE_URL = twitterConfig.local
+  ? twitterConfig.BASE_URL_LOCAL
+  : twitterConfig.BASE_URL_ONLINE;
+  
 const SignUpForm = (props) => {
   const auth = useAuth();
 
@@ -19,6 +24,7 @@ const SignUpForm = (props) => {
   const [errorPassword, setErrorPassword] = useState(false);
   const [errorConfirmPassword, setErrorConfirmPassword] = useState(false);
   const [errorTag, setErrorTag] = useState(false);
+  const [profilepicture, setProfilePicture] = useState(null);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -132,23 +138,48 @@ const SignUpForm = (props) => {
   };
 
   const handleSubmit = async () => {
+    var data = new FormData();
+    delete formData.confirmPassword;
+    delete formData.avatar;
     const input = {
       email: formData.email,
       password: formData.password,
     };
+    
+
     try {
-      const response = await axios.post(
-        "http://localhost:3001/auth/register",
+      const response1 = await axios.post(
+        BASE_URL+"/auth/register",
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
           },
         }
       );
-      //auth.loginAction(input);
+      console.log("User registered successfully:", response1.data.token);
+      if (profilepicture !== null){
+        data.append("profile",profilepicture)
+        try {
+          const response = await axios.patch(
+              BASE_URL+"/users",
+              data,
+              {
+                  headers: {
+                      "Content-Type": "multipart/form-data",
+                     Auth: `Bearer  ${response1.data.token}` // Corrected the header name to "Authorization"
+                  },
+              }
+          );
+          console.log("File uploaded successfully:", response.data);
+          
+      } catch (error) {  
+          console.error("Error uploading file:", error);
+      }
+      }
+      auth.loginAction(input);
     } catch (error) {
-      console.error("Error uploading file:", error);
+      console.error("Error signup:", error);
     }
   };
 
@@ -176,6 +207,7 @@ const SignUpForm = (props) => {
         formData={formData}
         setFormData={setFormData}
         errorTag={errorTag}
+        setProfilePicture={setProfilePicture}
       />
     ),
   };
