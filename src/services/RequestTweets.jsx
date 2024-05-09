@@ -285,14 +285,18 @@ const searchHashtags = async (search) => {
   }
 };
 
-const getTopHashtag = async (page) => {
+const getTopHashtag = async (pageTmp) => {
   const token = Cookies.get("token");
+  const page = pageTmp ? pageTmp : 1;
   try {
-    const response = await axios.get(BASE_URL + "/tweets/topHashtags", {
-      headers: {
-        Auth: token,
-      },
-    });
+    const response = await axios.get(
+      BASE_URL + "/tweets/topHashtags?page=" + page,
+      {
+        headers: {
+          Auth: token,
+        },
+      }
+    );
     console.log(response.data);
     return response.data;
   } catch (error) {

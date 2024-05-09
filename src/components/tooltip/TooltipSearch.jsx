@@ -28,7 +28,7 @@ const TooltipSearch = (props) => {
       place="bottom"
       offset={1}
       render={() => (
-        <div className="flex flex-1 max-h-[600px] overflow-y-auto font-medium text-center text-base text-icon">
+        <div className="flex flex-1 z-50 max-h-[600px] overflow-y-scroll font-medium text-center text-base text-icon">
           {props.search.length == 0 && latestSearch.length == 0 && (
             <span className="py-10 px-3">
               Essayez de chercher des personnes, des Listes ou des mots‑clés.
@@ -46,7 +46,7 @@ const TooltipSearch = (props) => {
                   event={() => removeAllLatestSearch()}
                 />
               </div>
-              <div>
+              <div className="">
                 {latestSearch.map((item, index) => {
                   return (
                     <React.Fragment key={index}>

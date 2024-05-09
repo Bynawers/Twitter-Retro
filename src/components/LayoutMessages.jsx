@@ -29,7 +29,7 @@ const LayoutMessages = ({ children }) => {
           </div>
           <main className="flex flex-3">
             <div
-              className="hidden md:flex flex-col w-[918px] max-w-[988px] lg:min-w-[988px] xl:min-w-[1048px] relative overflow-y-scroll no-scrollbar scrollbar-none"
+              className="flex flex-col w-[918px] max-w-[988px] lg:min-w-[988px] xl:min-w-[1048px] relative overflow-y-scroll no-scrollbar scrollbar-none"
               ref={mainRef}
               onScroll={handleMainScroll}
             >

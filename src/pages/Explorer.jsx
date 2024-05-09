@@ -79,33 +79,18 @@ const TrendsView = () => {
           Recherchez les utilisateurs et les tweets que vous souhaitez...
         </span>
       </div>
-      <Trends white={true} />
+      <Trends white={true} full={true} />
     </div>
   );
 };
 
 const HashtagView = (props) => {
-  console.log(props.data);
   if (!props.data) {
     return <span>Error</span>;
   }
   return (
     <div>
-      {props.data.map((item, index) => {
-        return (
-          <React.Fragment key={index}>
-            <div className="h-[90px] w-full hover:bg-gray-100">
-              <Avatar
-                search={true}
-                id={item._id}
-                tag={item.tag}
-                username={item.fullName}
-                bio={item.bio}
-              />
-            </div>
-          </React.Fragment>
-        );
-      })}
+      <Feed value={props.data} />
       {props.data.length == 0 && <SearchNotExist search={props.search} />}
     </div>
   );

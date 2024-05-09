@@ -1,18 +1,39 @@
 import React, { useEffect, useState } from "react";
 import IconButton from "./button/IconButton";
+import { Link, useNavigate } from "react-router-dom";
 
 import ReduceBigNumber from "../utils/ReduceBigNumbers";
 import { getTopHashtag } from "../services/RequestTweets";
 
 const Trends = (props) => {
   const [trends, setTrends] = useState([]);
+  const [page, setPage] = useState(1);
+  const [maxPage, setMaxPage] = useState(0);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getTopHashtag();
+      const data = await getTopHashtag(page);
       setTrends(data.hashtags);
+      setMaxPage(
+        Math.ceil(data.pagination.totalCount / data.pagination.pageSize)
+      );
     };
     fetchData();
   }, []);
+
+  const handleShowMore = async () => {
+    if (!props.full) {
+      navigate("/explore");
+      return;
+    }
+    console.log(page);
+    console.log(maxPage);
+    const data = await getTopHashtag(page + 1);
+    const newData = [data, ...trends];
+    setTrends(newData);
+    setPage(page + 1);
+  };
 
   return (
     <div
@@ -28,35 +49,41 @@ const Trends = (props) => {
       {trends.map((item, index) => {
         return (
           <React.Fragment key={index}>
-            <TrendsElement item={item} rank={index + 1} />
+            <TrendsElement item={item} rank={index + 1} navigate={navigate} />
           </React.Fragment>
         );
       })}
-      <div className="px-2 py-3 rounded-b-xl font-normal text-twitter hover:bg-foregroundHover cursor-pointer">
-        <span>Voir plus</span>
-      </div>
+      {(maxPage > page || !props.full) && (
+        <div
+          className="px-2 py-3 rounded-b-xl font-normal text-twitter hover:bg-foregroundHover cursor-pointer"
+          onClick={handleShowMore}
+        >
+          <span>Voir plus</span>
+        </div>
+      )}
+      {maxPage == page && props.full && (
+        <span className="px-2 font-light">Pas d'autres tendances...</span>
+      )}
     </div>
   );
 };
 
 const TrendsElement = (props) => {
   const reduceValue = ReduceBigNumber(props.item.count);
-  const handleTooltip = () => {};
+
+  const handleDetail = () => {
+    props.navigate(`/explore?src=typed_query&q=${props.item._id}`);
+  };
 
   return (
-    <div className="px-3 py-4 flex flex-col hover:bg-foregroundHover cursor-pointer ">
+    <div
+      className="px-3 py-4 flex flex-col hover:bg-foregroundHover cursor-pointer"
+      onClick={handleDetail}
+    >
       <div className="h-5 flex justify-between">
         <span className="font-normal text-textLight text-sm">
           {props.rank} · Tendances
         </span>
-        <IconButton
-          name="more"
-          styles="hover:bg-iconBackgroundHover"
-          colorHover={"#229df0"}
-          backgroundHover={"#dae8f0"}
-          event={handleTooltip}
-          value={null}
-        />
       </div>
       <div className="h-5">
         <span>#{props.item._id}</span>

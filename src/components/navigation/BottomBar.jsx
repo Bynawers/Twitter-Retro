@@ -5,7 +5,7 @@ const BottomBar = () => {
   const scrollDirection = useScrollDirection();
   return (
     <div
-      className={`inline sm:hidden w-full transition-all duration-500 ${
+      className={`inline z-50 sm:hidden w-full transition-all duration-500 ${
         scrollDirection === "down" ? "opacity-30" : "opacity-full"
       }`}
     >

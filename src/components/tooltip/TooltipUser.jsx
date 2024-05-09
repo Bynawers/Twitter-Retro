@@ -38,6 +38,7 @@ const TooltipUser = (props) => {
         width: 270,
         height: 112,
         borderRadius: 15,
+        zIndex: 9999,
       }}
     />
   );
