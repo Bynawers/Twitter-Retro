@@ -210,13 +210,6 @@ const ActionButtons = (props) => {
             styles="z-20"
             backgroundHover={"#e9f6fd"}
           />
-          <IconButton
-            event={handleShare}
-            name="share"
-            colorHover={"#54b3f3"}
-            styles="z-20"
-            backgroundHover={"#e9f6fd"}
-          />
         </div>
       )}
     </div>
