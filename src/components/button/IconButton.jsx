@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 
 import { FiSettings } from "react-icons/fi";
 import { FaTwitter } from "react-icons/fa";
+import { IoMdSend } from "react-icons/io";
 
 import {
   IoEllipsisHorizontal,
@@ -212,6 +213,11 @@ const IconButton = (props) => {
     ),
     group: (
       <LuMailPlus
+        style={{ color: "#00ADED", fontSize: props.size ? props.size : 25 }}
+      />
+    ),
+    send: (
+      <IoMdSend
         style={{ color: "#00ADED", fontSize: props.size ? props.size : 25 }}
       />
     ),

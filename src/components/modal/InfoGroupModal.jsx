@@ -13,6 +13,7 @@ import ClassicButton from "../button/ClassicButton";
 import { HiSearch } from "react-icons/hi";
 import SearchBar from "../SearchBar";
 import Avatar from "../Avatar";
+import { getSearchUser } from "../../services/RequestUsers";
 
 import { useNavigate } from "react-router-dom";
 
@@ -42,12 +43,11 @@ const customStyles = {
   },
 };
 
-function ModalChatGroup({ isOpen, onRequestClose, chatName, users }) {
+function InfoGroupModal({ isOpen, onRequestClose, chatName, users }) {
   const navigate = useNavigate();
   let subtitle;
   const { chats, setChats } = useChat();
   const { user, token } = useAuth();
-  const [step, setStep] = useState(1);
   const [groupChatName, setGroupChatName] = useState("");
   const [selectedUsers, setSelectedUsers] = useState(
     users ? (users.length > 0 ? users : []) : []
@@ -77,21 +77,13 @@ function ModalChatGroup({ isOpen, onRequestClose, chatName, users }) {
 
     try {
       setLoading(true);
-      const config = {
-        headers: {
-          Auth: token,
-        },
-      };
-      const { data } = await axios.get(
-        BASE_URL + `/search?search=${search}`,
-        config
-      );
+      const data = await getSearchUser(query);
       console.log(data);
       setLoading(false);
       console.log(data);
       setSearchResult(data);
     } catch (error) {
-      toast.error("Error searching users");
+      toast.error(error);
     }
   };
 
@@ -257,4 +249,4 @@ const UserHandler = (props) => {
   );
 };
 
-export default ModalChatGroup;
+export default InfoGroupModal;

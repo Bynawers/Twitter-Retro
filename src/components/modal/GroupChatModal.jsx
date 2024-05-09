@@ -1,7 +1,7 @@
 import React from "react";
 import Modal from "react-modal";
 import { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { useAuth } from "../../hooks/AuthProvider";
 import axios from "axios";
 import { useChat } from "../../hooks/ChatP";
@@ -13,6 +13,7 @@ import ClassicButton from "../button/ClassicButton";
 import { HiSearch } from "react-icons/hi";
 import SearchBar from "../SearchBar";
 import Avatar from "../Avatar";
+import { getSearchUser } from "../../services/RequestUsers";
 
 const BASE_URL = twitterConfig.local
   ? twitterConfig.BASE_URL_LOCAL
@@ -67,21 +68,11 @@ function GroupChatModal({ isOpen, onRequestClose }) {
 
     try {
       setLoading(true);
-      const config = {
-        headers: {
-          Auth: token,
-        },
-      };
-      const { data } = await axios.get(
-        BASE_URL + `/search?search=${search}`,
-        config
-      );
-      console.log(data);
+      const data = await getSearchUser(query);
       setLoading(false);
-      console.log(data);
       setSearchResult(data);
     } catch (error) {
-      toast.error("Error searching users");
+      toast.error(error);
     }
   };
 
@@ -137,7 +128,6 @@ function GroupChatModal({ isOpen, onRequestClose }) {
 
   return (
     <>
-      <ToastContainer />
       <Modal
         isOpen={isOpen}
         onAfterOpen={afterOpenModal}

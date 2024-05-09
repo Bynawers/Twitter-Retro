@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import MessageComponent from "./MessageComponent";
 import EmojiPicker from "emoji-picker-react";
-import { IoMdSend } from "react-icons/io";
 import { MdGif, MdOutlineEmojiEmotions } from "react-icons/md";
 import { IoImageOutline } from "react-icons/io5";
 import { useChat } from "../../hooks/ChatP";
@@ -17,7 +16,7 @@ import animationData from "../../animations/typing.json";
 import { getMessages, sendMessage } from "../../services/RequestMessages";
 import IconButton from "../button/IconButton";
 import { useNavigate } from "react-router-dom";
-import ModalChatGroup from "../modal/ModalChatGroup";
+import InfoGroupModal from "../modal/InfoGroupModal";
 
 var socket, selectedChatCompare;
 
@@ -173,7 +172,7 @@ function MessageSegment() {
       },
     };
     const response = await axios.get(
-      `http://localhost:3001/api/message/${selectedChat._id}`,
+      BASE_URL + `/api/message/${selectedChat._id}`,
       config
     );
     setMessagesList(response.data);
@@ -240,16 +239,6 @@ function MessageSegment() {
           <div className="flex items-center min-h-14 p-2 border-t-[1px]">
             <div className="flex items-center space-x-2 h-full">
               <IconButton
-                name="image"
-                colorHover={"#54b3f3"}
-                backgroundHover={"#e9f6fd"}
-              />
-              <IconButton
-                name="gif"
-                colorHover={"#54b3f3"}
-                backgroundHover={"#e9f6fd"}
-              />
-              <IconButton
                 name="emojis"
                 event={() => setShowEmojiPicker(!showEmojiPicker)}
                 colorHover={"#54b3f3"}
@@ -264,13 +253,14 @@ function MessageSegment() {
               onKeyPress={handleKeyPress}
               className="ml-3 flex-grow h-full px-4 rounded-lg border-2 border-gray-300"
             />
-            <button
-              className="text-blue-500 rounded-full font-semibold ml-2"
-              onClick={sendMessageHandler}
-            >
-              <IoMdSend size="1.5em" />
-            </button>
-            <ModalChatGroup
+
+            <IconButton
+              name="send"
+              event={sendMessageHandler}
+              colorHover={"#54b3f3"}
+              backgroundHover={"#e9f6fd"}
+            />
+            <InfoGroupModal
               users={selectedChat.users}
               isOpen={modalInfoOpen}
               chatName={chatName}

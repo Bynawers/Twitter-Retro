@@ -34,13 +34,7 @@ function UserItemSegment() {
       <div className="flex items-end justify-between p-4">
         <h1 className="text-2xl font-bold mb-4">Messages</h1>
         <div className="flex items-end mb-4">
-          <div className="cursor-pointer items-center space-x-1 rounded-full font-san transition-all duration-20">
-            <IconButton
-              name="setting"
-              colorHover={"#54b3f3"}
-              backgroundHover={"#e9f6fd"}
-            />
-          </div>
+          <div className="cursor-pointer items-center space-x-1 rounded-full font-san transition-all duration-20"></div>
           <IconButton
             name="group"
             colorHover={"#54b3f3"}
