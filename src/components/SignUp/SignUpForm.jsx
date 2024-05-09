@@ -6,10 +6,9 @@ import axios from "axios";
 import SignUpInfo from "./FirstStep";
 import PersonalInfo from "./ThirdStep";
 import OtherInfo from "./SecondStep";
+import twitterConfig from "../../../twitterConfig.json";
 
 import { signupUser, checkEmail, checkTag } from "../../services/RequestAuth";
-
-import twitterConfig from "../../../twitterConfig.json";
 
 import { useAuth } from "../../hooks/AuthProvider";
 
@@ -73,16 +72,45 @@ const SignUpForm = (props) => {
       setErrorConfirmPassword(true);
       toast.error("Please confirm your password");
       return false;
-    }
-    if (password !== confirmPassword) {
+    } else if (password !== confirmPassword) {
       setErrorConfirmPassword(true);
       toast.error("Passwords not matching");
+      return false;
+    }
+
+    // Validate password against rules
+    const isPasswordValid = validatePasswordRules(password);
+    if (!isPasswordValid) {
+      setErrorPassword(true);
+      toast.error("Password does not meet requirements");
       return false;
     }
 
     setErrorPassword(false);
     setErrorConfirmPassword(false);
     return true;
+  };
+
+  const validatePasswordRules = (password) => {
+    // Define password rules
+    const rules = {
+      minLength: 5, // Minimum length requirement
+      hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/, // Special character requirement
+      hasNumber: /\d/, // Number requirement
+      hasCapital: /[A-Z]/, // Uppercase letter requirement
+    };
+
+    // Check each rule
+    const isMinLengthValid = password.length >= rules.minLength;
+    const hasSpecialChar = rules.hasSpecialChar.test(password);
+    const hasNumber = rules.hasNumber.test(password);
+    const hasCapital = rules.hasCapital.test(password);
+
+    // Check if all rules pass
+    const isValid =
+      isMinLengthValid && hasSpecialChar && hasNumber && hasCapital;
+
+    return isValid;
   };
 
   const validateFullName = () => {

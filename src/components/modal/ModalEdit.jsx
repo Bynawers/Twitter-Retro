@@ -170,7 +170,7 @@ const ModalEdit = (props) => {
 
           <div className="flex flex-col w-full px-4 pb-10">
             <ClassicInput
-              current={newName.length}
+              current={newName ? newName.length : ""}
               limit={config.name_limite_size}
               name="Name"
               value={newName}
@@ -181,7 +181,7 @@ const ModalEdit = (props) => {
 
             <ClassicInput
               type="area"
-              current={newBio.length}
+              current={newBio ? newBio.length : ""}
               limit={config.bio_limite_size}
               name="Bio"
               value={newBio}
