@@ -10,7 +10,7 @@ const HeaderSearch = (props) => {
 
   return (
     <div
-      className={`sticky w-full bg-white backdrop-filter transition-all duration-500 sm:top-0 ${
+      className={`sticky w-full bg-white backdrop-filter transition-all duration-500 z-50 sm:top-0 ${
         scrollDirection === "down" ? "-top-24" : "top-0"
       }`}
     >
@@ -28,7 +28,7 @@ const HeaderSearch = (props) => {
         <TabNavigator
           view={props.view}
           setView={props.setView}
-          data={["Top", "Latest", "People"]}
+          data={["Hashtag", "Latest", "People"]}
         />
       )}
       {props.tab && <div className="h-[1px] w-full bg-gray-200" />}

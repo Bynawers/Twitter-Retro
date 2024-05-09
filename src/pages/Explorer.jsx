@@ -5,7 +5,7 @@ import Trends from "../components/Trends";
 
 import { useLocation } from "react-router-dom";
 
-import { searchLatestTweet } from "../services/RequestTweets";
+import { searchLatestTweet, searchHashtags } from "../services/RequestTweets";
 import { getSearchUser } from "../services/RequestUsers";
 import Avatar from "../components/Avatar";
 import Feed from "../components/Feed";
@@ -16,11 +16,11 @@ function Explorer() {
   const query = queryParams.get("q");
   const source = queryParams.get("src");
 
-  const [view, setView] = useState("Top");
+  const [view, setView] = useState("Hashtag");
   const [search, setSearch] = useState("");
 
   const [dataUser, setDataUser] = useState([]);
-  const [dataTop, setDataTop] = useState([]);
+  const [dataHashtag, setDataHashtag] = useState([]);
   const [dataLatest, setDataLatest] = useState([]);
 
   useEffect(() => {
@@ -36,6 +36,8 @@ function Explorer() {
   const requestData = async (value) => {
     setDataUser(await getSearchUser(value));
     setDataLatest(await searchLatestTweet(value));
+    const searchHashtagsData = await searchHashtags(value);
+    setDataHashtag(searchHashtagsData.posts);
   };
 
   return (
@@ -47,14 +49,16 @@ function Explorer() {
         search={search}
         setSearch={setSearch}
         dataUser={dataUser}
-        dataTop={dataTop}
+        dataTop={dataHashtag}
         source={source}
         requestData={requestData}
       />
       <main className="flex flex-1 flex-col h-full w-full">
         {source && (
           <>
-            {view === "Top" && <div>Top searchs</div>}
+            {view === "Hashtag" && (
+              <HashtagView search={query} data={dataHashtag} />
+            )}
             {view === "Latest" && (
               <LatestView search={query} data={dataLatest} />
             )}
@@ -76,6 +80,33 @@ const TrendsView = () => {
         </span>
       </div>
       <Trends white={true} />
+    </div>
+  );
+};
+
+const HashtagView = (props) => {
+  console.log(props.data);
+  if (!props.data) {
+    return <span>Error</span>;
+  }
+  return (
+    <div>
+      {props.data.map((item, index) => {
+        return (
+          <React.Fragment key={index}>
+            <div className="h-[90px] w-full hover:bg-gray-100">
+              <Avatar
+                search={true}
+                id={item._id}
+                tag={item.tag}
+                username={item.fullName}
+                bio={item.bio}
+              />
+            </div>
+          </React.Fragment>
+        );
+      })}
+      {props.data.length == 0 && <SearchNotExist search={props.search} />}
     </div>
   );
 };
