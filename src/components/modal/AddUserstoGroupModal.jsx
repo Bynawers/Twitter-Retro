@@ -107,7 +107,7 @@ function AddUserstoGroupModal({ isOpen, onRequestClose }) {
                 </span>
               </div>
               <ClassicButton
-                text="Modify"
+                text="Add"
                 color={selectedUsers.length !== 0 ? "black" : "lock"}
                 event={handleSubmit}
               />

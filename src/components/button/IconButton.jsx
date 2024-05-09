@@ -24,7 +24,7 @@ import {
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { HiSearch, HiOutlineSearch } from "react-icons/hi";
 import { MdGif, MdOutlineEmojiEmotions } from "react-icons/md";
-import { RiSettings3Fill } from "react-icons/ri";
+import { RiSettings3Fill ,RiUserAddLine } from "react-icons/ri";
 import { LuMailPlus } from "react-icons/lu";
 
 const IconButton = (props) => {
@@ -205,6 +205,9 @@ const IconButton = (props) => {
       <IoMdInformationCircleOutline
         style={{ color: "#00ADED", fontSize: props.size ? props.size : 25 }}
       />
+    ),
+    groupadd : (
+    <RiUserAddLine  style={{ color: "#00ADED", fontSize: props.size ? props.size : 25 }}/>
     ),
     setting: (
       <RiSettings3Fill

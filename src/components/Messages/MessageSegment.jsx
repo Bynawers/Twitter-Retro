@@ -206,7 +206,7 @@ function MessageSegment() {
             <div className="flex">
               {selectedChat.isGroupChat ? (
                 <IconButton
-                  name="info"
+                  name="groupadd"
                   event={() => setModalAddOpen(true)}
                   colorHover={"#54b3f3"}
                   backgroundHover={"#e9f6fd"}
