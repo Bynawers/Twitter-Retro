@@ -235,12 +235,29 @@ const searchLatestTweet = async (search) => {
 const getFeedTrendy = async (page) => {
   const token = Cookies.get("token");
   try {
-    const response = await axios.get(BASE_URL + "/tweets/feedTrendy?page=1", {
+    const response = await axios.get(BASE_URL + "/tweets/feedTrendy", {
       headers: {
         Auth: token,
       },
     });
 
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des utilisateurs:", error);
+    return null;
+  }
+};
+
+const getFeed = async (page) => {
+  const token = Cookies.get("token");
+  try {
+    const response = await axios.get(BASE_URL + "/tweets/feed?page=1", {
+      headers: {
+        Auth: token,
+      },
+    });
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Erreur lors de la récupération des utilisateurs:", error);
@@ -268,6 +285,22 @@ const searchHashtags = async (search) => {
   }
 };
 
+const getTopHashtag = async (page) => {
+  const token = Cookies.get("token");
+  try {
+    const response = await axios.get(BASE_URL + "/tweets/topHashtags", {
+      headers: {
+        Auth: token,
+      },
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des utilisateurs:", error);
+    return null;
+  }
+};
+
 export {
   getTweets,
   createTweet,
@@ -284,4 +317,6 @@ export {
   getComments,
   getFeedTrendy,
   searchHashtags,
+  getFeed,
+  getTopHashtag,
 };

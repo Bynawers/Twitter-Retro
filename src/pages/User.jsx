@@ -141,7 +141,11 @@ function User() {
           me ? (auth.user ? auth.user.stat.postCount : []) : user.stat.postCount
         }
       />
-      <ModalEdit modalIsOpen={modalEdit} setIsOpen={setModalEdit} />
+      <ModalEdit
+        modalIsOpen={modalEdit}
+        setIsOpen={setModalEdit}
+        user={auth.user}
+      />
       <main className="flex flex-1 flex-col h-full w-full">
         <div className="w-full min-h-[200px] bg-banner">
           {!bannerError && (

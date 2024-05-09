@@ -116,7 +116,7 @@ function GroupChatModal({ isOpen, onRequestClose }) {
   }
 
   const handleNext = () => {
-    if (selectedUsers.length === 0) {
+    if (selectedUsers.length < 2) {
       return;
     }
     setStep(step + 1);

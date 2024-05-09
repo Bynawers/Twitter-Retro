@@ -11,7 +11,7 @@ const HeaderFeed = (props) => {
 
   return (
     <div
-      className={`border-b-[1px] sticky w-full bg-opacity-70 bg-white backdrop-filter backdrop-blur-md transition-all duration-500 sm:top-0 ${
+      className={`border-b-[1px] z-50 sticky w-full bg-opacity-70 bg-white backdrop-filter backdrop-blur-md transition-all duration-500 sm:top-0 ${
         scrollDirection === "down" ? "-top-24" : "top-0"
       }`}
     >

@@ -33,14 +33,15 @@ const customStyles = {
 
 const ModalEdit = (props) => {
   const auth = useAuth();
+  console.log(auth.user);
 
   const [newProfileFile, setNewProfileFile] = useState(null);
   const [newBannerFile, setNewBannerFile] = useState(null);
 
   const [newBanner, setNewBanner] = useState(null);
   const [newProfile, setNewProfile] = useState(null);
-  const [newName, setNewName] = useState(auth.user.fullName);
-  const [newBio, setNewBio] = useState(auth.user.bio);
+  const [newName, setNewName] = useState(props.user.fullName);
+  const [newBio, setNewBio] = useState(props.user.bio);
 
   function closeModal() {
     setNewName("");
@@ -71,6 +72,13 @@ const ModalEdit = (props) => {
 
     const userModify = await setUser(formDataUser);
 
+    const newUser = {
+      fullName: newName,
+      bio: newBio,
+    };
+
+    auth.updateLocalUser(newUser);
+
     if (userModify) {
       closeModal();
       toast.success("Tweet posted successfully");
@@ -79,11 +87,8 @@ const ModalEdit = (props) => {
     }
   };
 
-  console.log(
-    newBanner
-      ? newBanner
-      : BASE_URL_IMAGE + "banner/" + (auth.user ? auth.user._id : "undefined")
-  );
+  console.log(newName);
+  console.log(newBio);
 
   return (
     <>

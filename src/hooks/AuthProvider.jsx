@@ -28,6 +28,14 @@ const AuthProvider = ({ children }) => {
     localStorage.setItem("user", JSON.stringify(userData));
   };
 
+  const updateLocalUser = (userData) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      fullName: userData.fullName ? userData.fullName : prevUser.fullName,
+      bio: userData.bio ? userData.bio : prevUser.bio,
+    }));
+  };
+
   const loginAction = async (data) => {
     const ERROR_MESSAGE = {
       401: "Unknow User, please retry",
@@ -57,6 +65,7 @@ const AuthProvider = ({ children }) => {
 
   const logOut = () => {
     setToken("");
+    setUser("");
     Cookies.remove("token");
     localStorage.removeItem("user");
   };
@@ -69,6 +78,8 @@ const AuthProvider = ({ children }) => {
         loginAction,
         logOut,
         getUserData,
+        setUser,
+        updateLocalUser,
         updateUser,
       }}
     >

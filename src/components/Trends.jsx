@@ -1,47 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import IconButton from "./button/IconButton";
 
 import ReduceBigNumber from "../utils/ReduceBigNumbers";
+import { getTopHashtag } from "../services/RequestTweets";
 
 const Trends = (props) => {
-  const trends = [
-    {
-      name: "Dune 2",
-      stat: 200034,
-    },
-    {
-      name: "Bitcoin",
-      stat: 509302,
-    },
-    {
-      name: "Cryptographie",
-      stat: 403823,
-    },
-    {
-      name: "Champions League",
-      stat: 2234234,
-    },
-    {
-      name: "Twitter Retro",
-      stat: 23424,
-    },
-    {
-      name: "JO 2024",
-      stat: 924234,
-    },
-    {
-      name: "PSG - BARCA",
-      stat: 53492,
-    },
-    {
-      name: "Orages",
-      stat: 91492,
-    },
-    {
-      name: "PSG - BARCA",
-      stat: 23492,
-    },
-  ];
+  const [trends, setTrends] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getTopHashtag();
+      setTrends(data.hashtags);
+    };
+    fetchData();
+  }, []);
+
   return (
     <div
       className={`flex flex-col mb-4 bg-grey-100 font-semibold rounded-xl w-full ${
@@ -68,7 +40,7 @@ const Trends = (props) => {
 };
 
 const TrendsElement = (props) => {
-  const reduceValue = ReduceBigNumber(props.item.stat);
+  const reduceValue = ReduceBigNumber(props.item.count);
   const handleTooltip = () => {};
 
   return (
@@ -87,7 +59,7 @@ const TrendsElement = (props) => {
         />
       </div>
       <div className="h-5">
-        <span>#{props.item.name}</span>
+        <span>#{props.item._id}</span>
       </div>
       <div className="h-5">
         <span className="font-normal text-textLight text-sm">

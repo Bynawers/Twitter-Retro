@@ -17,18 +17,18 @@ const TooltipUser = (props) => {
       clickable
       render={() => (
         <div className="font-bold text-base">
-          <button
-            className="flex text-left items-center h-[44px]"
+          <div
+            className="flex text-left items-center h-[44px] cursor-pointer"
             onClick={handleAddAccount}
           >
             <p>Changer les paramètres</p>
-          </button>
-          <button
-            className="flex text-left items-center h-[44px]"
+          </div>
+          <div
+            className="flex text-left items-center h-[44px] cursor-pointer"
             onClick={handleDisconnect}
           >
             <p>Se déconnecter de @{props.tag}</p>
-          </button>
+          </div>
         </div>
       )}
       style={{
