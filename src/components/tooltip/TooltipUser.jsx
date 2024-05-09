@@ -21,7 +21,7 @@ const TooltipUser = (props) => {
             className="flex text-left items-center h-[44px]"
             onClick={handleAddAccount}
           >
-            <p>Ajoutez un compte existant</p>
+            <p>Changer les paramètres</p>
           </button>
           <button
             className="flex text-left items-center h-[44px]"

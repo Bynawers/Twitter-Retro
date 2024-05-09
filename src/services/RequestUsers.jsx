@@ -145,6 +145,151 @@ const unfollowUser = async (userId) => {
   }
 };
 
+const getSearchUser = async (search) => {
+  const token = Cookies.get("token");
+
+  try {
+    const response = await axios.get(BASE_URL + "/users/search/" + search, {
+      headers: {
+        Auth: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
+const getFollowing = async (tag) => {
+  const token = Cookies.get("token");
+
+  try {
+    const response = await axios.get(
+      BASE_URL + "/users/" + tag + "/following",
+      {
+        headers: {
+          Auth: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
+const getFollowers = async (tag) => {
+  const token = Cookies.get("token");
+
+  try {
+    const response = await axios.get(
+      BASE_URL + "/users/" + tag + "/followers",
+      {
+        headers: {
+          Auth: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
+const getUserPosts = async (tag, pageTmp, type) => {
+  const token = Cookies.get("token");
+
+  const page = pageTmp ? pageTmp : 1;
+
+  try {
+    let response = await axios.get(
+      BASE_URL + "/users/" + tag + "/posts?page=" + page,
+      {
+        headers: {
+          Auth: token,
+        },
+        params: {
+          type: type ? type : "tweet",
+        },
+      }
+    );
+    response.data.data;
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
+const getUserRetweets = async (tag, pageTmp) => {
+  const token = Cookies.get("token");
+
+  const page = pageTmp ? pageTmp : 1;
+
+  try {
+    const response = await axios.get(BASE_URL + "/users/" + tag + "/retweets", {
+      headers: {
+        Auth: `Bearer ${token}`,
+      },
+    });
+    response.data.data.reverse();
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
+const getUserLikes = async (tag, pageTmp) => {
+  const token = Cookies.get("token");
+
+  const page = pageTmp ? pageTmp : 1;
+
+  try {
+    const response = await axios.get(
+      BASE_URL + "/users/" + tag + "/likes?page=" + page,
+      {
+        headers: {
+          Auth: `Bearer ${token}`,
+        },
+        params: {
+          cacheBuster: Date.now(),
+        },
+      }
+    );
+    response.data.data.reverse();
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
+const getUserBookmarks = async (tag, pageTmp) => {
+  const token = Cookies.get("token");
+
+  const page = pageTmp ? pageTmp : 1;
+
+  try {
+    const response = await axios.get(
+      BASE_URL + "/users/" + tag + "/bookmarks",
+      {
+        headers: {
+          Auth: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
 export {
   getUser,
   getUsers,
@@ -154,4 +299,11 @@ export {
   setBanner,
   followUser,
   unfollowUser,
+  getSearchUser,
+  getFollowing,
+  getFollowers,
+  getUserPosts,
+  getUserLikes,
+  getUserRetweets,
+  getUserBookmarks,
 };

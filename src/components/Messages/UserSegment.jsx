@@ -3,14 +3,9 @@ import axios from "axios";
 import { useAuth } from "../../hooks/AuthProvider";
 import UserItem from "./UserItem";
 import { useChat } from "../../hooks/ChatP";
-import { RiSettings3Fill } from "react-icons/ri";
-import { LuMailPlus } from "react-icons/lu";
-import twitterConfig from "../../../twitterConfig.json";
 import GroupChatModal from "../modal/GroupChatModal";
-
-const BASE_URL = twitterConfig.local
-  ? twitterConfig.BASE_URL_LOCAL
-  : twitterConfig.BASE_URL_ONLINE;
+import { getChat } from "../../services/RequestMessages";
+import IconButton from "../button/IconButton";
 
 function UserItemSegment() {
   const { selectedChat, setSelectedChat, chats, setChats } = useChat();
@@ -19,16 +14,7 @@ function UserItemSegment() {
 
   useEffect(() => {
     const fetchUserItems = async () => {
-      try {
-        const response = await axios.get(BASE_URL + "/api/chat", {
-          headers: {
-            Auth: auth.token,
-          },
-        });
-        setChats(response.data);
-      } catch (error) {
-        console.error("Error fetching user items:", error);
-      }
+      setChats(await getChat());
     };
 
     fetchUserItems();
@@ -45,39 +31,35 @@ function UserItemSegment() {
 
   return (
     <div className="w-5/12 h-screen border-r border-gray-300 overflow-hidden">
-        <div className="flex items-end justify-between p-4">
-          <h1 className="text-2xl font-bold mb-4">Messages</h1>
-          <div className="flex items-end mb-4">
-            <div className="cursor-pointer items-center space-x-1 rounded-full font-san transition-all duration-20">
-              <RiSettings3Fill
-                size="1.5em"
-                className="text-blue-500"
-                style={{ marginRight: "1em" }}
-              />
-            </div>
-            <div onClick={openModal}>
-              <LuMailPlus size="1.5em" className="text-blue-500 cursor-pointer" />
-            </div>
-          </div>
+      <div className="flex items-end justify-between p-4">
+        <h1 className="text-2xl font-bold mb-4">Messages</h1>
+        <div className="flex items-end mb-4">
+          <div className="cursor-pointer items-center space-x-1 rounded-full font-san transition-all duration-20"></div>
+          <IconButton
+            name="group"
+            colorHover={"#54b3f3"}
+            backgroundHover={"#e9f6fd"}
+            event={openModal}
+          />
         </div>
-        <div className="overflow-y-auto max-h-screen">   
-     {/* Map over user items to render UserItem components */}
-     {chats.map((userItem, index) => (
-        <UserItem
-          item={userItem}
-          selected={selectedChat && selectedChat._id === userItem._id}
-          key={index}
-          time="testo"
-          onClick={() => {
-            setSelectedChat(userItem);
-          }}
-        />
-      ))}
+      </div>
+      <div className="overflow-y-auto max-h-screen">
+        {/* Map over user items to render UserItem components */}
+        {chats.map((userItem, index) => (
+          <UserItem
+            item={userItem}
+            selected={selectedChat && selectedChat._id === userItem._id}
+            key={index}
+            time="testo"
+            onClick={() => {
+              setSelectedChat(userItem);
+            }}
+          />
+        ))}
+      </div>
 
-       </div>
- 
       {/* Modal */}
-      <GroupChatModal isOpen={modalIsOpen} onRequestClose={closeModal}  />
+      <GroupChatModal isOpen={modalIsOpen} onRequestClose={closeModal} />
     </div>
   );
 }

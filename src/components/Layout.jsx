@@ -1,13 +1,17 @@
 import { useRef } from "react";
+import { useLocation } from "react-router-dom";
 
 import Widget from "./Widget";
 import Sidebar from "./navigation/SideBar";
 import BottomBar from "./navigation/BottomBar";
 
 import { useAuth } from "../hooks/AuthProvider";
+import { useScroll } from "../hooks/ScrollProvider";
 
 const Layout = ({ children }) => {
   const auth = useAuth();
+  const scroll = useScroll();
+  const location = useLocation();
 
   const widgetRef = useRef(null);
   const mainRef = useRef(null);
@@ -23,7 +27,7 @@ const Layout = ({ children }) => {
       : "none";
   };
 
-  const handleScroll = (event) => {
+  const handleScroll = (e) => {
     const currentMainScrollTop = mainRef.current.scrollTop;
     const currentWidgetScrollTop = widgetRef.current.scrollTop;
 
@@ -52,6 +56,16 @@ const Layout = ({ children }) => {
 
     prevMainScrollTop = currentMainScrollTop;
     prevWidgetScrollTop = currentWidgetScrollTop;
+
+    const bottom =
+      mainRef.current.scrollHeight - mainRef.current.scrollTop ===
+      mainRef.current.clientHeight;
+
+    if (bottom) {
+      scroll.setIsScrollEnd(true);
+    } else {
+      scroll.setIsScrollEnd(false);
+    }
   };
 
   return (

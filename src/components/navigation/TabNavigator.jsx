@@ -29,7 +29,7 @@ const ButtonHeaderNavigation = (props) => {
         <span
           className={
             "font-sans font-bold " +
-            (props.view === props.text ? "" : "opacity-70 font-medium")
+            (props.view === props.text ? "" : "font-medium")
           }
         >
           {props.text}

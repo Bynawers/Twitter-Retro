@@ -12,11 +12,10 @@ import { signupUser, checkEmail, checkTag } from "../../services/RequestAuth";
 
 import { useAuth } from "../../hooks/AuthProvider";
 
-
 const BASE_URL = twitterConfig.local
   ? twitterConfig.BASE_URL_LOCAL
   : twitterConfig.BASE_URL_ONLINE;
-  
+
 const SignUpForm = (props) => {
   const auth = useAuth();
 
@@ -73,16 +72,45 @@ const SignUpForm = (props) => {
       setErrorConfirmPassword(true);
       toast.error("Please confirm your password");
       return false;
-    }
-    if (password !== confirmPassword) {
+    } else if (password !== confirmPassword) {
       setErrorConfirmPassword(true);
       toast.error("Passwords not matching");
+      return false;
+    }
+
+    // Validate password against rules
+    const isPasswordValid = validatePasswordRules(password);
+    if (!isPasswordValid) {
+      setErrorPassword(true);
+      toast.error("Password does not meet requirements");
       return false;
     }
 
     setErrorPassword(false);
     setErrorConfirmPassword(false);
     return true;
+  };
+
+  const validatePasswordRules = (password) => {
+    // Define password rules
+    const rules = {
+      minLength: 5, // Minimum length requirement
+      hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/, // Special character requirement
+      hasNumber: /\d/, // Number requirement
+      hasCapital: /[A-Z]/, // Uppercase letter requirement
+    };
+
+    // Check each rule
+    const isMinLengthValid = password.length >= rules.minLength;
+    const hasSpecialChar = rules.hasSpecialChar.test(password);
+    const hasNumber = rules.hasNumber.test(password);
+    const hasCapital = rules.hasCapital.test(password);
+
+    // Check if all rules pass
+    const isValid =
+      isMinLengthValid && hasSpecialChar && hasNumber && hasCapital;
+
+    return isValid;
   };
 
   const validateFullName = () => {
@@ -146,11 +174,10 @@ const SignUpForm = (props) => {
       email: formData.email,
       password: formData.password,
     };
-    
 
     try {
       const response1 = await axios.post(
-        BASE_URL+"/auth/register",
+        BASE_URL + "/auth/register",
         formData,
         {
           headers: {
@@ -159,24 +186,19 @@ const SignUpForm = (props) => {
         }
       );
       console.log("User registered successfully:", response1.data.token);
-      if (profilepicture !== null){
-        data.append("profile",profilepicture)
+      if (profilepicture !== null) {
+        data.append("profile", profilepicture);
         try {
-          const response = await axios.patch(
-              BASE_URL+"/users",
-              data,
-              {
-                  headers: {
-                      "Content-Type": "multipart/form-data",
-                     Auth: `Bearer  ${response1.data.token}` // Corrected the header name to "Authorization"
-                  },
-              }
-          );
+          const response = await axios.patch(BASE_URL + "/users", data, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Auth: `Bearer  ${response1.data.token}`, // Corrected the header name to "Authorization"
+            },
+          });
           console.log("File uploaded successfully:", response.data);
-          
-      } catch (error) {  
+        } catch (error) {
           console.error("Error uploading file:", error);
-      }
+        }
       }
       auth.loginAction(input);
     } catch (error) {

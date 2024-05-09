@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import MessageComponent from "./MessageComponent";
 import EmojiPicker from "emoji-picker-react";
-import { IoMdSend } from "react-icons/io";
 import { MdGif, MdOutlineEmojiEmotions } from "react-icons/md";
 import { IoImageOutline } from "react-icons/io5";
 import { useChat } from "../../hooks/ChatP";
@@ -10,11 +9,15 @@ import axios from "axios";
 import { getSender, getSenderFull } from "../../utils/ChatLogics";
 import { ToastContainer, toast } from "react-toastify";
 import { isSameUser } from "../../utils/ChatLogics";
-import { IoMdInformationCircleOutline } from "react-icons/io";
 import twitterConfig from "../../../twitterConfig.json";
 import io from "socket.io-client";
 import Lottie from "lottie-react";
 import animationData from "../../animations/typing.json";
+import { getMessages, sendMessage } from "../../services/RequestMessages";
+import IconButton from "../button/IconButton";
+import { useNavigate } from "react-router-dom";
+import InfoGroupModal from "../modal/InfoGroupModal";
+import AddUserstoGroupModal from "../modal/AddUserstoGroupModal";
 
 var socket, selectedChatCompare;
 
@@ -22,13 +25,16 @@ const BASE_URL = twitterConfig.local
   ? twitterConfig.BASE_URL_LOCAL
   : twitterConfig.BASE_URL_ONLINE;
 
-var socket, selectedChatCompare;
-
 function MessageSegment() {
+  const navigate = useNavigate();
   const { selectedChat, setSelectedChat, notification, setNotification } =
     useChat();
+  const [modalInfoOpen, setModalInfoOpen] = useState(false);
+  const [modalAddOpen, setModalAddOpen] = useState(false);
   const [socketConnected, setSocketConnected] = useState(false);
   const { user, token } = useAuth();
+  const [userChat, setUserChat] = useState(null);
+  const [chatName, setChatName] = useState("");
   const [message, setMessage] = useState("");
   const [messagesList, setMessagesList] = useState([]);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -49,10 +55,9 @@ function MessageSegment() {
         selectedChatCompare._id !== chatID
       ) {
         setIsTyping(false);
-      }else{
-        setIsTyping(true)
+      } else {
+        setIsTyping(true);
       }
-      
     });
     socket.on("stop typing", () => setIsTyping(false));
     return () => {
@@ -61,6 +66,7 @@ function MessageSegment() {
       socket.off("message received");
     };
   }, []);
+
   useEffect(() => {
     socket.on("message recieved", (newMessageRecieved) => {
       if (
@@ -77,12 +83,25 @@ function MessageSegment() {
   });
 
   useEffect(() => {
-    if (selectedChat) {
-      fetchMessages();
-      console.log("selected chat", selectedChat);
-      selectedChatCompare = selectedChat;
-      setIsTyping(false)
+    if (!selectedChat) {
+      return;
     }
+
+    const fetchData = async () => {
+      if (selectedChat.isGroupChat) {
+        setChatName(selectedChat.chatName);
+      } else {
+        const userChatTmp = await getSender(user, selectedChat.users);
+
+        setChatName(userChatTmp.fullName);
+        setUserChat(userChatTmp);
+      }
+    };
+    fetchData();
+
+    fetchMessages();
+    selectedChatCompare = selectedChat;
+    setIsTyping(false);
   }, [selectedChat]);
 
   useEffect(() => {
@@ -124,38 +143,19 @@ function MessageSegment() {
     return () => clearTimeout(typingTimer);
   };
 
-  const sendMessage = async () => {
+  const sendMessageHandler = async () => {
     if (message.trim() !== "") {
       socket.emit("stop typing", selectedChat._id);
-      try {
-        const config = {
-          headers: {
-            "Content-type": "application/json",
-            Auth: token,
-          },
-        };
-        setMessage("");
-        const { data } = await axios.post(
-          BASE_URL + "/api/message",
-          {
-            content: message,
-            chatId: selectedChat._id,
-          },
-          config
-        );
-        //console.log("data", data);
-        socket.emit("new message", data);
-        setMessagesList([...messagesList, data]);
-      } catch (error) {
-        console.log(error);
-        toast.error("Error sending message");
-      }
+      const data = await sendMessage(message, selectedChat._id);
+      socket.emit("new message", data);
+      setMessage("");
+      setMessagesList([...messagesList, data]);
     }
   };
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
-      sendMessage();
+      sendMessageHandler();
     }
   };
 
@@ -164,23 +164,36 @@ function MessageSegment() {
   };
 
   const fetchMessages = async () => {
-    if (!selectedChat) return;
-    try {
-      const config = {
-        headers: {
-          Auth: token,
-        },
-      };
-      const response = await axios.get(
-        `http://localhost:3001/api/message/${selectedChat._id}`,
-        config
-      );
-      setMessagesList(response.data);
-
-      socket.emit("join chat", selectedChat._id);
-    } catch (error) {
-      console.error("Error fetching messages:", error);
+    if (!selectedChat) {
+      return;
     }
+
+    const config = {
+      headers: {
+        Auth: token,
+      },
+    };
+    const response = await axios.get(
+      BASE_URL + `/api/message/${selectedChat._id}`,
+      config
+    );
+    setMessagesList(response.data);
+
+    setMessagesList(await getMessages(selectedChat._id));
+
+    socket.emit("join chat", selectedChat._id);
+  };
+
+  const handleInfo = () => {
+    if (selectedChat.isGroupChat) {
+      setModalInfoOpen(true);
+    } else {
+      navigate("/" + userChat.tag);
+    }
+  };
+
+  const handleChatNameChange = (value) => {
+    setChatName(value);
   };
 
   return (
@@ -189,16 +202,21 @@ function MessageSegment() {
         <>
           {/* Chat section */}
           <div className="flex justify-between items-center min-h-16 px-4 border-b-[1px]">
-            <h1 className="text-xl font-bold">
-              {selectedChat && !selectedChat.isGroupChat
-                ? getSender(user, selectedChat.users)
-                : selectedChat && selectedChat.chatName}
-            </h1>
-            <div>
-              <IoMdInformationCircleOutline
-                size="1.5em"
-                className="text-blue-500"
-                style={{ marginBottom: "0.3em" }}
+            <h1 className="text-xl font-bold">{chatName}</h1>
+            <div className="flex">
+              {selectedChat.isGroupChat ? (
+                <IconButton
+                  name="info"
+                  event={() => setModalAddOpen(true)}
+                  colorHover={"#54b3f3"}
+                  backgroundHover={"#e9f6fd"}
+                  />
+              ) : null }
+              <IconButton
+                name="info"
+                event={() => handleInfo()}
+                colorHover={"#54b3f3"}
+                backgroundHover={"#e9f6fd"}
               />
             </div>
           </div>
@@ -209,7 +227,7 @@ function MessageSegment() {
             {/* Messages container */}
             <div className="flex flex-col gap-2 p-4">
               {messagesList.map((message, index) => {
-                const sameUser = isSameUser(message, user._id);;
+                const sameUser = isSameUser(message, user._id);
                 return (
                   <MessageComponent
                     key={index}
@@ -229,13 +247,12 @@ function MessageSegment() {
           ) : null}
 
           <div className="flex items-center min-h-14 p-2 border-t-[1px]">
-            <div className="flex items-center space-x-3 h-full">
-              <IoImageOutline size="1.5em" className="text-blue-500" />
-              <MdGif size="2em" className="text-blue-500" />
-              <MdOutlineEmojiEmotions
-                size="1.5em"
-                className="text-blue-500"
-                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+            <div className="flex items-center space-x-2 h-full">
+              <IconButton
+                name="emojis"
+                event={() => setShowEmojiPicker(!showEmojiPicker)}
+                colorHover={"#54b3f3"}
+                backgroundHover={"#e9f6fd"}
               />
             </div>
             <input
@@ -246,12 +263,25 @@ function MessageSegment() {
               onKeyPress={handleKeyPress}
               className="ml-3 flex-grow h-full px-4 rounded-lg border-2 border-gray-300"
             />
-            <button
-              className="text-blue-500 rounded-full font-semibold ml-2"
-              onClick={sendMessage}
-            >
-              <IoMdSend size="1.5em" />
-            </button>
+
+            <IconButton
+              name="send"
+              event={sendMessageHandler}
+              colorHover={"#54b3f3"}
+              backgroundHover={"#e9f6fd"}
+            />
+            <InfoGroupModal
+              users={selectedChat.users}
+              isOpen={modalInfoOpen}
+              chatName={chatName}
+              handleChatNameChange={handleChatNameChange}
+              onRequestClose={() => setModalInfoOpen(false)}
+            />
+            <AddUserstoGroupModal
+              isOpen={modalAddOpen}
+              onRequestClose={() => setModalAddOpen(false)}
+            />
+
           </div>
           {showEmojiPicker && (
             <div className="absolute bottom-16 right-2">

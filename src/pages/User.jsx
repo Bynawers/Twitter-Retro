@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, Link ,useNavigate} from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { useLocation, Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { useChat } from "../hooks/ChatP";
 
 import { useAuth } from "../hooks/AuthProvider";
@@ -20,25 +20,26 @@ import {
   unfollowUser,
 } from "../services/RequestUsers";
 
-import Feed from "../components/Feed";
 import FeedUser from "../components/FeedUser";
 import axios from "axios";
-
 
 const BASE_URL_IMAGE = twitterConfig.local
   ? twitterConfig.BASE_URL_LOCAL + "/images/"
   : twitterConfig.BASE_URL_ONLINE + "/images/";
 
-  const BASE_URL = twitterConfig.local
+const BASE_URL = twitterConfig.local
   ? twitterConfig.BASE_URL_LOCAL
   : twitterConfig.BASE_URL_ONLINE;
 
 function User() {
+  const navigate = useNavigate();
   const setSelectedChat = useChat().setSelectedChat;
   const [init, setInit] = useState(false);
   const [view, setView] = useState("Posts");
   const [user, setUser] = useState([]);
-  const navigate = useNavigate();
+
+  const [bannerError, setBannerError] = useState(false);
+
   const [isFollow, setIsFollow] = useState(null);
 
   const [modalEdit, setModalEdit] = useState(false);
@@ -58,19 +59,17 @@ function User() {
         Auth: auth.token,
       },
     };
-      const {data} = await axios.post(
-        BASE_URL + "/api/chat",
-        {
-          userId: user._id,
-        },
-        config
-      );
-      setSelectedChat(data);
-      navigate("/messages");
+    const { data } = await axios.post(
+      BASE_URL + "/api/chat",
+      {
+        userId: user._id,
+      },
+      config
+    );
+    setSelectedChat(data);
+    navigate("/messages");
 
-      console.log("data", data);
-
-      
+    console.log("data", data);
   };
 
   useEffect(() => {
@@ -102,7 +101,7 @@ function User() {
     if (!me) {
       fetchData();
     }
-  }, [me]);
+  }, [username]);
 
   const handleFollow = async () => {
     let response;
@@ -129,20 +128,29 @@ function User() {
     setModalEdit(true);
   };
 
+  const handleBannerError = () => {
+    setBannerError(true);
+  };
+
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col">
       <HeaderBack
         view="user"
-        name={me ? (auth.user ? auth.user.fullName : user.fullName) : ""}
-        post={me ? (auth.user ? auth.user.stat.postCount : user.postCount) : []}
+        name={me ? (auth.user ? auth.user.fullName : "") : user.fullName}
+        post={
+          me ? (auth.user ? auth.user.stat.postCount : []) : user.stat.postCount
+        }
       />
       <ModalEdit modalIsOpen={modalEdit} setIsOpen={setModalEdit} />
       <main className="flex flex-1 flex-col h-full w-full">
         <div className="w-full min-h-[200px] bg-banner">
-          <img
-            src={BASE_URL_IMAGE + "banner/" + (me ? auth.user._id : user._id)}
-            className="w-full h-[200px] object-cover"
-          />
+          {!bannerError && (
+            <img
+              src={BASE_URL_IMAGE + "banner/" + (me ? auth.user._id : user._id)}
+              className="w-full h-[200px] object-cover"
+              onError={handleBannerError}
+            />
+          )}
         </div>
         <div className=" w-full px-4 pt-3 mb-4">
           <div className="flex justify-between w-full h-[70px]">
@@ -168,10 +176,7 @@ function User() {
                     <div className="flex space-x-2">
                       <IconButton name="more" styles="border-[1px]" />
                       <div onClick={handleClickMessage}>
-                        <IconButton
-                          name="message"
-                          styles="border-[1px]"
-                        />
+                        <IconButton name="message" styles="border-[1px]" />
                       </div>
                     </div>
                     <ClassicButton
@@ -205,7 +210,7 @@ function User() {
               </span>
               <a
                 className="font-normal text-icon-default-color"
-                href={(me ? auth.user.tag : user.tag) + "/follow"}
+                href={(me ? auth.user.tag : user.tag) + "/follow?src=following"}
               >
                 Following
               </a>
@@ -218,7 +223,7 @@ function User() {
               </span>
               <a
                 className="font-normal text-icon-default-color"
-                href={(me ? auth.user.tag : user.tag) + "/follow"}
+                href={(me ? auth.user.tag : user.tag) + "/follow?src=followers"}
               >
                 Followers
               </a>
@@ -229,10 +234,13 @@ function User() {
           <TabNavigator
             view={view}
             setView={setView}
-            data={["Posts", "Retweets", "Likes"]}
+            data={["Posts", "Replies", "Retweets", "Likes"]}
           />
         </nav>
         {me && <FeedUser me={me} view={view} user={user} />}
+        {user.tag !== undefined && !me && (
+          <FeedUser me={me} view={view} user={user} />
+        )}
       </main>
     </div>
   );

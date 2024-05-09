@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
 
 import ReduceBigNumber from "../utils/ReduceBigNumbers";
 
@@ -19,6 +20,7 @@ import { useProfile } from "../hooks/ProfileProvider";
 const ActionButtons = (props) => {
   const auth = useAuth();
   const { updateUser } = useAuth();
+  const navigate = useNavigate();
   const {
     addLikedTweet,
     addRetweetedTweet,
@@ -38,7 +40,20 @@ const ActionButtons = (props) => {
     auth.user.bookmarks ? auth.user.bookmarks.includes(props.id) : false
   );
 
-  const handleDefault = async (e) => {};
+  const toParametersPost =
+    "/" +
+    (props.post
+      ? props.post.author
+        ? props.post.author.tag
+        : "undefined"
+      : "undefined") +
+    "/status/" +
+    props.id +
+    "?q=comment";
+
+  const handleComment = async (e) => {
+    navigate(toParametersPost, { state: { data: props.data } });
+  };
 
   const handleLike = async (e) => {
     e.preventDefault();
@@ -137,10 +152,11 @@ const ActionButtons = (props) => {
       }`}
     >
       <IconButton
-        event={handleDefault}
+        event={handleComment}
         value={ReduceBigNumber(props.data ? props.data.comment : -1)}
         colorHover={"#54b3f3"}
         backgroundHover={"#e9f6fd"}
+        styles="z-20"
         name="chat"
       />
       <IconButton
@@ -149,6 +165,7 @@ const ActionButtons = (props) => {
         colorHover={"#13ba82"}
         backgroundHover={"#def1eb"}
         state={retweet}
+        styles="z-20"
         name="retweet"
       />
       <IconButton
@@ -157,15 +174,17 @@ const ActionButtons = (props) => {
         colorHover={"#fa2c8b"}
         backgroundHover={"#fee7f2"}
         state={like}
+        styles="z-20"
         name="like"
       />
 
       {props.view == "menu" && (
         <IconButton
-          event={handleDefault}
+          event={handleComment}
           value={ReduceBigNumber(props.data ? props.data.view : -1)}
           colorHover={"#54b3f3"}
           backgroundHover={"#e9f6fd"}
+          styles="z-20"
           name="view"
         />
       )}
@@ -175,6 +194,7 @@ const ActionButtons = (props) => {
           value={ReduceBigNumber(props.data ? props.data.bookmark : -1)}
           colorHover={"#54b3f3"}
           backgroundHover={"#e9f6fd"}
+          styles="z-20"
           state={bookmark}
           name="bookmark"
         />
@@ -187,12 +207,14 @@ const ActionButtons = (props) => {
             state={bookmark}
             name="bookmark"
             colorHover={"#54b3f3"}
+            styles="z-20"
             backgroundHover={"#e9f6fd"}
           />
           <IconButton
             event={handleShare}
             name="share"
             colorHover={"#54b3f3"}
+            styles="z-20"
             backgroundHover={"#e9f6fd"}
           />
         </div>

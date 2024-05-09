@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 
 import { FiSettings } from "react-icons/fi";
 import { FaTwitter } from "react-icons/fa";
+import { IoMdSend } from "react-icons/io";
 
 import {
   IoEllipsisHorizontal,
@@ -20,12 +21,11 @@ import {
   IoImageOutline,
   IoCameraOutline,
 } from "react-icons/io5";
-
-
-import axios from "axios";
-
-import { useAuth } from "../../hooks/AuthProvider";
-
+import { IoMdInformationCircleOutline } from "react-icons/io";
+import { HiSearch, HiOutlineSearch } from "react-icons/hi";
+import { MdGif, MdOutlineEmojiEmotions } from "react-icons/md";
+import { RiSettings3Fill } from "react-icons/ri";
+import { LuMailPlus } from "react-icons/lu";
 
 const IconButton = (props) => {
   const inputRef = useRef(null);
@@ -53,14 +53,6 @@ const IconButton = (props) => {
       <FaTwitter
         color="#00ADED"
         style={{ fontSize: props.size ? props.size : 35 }}
-      />
-    ),
-    setting: (
-      <FiSettings
-        style={{
-          color: hover ? props.colorHover : color,
-          fontSize: props.size ? props.size : 17,
-        }}
       />
     ),
     chat: (
@@ -168,6 +160,23 @@ const IconButton = (props) => {
         }}
       />
     ),
+    search: props.state ? (
+      <HiSearch
+        className={animation}
+        style={{
+          color: props.colorHover,
+          fontSize: props.size ? props.size : 19,
+        }}
+      />
+    ) : (
+      <HiOutlineSearch
+        className={animation}
+        style={{
+          color: hover ? props.colorHover : color,
+          fontSize: props.size ? props.size : 19,
+        }}
+      />
+    ),
     message: (
       <IoMailOutline className={styles + animation} style={{ color: color }} />
     ),
@@ -180,6 +189,36 @@ const IconButton = (props) => {
       <img
         className="flex h-8 w-8 rounded-full object-cover"
         src="./src/assets/defaultAvatar.jpg"
+      />
+    ),
+    emojis: (
+      <MdOutlineEmojiEmotions
+        style={{ color: "#00ADED", fontSize: props.size ? props.size : 19 }}
+      />
+    ),
+    gif: (
+      <MdGif
+        style={{ color: "#00ADED", fontSize: props.size ? props.size : 25 }}
+      />
+    ),
+    info: (
+      <IoMdInformationCircleOutline
+        style={{ color: "#00ADED", fontSize: props.size ? props.size : 25 }}
+      />
+    ),
+    setting: (
+      <RiSettings3Fill
+        style={{ color: "#00ADED", fontSize: props.size ? props.size : 25 }}
+      />
+    ),
+    group: (
+      <LuMailPlus
+        style={{ color: "#00ADED", fontSize: props.size ? props.size : 25 }}
+      />
+    ),
+    send: (
+      <IoMdSend
+        style={{ color: "#00ADED", fontSize: props.size ? props.size : 25 }}
       />
     ),
   };
@@ -206,7 +245,6 @@ const IconButton = (props) => {
     if (props.type == "input") {
       openFileInput();
       return;
-      
     }
     props.event(e);
   };
@@ -221,7 +259,7 @@ const IconButton = (props) => {
 
   return (
     <button
-      className="flex h-full items-center justify-end rounded-xl"
+      className={`flex h-full items-center justify-end rounded-xl`}
       onClick={handleClick}
       onMouseEnter={handleHover}
       onMouseLeave={handleUnHover}

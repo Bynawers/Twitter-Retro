@@ -1,18 +1,11 @@
 import { useState } from "react";
 import { FaFeatherAlt } from "react-icons/fa";
-import { HiOutlineDotsHorizontal } from "react-icons/hi";
 
 import SideBarElement from "./SideBarElement";
-import TooltipUser from "../tooltip/TooltipUser";
 import ModalPost from "../modal/ModalPost";
-
-import twitterConfig from "../../../twitterConfig.json";
+import Avatar from "../Avatar";
 
 import { useAuth } from "../../hooks/AuthProvider";
-
-const BASE_URL = twitterConfig.local
-  ? twitterConfig.BASE_URL_LOCAL
-  : twitterConfig.BASE_URL_ONLINE;
 
 const Sidebar = () => {
   const auth = useAuth();
@@ -31,7 +24,6 @@ const Sidebar = () => {
           <SideBarElement name="Twitter" path="/home" />
           <SideBarElement name="Accueil" path="/home" />
           <SideBarElement name="Explorer" path="/explore" />
-          <SideBarElement name="Notifications" path="/notifications" />
           <SideBarElement name="Messages" path="/messages" />
           <SideBarElement name="Signets" path="/bookmark" />
           <SideBarElement name="Profiles" path={"/" + auth.user.tag} />
@@ -63,35 +55,6 @@ const ButtonPost = (props) => {
         className="text-white inline xl:hidden 2xl:hidden"
         size="2em"
       />
-    </button>
-  );
-};
-
-const Avatar = (props) => {
-  return (
-    <button
-      className="flex flex-col items-center absolute bottom-5 w-full"
-      data-tooltip-id="signup"
-    >
-      <TooltipUser tag={props.tag} />
-      <div
-        className="flex
-      cursor-pointer items-center rounded-full xl:px-4 xl:py-3 font-sans w-[85px] xl:w-full hover:bg-gray-200 xl:justify-between justify-center"
-      >
-        <div className="flex flex-row items-center">
-          <img
-            className="flex h-[50px] w-[50px] rounded-full object-cover"
-            src={BASE_URL + "/images/profile/" + props.id}
-          />
-          <div className="hidden flex-col items-start xl:flex 2xl:flex">
-            <span className="text-sm pl-3 font-bold">{props.username}</span>
-            <span className="text-sm pl-3 font-light">@{props.tag}</span>
-          </div>
-        </div>
-        <div className="hidden items-start xl:inline 2xl:inline">
-          <HiOutlineDotsHorizontal size="1.5em" />
-        </div>
-      </div>
     </button>
   );
 };
