@@ -17,6 +17,7 @@ import { getMessages, sendMessage } from "../../services/RequestMessages";
 import IconButton from "../button/IconButton";
 import { useNavigate } from "react-router-dom";
 import InfoGroupModal from "../modal/InfoGroupModal";
+import AddUserstoGroupModal from "../modal/AddUserstoGroupModal";
 
 var socket, selectedChatCompare;
 
@@ -26,9 +27,9 @@ const BASE_URL = twitterConfig.local
 
 function MessageSegment() {
   const navigate = useNavigate();
-  const { selectedChat, setSelectedChat, notification, setNotification } =
-    useChat();
+  const { selectedChat, setSelectedChat, chats, setChats } = useChat();
   const [modalInfoOpen, setModalInfoOpen] = useState(false);
+  const [modalAddOpen, setModalAddOpen] = useState(false);
   const [socketConnected, setSocketConnected] = useState(false);
   const { user, token } = useAuth();
   const [userChat, setUserChat] = useState(null);
@@ -40,6 +41,7 @@ function MessageSegment() {
   const [istyping, setIsTyping] = useState(false);
   const messagesContainerRef = useRef(null); // Ref for messages container
 
+  console.log(chats);
   useEffect(() => {
     socket = io(BASE_URL);
     socket.emit("setup", user);
@@ -197,7 +199,15 @@ function MessageSegment() {
           {/* Chat section */}
           <div className="flex justify-between items-center min-h-16 px-4 border-b-[1px]">
             <h1 className="text-xl font-bold">{chatName}</h1>
-            <div>
+            <div className="flex">
+              {selectedChat.isGroupChat ? (
+                <IconButton
+                  name="groupadd"
+                  event={() => setModalAddOpen(true)}
+                  colorHover={"#54b3f3"}
+                  backgroundHover={"#e9f6fd"}
+                />
+              ) : null}
               <IconButton
                 name="info"
                 event={() => handleInfo()}
@@ -260,8 +270,13 @@ function MessageSegment() {
               users={selectedChat.users}
               isOpen={modalInfoOpen}
               chatName={chatName}
-              handleChatNameChange={handleChatNameChange}
+              setChatName={setChatName}
               onRequestClose={() => setModalInfoOpen(false)}
+              setChats={setChats}
+            />
+            <AddUserstoGroupModal
+              isOpen={modalAddOpen}
+              onRequestClose={() => setModalAddOpen(false)}
             />
           </div>
           {showEmojiPicker && (

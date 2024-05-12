@@ -43,74 +43,91 @@ const customStyles = {
   },
 };
 
-function InfoGroupModal({ isOpen, onRequestClose, chatName, users }) {
+function InfoGroupModal({
+  isOpen,
+  onRequestClose,
+  chatName,
+  setChatName,
+  users,
+}) {
   const navigate = useNavigate();
   let subtitle;
   const { chats, setChats } = useChat();
   const { user, token } = useAuth();
+  const { selectedChat } = useChat();
   const [groupChatName, setGroupChatName] = useState("");
   const [selectedUsers, setSelectedUsers] = useState(
     users ? (users.length > 0 ? users : []) : []
   );
-  const [search, setSearch] = useState("");
-  const [searchResult, setSearchResult] = useState([]);
-  const [loading, setLoading] = useState(false);
-  useEffect(() => {}, [selectedUsers]);
 
-  const handleGroup = (userToAdd) => {
-    if (selectedUsers.includes(userToAdd)) {
-      return;
-    }
-
-    setSelectedUsers([...selectedUsers, userToAdd]);
-  };
-
-  const handleSearch = async (query) => {
-    setSearch(query);
-    if (!query) {
-      return;
-    }
-
+  const leaveRequest = async () => {
     try {
-      setLoading(true);
-      const data = await getSearchUser(query);
-      setLoading(false);
-      setSearchResult(data);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Auth: token,
+        },
+      };
 
-  const handleDelete = (delUser) => {
-    setSelectedUsers(selectedUsers.filter((sel) => sel._id !== delUser._id));
+      const requestBody = {
+        chatId: selectedChat._id,
+        userId: user._id,
+      };
+
+      const response = await axios.put(
+        BASE_URL + "/api/chat/groupremove",
+
+        requestBody,
+        config
+      );
+      if (response.status === 200) {
+        onRequestClose();
+        const newChats = chats.filter((item) => item._id !== selectedChat._id);
+        setChats(newChats);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error leaving the group chat");
+    }
   };
 
   const handleSubmit = async () => {
-    if (!groupChatName || !selectedUsers) {
-      toast.error("Please fill all fields");
-      return;
-    }
-
     try {
       const config = {
         headers: {
           Auth: token,
         },
       };
-      const { data } = await axios.post(
-        BASE_URL + `/api/chat/group`,
-        {
-          name: groupChatName,
-          users: JSON.stringify(selectedUsers.map((u) => u._id)),
-        },
+
+      const requestBody = {
+        chatId: selectedChat,
+        chatName: groupChatName,
+      };
+
+      if (groupChatName == "") {
+        return;
+      }
+
+      const response = await axios.put(
+        BASE_URL + "/api/chat/rename",
+        requestBody,
         config
       );
-      setChats([data, ...chats]);
-      onRequestClose();
-      toast.success("Group chat created successfully");
+
+      if (response.status === 200) {
+        setChatName(groupChatName);
+        const newChats = chats.map((item) =>
+          item._id === selectedChat._id
+            ? { ...item, chatName: groupChatName }
+            : item
+        );
+        setChats(newChats);
+        onRequestClose();
+      }
     } catch (error) {
-      console.log(error);
-      toast.error("Error creating group chat");
+      console.error(error);
+      // Handle the error appropriately, e.g., display an error message to the user
+      throw new Error("Error renaming the group chat");
     }
   };
 
@@ -162,68 +179,86 @@ function InfoGroupModal({ isOpen, onRequestClose, chatName, users }) {
             {selectedUsers.map((u, index) => {
               return (
                 <React.Fragment key={index}>
-                  <UserHandler data={u} navigate={navigate} />
+                  <UserHandler
+                    data={u}
+                    navigate={navigate}
+                    selectedUsers={selectedUsers}
+                    setSelectedUsers={setSelectedUsers}
+                  />
                 </React.Fragment>
               );
             })}
-            <ClassicButton text="Leave group" color="red" textButton={true} />
+            <div
+              onClick={leaveRequest}
+              className="ml-[40%]  mr-[40%] justify-center items-center flex"
+            >
+              <ClassicButton text="Leave group" color="red" textButton={true} />
+            </div>
           </div>
-
-          <div className="flex items-center border-b">
-            <HiSearch className="absolute ml-4 text-twitter" size={25} />
-            <input
-              type="text"
-              placeholder="Search people"
-              className="w-[90%] ml-[10%] h-10 pr-4 outline-none"
-              onChange={(e) => handleSearch(e.target.value)}
-            />
-          </div>
-          {searchResult.map((user, index) => (
-            <React.Fragment key={index}>
-              <UserElement data={user} event={() => handleGroup(user)} />
-            </React.Fragment>
-          ))}
         </div>
       </Modal>
     </>
   );
 }
 
-const UserElement = (props) => {
-  return (
-    <div className="w-full h-[65px]">
-      <Avatar
-        group
-        id={props.data._id}
-        username={props.data.fullName}
-        tag={props.data.tag}
-        event={props.event}
-      />
-    </div>
-  );
-};
-
 const UserHandler = (props) => {
   const goProfile = () => {
     props.navigate("/" + props.data.tag);
   };
+  const selectedChat = useChat().selectedChat;
+  const { token } = useAuth();
+
+  const handleremove = async () => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Auth: token,
+        },
+      };
+
+      const requestBody = {
+        chatId: selectedChat._id,
+        userId: props.data._id,
+      };
+
+      const response = await axios.put(
+        BASE_URL + "/api/chat/groupremove",
+        requestBody,
+        config
+      );
+
+      if (response.status == 200) {
+        const updatedUsers = props.selectedUsers.filter(
+          (item) => item._id !== props.data._id
+        );
+        console.log(updatedUsers);
+        props.setSelectedUsers(updatedUsers);
+      }
+
+      toast.success("User removed from the group chat");
+    } catch (error) {
+      console.error(error);
+      throw new Error("Error removing user from the group chat");
+    }
+  };
+
   return (
-    <button
-      className="flex flex-col items-center w-full"
+    <div
+      className="flex flex-col items-center w-full cursor-pointer"
       to={"/" + props.data.tag}
-      onClick={goProfile}
     >
       <div
         className="flex
-      cursor-pointer items-center xl:px-4 xl:py-3 font-sans w-[85px] xl:w-full hover:bg-gray-100 xl:justify-between justify-center"
+      cursor-pointer items-center px-4 py-3 font-sans w-full hover:bg-gray-100 justify-center"
       >
         <div className="flex flex-row items-center w-full justify-between">
-          <div className="flex">
+          <div className="flex" onClick={goProfile}>
             <img
               className="flex h-[40px] w-[40px] rounded-full object-cover"
               src={BASE_URL + "/images/profile/" + props.data._id}
             />
-            <div className="hidden flex-col items-start xl:flex 2xl:flex">
+            <div className="flex-col items-start flex">
               <span className="text-md pl-3 font-bold">
                 {props.data.fullName}
               </span>
@@ -234,11 +269,11 @@ const UserHandler = (props) => {
             text="remove"
             color="red"
             textButton={true}
-            event={() => alert("remove")}
+            event={handleremove}
           />
         </div>
       </div>
-    </button>
+    </div>
   );
 };
 
