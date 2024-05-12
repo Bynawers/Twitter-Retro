@@ -118,7 +118,7 @@ const likeTweet = async (id) => {
     return response;
   } catch (error) {
     console.error("Erreur lors de la récupération des utilisateurs:", error);
-    return null;
+    return { response: 500 };
   }
 };
 
@@ -137,7 +137,7 @@ const unlikeTweet = async (id) => {
     return response;
   } catch (error) {
     console.error("Erreur lors de la récupération des utilisateurs:", error);
-    return null;
+    return { response: 500 };
   }
 };
 
@@ -156,7 +156,7 @@ const retweetTweet = async (id) => {
     return response;
   } catch (error) {
     console.error("Erreur lors de la récupération des utilisateurs:", error);
-    return null;
+    return { response: 500 };
   }
 };
 
@@ -175,7 +175,7 @@ const unretweetTweet = async (id) => {
     return response;
   } catch (error) {
     console.error("Erreur lors de la récupération des utilisateurs:", error);
-    return null;
+    return { response: 500 };
   }
 };
 
@@ -194,7 +194,7 @@ const bookmarkTweet = async (id) => {
     return response;
   } catch (error) {
     console.error("Erreur lors de la récupération des utilisateurs:", error);
-    return null;
+    return { response: 500 };
   }
 };
 
@@ -213,7 +213,7 @@ const unbookmarkTweet = async (id) => {
     return response;
   } catch (error) {
     console.error("Erreur lors de la récupération des utilisateurs:", error);
-    return null;
+    return { response: 500 };
   }
 };
 
@@ -232,16 +232,19 @@ const searchLatestTweet = async (search) => {
   }
 };
 
-const getFeedTrendy = async (page) => {
+const getFeedTrendy = async (pageTmp) => {
   const token = Cookies.get("token");
+  const page = pageTmp ? pageTmp : 1;
   try {
-    const response = await axios.get(BASE_URL + "/tweets/feedTrendy", {
-      headers: {
-        Auth: token,
-      },
-    });
+    const response = await axios.get(
+      BASE_URL + "/tweets/feedTrendy?page=" + page,
+      {
+        headers: {
+          Auth: token,
+        },
+      }
+    );
 
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Erreur lors de la récupération des utilisateurs:", error);
@@ -249,15 +252,15 @@ const getFeedTrendy = async (page) => {
   }
 };
 
-const getFeed = async (page) => {
+const getFeed = async (pageTmp) => {
   const token = Cookies.get("token");
+  const page = pageTmp ? pageTmp : 1;
   try {
-    const response = await axios.get(BASE_URL + "/tweets/feed?page=1", {
+    const response = await axios.get(BASE_URL + "/tweets/feed?page=" + page, {
       headers: {
         Auth: token,
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Erreur lors de la récupération des utilisateurs:", error);

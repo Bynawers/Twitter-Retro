@@ -9,8 +9,10 @@ import { searchLatestTweet, searchHashtags } from "../services/RequestTweets";
 import { getSearchUser } from "../services/RequestUsers";
 import Avatar from "../components/Avatar";
 import Feed from "../components/Feed";
+import { useAuth } from "../hooks/AuthProvider";
 
 function Explorer() {
+  const auth = useAuth();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const query = queryParams.get("q");
@@ -40,6 +42,36 @@ function Explorer() {
     setDataHashtag(searchHashtagsData.posts);
   };
 
+  const handleModifyStatHashtag = (id, stat) => {
+    const newData = dataHashtag.map((tweet) => {
+      if (tweet._id === id) {
+        return {
+          ...tweet,
+          stat: stat,
+        };
+      } else {
+        return tweet;
+      }
+    });
+
+    setDataHashtag(newData);
+  };
+
+  const handleModifyStatLatest = (id, stat) => {
+    const newData = dataLatest.map((tweet) => {
+      if (tweet._id === id) {
+        return {
+          ...tweet,
+          stat: stat,
+        };
+      } else {
+        return tweet;
+      }
+    });
+
+    setDataLatest(newData);
+  };
+
   return (
     <div className="flex flex-col">
       <HeaderSearch
@@ -57,12 +89,22 @@ function Explorer() {
         {source && (
           <>
             {view === "Hashtag" && (
-              <HashtagView search={query} data={dataHashtag} />
+              <HashtagView
+                search={query}
+                data={dataHashtag}
+                handleModifyStat={handleModifyStatHashtag}
+              />
             )}
             {view === "Latest" && (
-              <LatestView search={query} data={dataLatest} />
+              <LatestView
+                search={query}
+                data={dataLatest}
+                handleModifyStat={handleModifyStatLatest}
+              />
             )}
-            {view === "People" && <PeopleView search={query} data={dataUser} />}
+            {view === "People" && (
+              <PeopleView auth={auth} search={query} data={dataUser} />
+            )}
           </>
         )}
         {!source && <TrendsView />}
@@ -90,7 +132,7 @@ const HashtagView = (props) => {
   }
   return (
     <div>
-      <Feed value={props.data} />
+      <Feed value={props.data} handleModifyStat={props.handleModifyStat} />
       {props.data.length == 0 && <SearchNotExist search={props.search} />}
     </div>
   );
@@ -100,10 +142,12 @@ const PeopleView = (props) => {
   return (
     <div>
       {props.data.map((item, index) => {
+        let isFollow = props.auth.user.following.includes(item._id);
         return (
           <React.Fragment key={index}>
-            <div className="h-[90px] w-full hover:bg-gray-100">
+            <div className="h-auto w-full hover:bg-gray-100">
               <Avatar
+                follow={isFollow}
                 search={true}
                 id={item._id}
                 tag={item.tag}
@@ -122,7 +166,7 @@ const PeopleView = (props) => {
 const LatestView = (props) => {
   return (
     <div>
-      <Feed value={props.data} />
+      <Feed value={props.data} handleModifyStat={props.handleModifyStat} />
       {props.data.length == 0 && <SearchNotExist search={props.search} />}
     </div>
   );

@@ -73,6 +73,7 @@ const ActionButtons = (props) => {
 
     if (response.status == 200) {
       setLike(!like);
+      props.handleModifyStat(props.id, response.data.tweetStat);
 
       const updatedUser = {
         ...auth.user,
@@ -104,6 +105,7 @@ const ActionButtons = (props) => {
 
     if (response.status == 200) {
       setRetweet(!retweet);
+      props.handleModifyStat(props.id, response.data.tweetStat);
 
       const updatedUser = {
         ...auth.user,
@@ -123,7 +125,8 @@ const ActionButtons = (props) => {
     let response;
     if (!bookmark) {
       response = await bookmarkTweet(props.id);
-      response.status === 200 ? addBookmarkedTweet(props.post) : "";
+      if (response)
+        response.status === 200 ? addBookmarkedTweet(props.post) : "";
     } else {
       response = await unbookmarkTweet(props.id);
       response.status === 200 ? removeBookmarkedTweet(props.id) : "";
@@ -131,6 +134,7 @@ const ActionButtons = (props) => {
 
     if (response.status == 200) {
       setBookmark(!bookmark);
+      props.handleModifyStat(props.id, response.data.tweetStat);
       const updatedUser = {
         ...auth.user,
         bookmarks: response.data.bookmarks,

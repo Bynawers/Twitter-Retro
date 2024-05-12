@@ -185,7 +185,6 @@ const SignUpForm = (props) => {
           },
         }
       );
-      console.log("User registered successfully:", response1.data.token);
       if (profilepicture !== null) {
         data.append("profile", profilepicture);
         try {
@@ -195,7 +194,6 @@ const SignUpForm = (props) => {
               Auth: `Bearer  ${response1.data.token}`, // Corrected the header name to "Authorization"
             },
           });
-          console.log("File uploaded successfully:", response.data);
         } catch (error) {
           console.error("Error uploading file:", error);
         }

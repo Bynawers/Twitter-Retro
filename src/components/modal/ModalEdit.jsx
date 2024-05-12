@@ -33,7 +33,6 @@ const customStyles = {
 
 const ModalEdit = (props) => {
   const auth = useAuth();
-  console.log(auth.user);
 
   const [newProfileFile, setNewProfileFile] = useState(null);
   const [newBannerFile, setNewBannerFile] = useState(null);
@@ -86,9 +85,6 @@ const ModalEdit = (props) => {
       toast.error("An error has occurred");
     }
   };
-
-  console.log(newName);
-  console.log(newBio);
 
   return (
     <>

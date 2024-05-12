@@ -41,6 +41,7 @@ const Avatar = (props) => {
   };
 
   if (props.search) {
+    console.log(isFollow);
     return (
       <Link
         className="flex flex-col w-full"
@@ -50,14 +51,14 @@ const Avatar = (props) => {
         <TooltipUser tag={props.tag} />
         <div
           className="flex
-        cursor-pointer items-center xl:px-4 xl:py-3 font-sans w-[85px] xl:w-full hover:bg-gray-100 xl:justify-between justify-center"
+        cursor-pointer items-center px-4 py-3 font-sans w-full hover:bg-gray-100 justify-between"
         >
           <div className="flex flex-row items-center w-full">
             <img
               className="flex h-[40px] w-[40px] rounded-full object-cover"
               src={BASE_URL + "/images/profile/" + props.id}
             />
-            <div className="hidden flex-col items-start xl:flex 2xl:flex w-full">
+            <div className="flex-col items-start flex w-full">
               <div className="flex w-full justify-between items-center">
                 <div className="flex flex-col">
                   <span className="text-md pl-3 font-bold">

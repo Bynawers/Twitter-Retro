@@ -8,7 +8,6 @@ const PersonalInfo = (props) => {
     setAvatar(file);
 
     props.setProfilePicture(file);
-    console.log(file);
   };
 
   return (

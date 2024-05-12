@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 
 import HeaderBack from "../components/header/HeaderBack";
 
@@ -11,11 +11,15 @@ import ModalPhoto from "../components/modal/ModalPhoto";
 import Feed from "../components/Feed";
 
 import { getTweetPerId, getComments } from "../services/RequestTweets";
+import { deleteTweet } from "../services/RequestTweets";
 import DateConverter from "../utils/DateConverter";
 import { useAuth } from "../hooks/AuthProvider";
+import { useProfile } from "../hooks/ProfileProvider";
 
 import twitterConfig from "../../twitterConfig.json";
 import ClassicButton from "../components/button/ClassicButton";
+
+import TooltipMoreDetails from "../components/tooltip/TooltipMoreDetails";
 
 const BASE_URL = twitterConfig.local
   ? twitterConfig.BASE_URL_LOCAL + "/images/"
@@ -23,6 +27,10 @@ const BASE_URL = twitterConfig.local
 
 const Post = () => {
   const auth = useAuth();
+  const navigate = useNavigate();
+
+  const { removePostedTweet } = useProfile();
+
   const [tweet, setTweet] = useState(null);
   const [comments, setComments] = useState([]);
   const [error, setError] = useState(false);
@@ -74,6 +82,40 @@ const Post = () => {
       return;
     }
     setComments([comment, ...comments]);
+  };
+
+  const handleModifyStat = (id, stat) => {
+    if (id == tweet._id) {
+      setTweet({ ...tweet, stat });
+    } else {
+      const newData = comments.map((tweet) => {
+        if (tweet._id === id) {
+          return {
+            ...tweet,
+            stat: stat,
+          };
+        } else {
+          return tweet;
+        }
+      });
+
+      setComments(newData);
+    }
+  };
+
+  const handleDeleteTweet = async (id) => {
+    const response = await deleteTweet(id);
+
+    if (response.status == 200) {
+      const updatedUser = {
+        ...auth.user,
+        tweets: response.data.userTweets,
+        stat: response.data.userStat,
+      };
+      auth.updateUser(updatedUser);
+      removePostedTweet(id);
+    }
+    navigate("/" + auth.user.tag);
   };
 
   if (error && !tweet) {
@@ -150,7 +192,13 @@ const Post = () => {
               Vues
             </span>
           </div>
-          <ActionButtons view="main" data={tweet.stat} id={tweet._id} />
+          <ActionButtons
+            view="main"
+            post={tweet}
+            data={tweet.stat}
+            id={tweet._id}
+            handleModifyStat={handleModifyStat}
+          />
         </main>
       </div>
       <PostYourself
@@ -159,11 +207,16 @@ const Post = () => {
         userId={auth.user._id}
         handleAddComment={handleAddComment}
       />
-      <Feed value={comments} />
+      <Feed value={comments} handleModifyStat={handleModifyStat} />
       <ModalPhoto
         modalIsOpen={modalPhoto}
         setIsOpen={setModalPhoto}
         id={tweet._id}
+      />
+      <TooltipMoreDetails
+        data={tweet}
+        myTag={auth.user.tag}
+        handleDeleteTweet={handleDeleteTweet}
       />
     </div>
   );

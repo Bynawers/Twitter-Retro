@@ -55,11 +55,7 @@ function InfoGroupModal({ isOpen, onRequestClose, chatName, users }) {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  console.log(users);
-  useEffect(() => {
-    console.log(selectedUsers);
-  }, [selectedUsers]);
+  useEffect(() => {}, [selectedUsers]);
 
   const handleGroup = (userToAdd) => {
     if (selectedUsers.includes(userToAdd)) {
@@ -78,9 +74,7 @@ function InfoGroupModal({ isOpen, onRequestClose, chatName, users }) {
     try {
       setLoading(true);
       const data = await getSearchUser(query);
-      console.log(data);
       setLoading(false);
-      console.log(data);
       setSearchResult(data);
     } catch (error) {
       toast.error(error);
@@ -166,7 +160,6 @@ function InfoGroupModal({ isOpen, onRequestClose, chatName, users }) {
 
           <div>
             {selectedUsers.map((u, index) => {
-              console.log("---------------");
               return (
                 <React.Fragment key={index}>
                   <UserHandler data={u} navigate={navigate} />

@@ -26,7 +26,7 @@ const Widget = () => {
         {showWidget && (
           <>
             {showTrends && <Trends />}
-            <RefLink />
+
             <div className="pb-10" />
           </>
         )}

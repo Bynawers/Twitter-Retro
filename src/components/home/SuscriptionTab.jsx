@@ -12,7 +12,6 @@ function Suscription() {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log("fetch");
       const data = await getFeed();
       setFeed(data.tweets);
     };

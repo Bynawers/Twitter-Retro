@@ -132,7 +132,6 @@ const ProfileProvider = ({ children }) => {
       setMaxBookmarksPages(newUserBookmarks.totalPages);
       setBookmarksPages(bookmarksPages + 1);
     } else if (type === "Replies") {
-      console.log(repliesPages + " > " + maxRepliesPages);
       if (maxRepliesPages) {
         if (repliesPages >= maxRepliesPages) {
           return;
@@ -149,6 +148,7 @@ const ProfileProvider = ({ children }) => {
     }
   };
   const addLikedTweet = (tweet, newStat) => {
+    console.log(tweet);
     setPostStat(tweet._id, newStat);
     setBookmarkStat(tweet._id, newStat);
     setLikes([{ ...tweet, stat: newStat }, ...likes]);

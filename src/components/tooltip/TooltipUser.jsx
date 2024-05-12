@@ -18,13 +18,7 @@ const TooltipUser = (props) => {
       render={() => (
         <div className="font-bold text-base">
           <div
-            className="flex text-left items-center h-[44px] cursor-pointer"
-            onClick={handleAddAccount}
-          >
-            <p>Changer les paramètres</p>
-          </div>
-          <div
-            className="flex text-left items-center h-[44px] cursor-pointer"
+            className="flex justify-center items-center text-center h-[50px] cursor-pointer"
             onClick={handleDisconnect}
           >
             <p>Se déconnecter de @{props.tag}</p>
@@ -35,8 +29,9 @@ const TooltipUser = (props) => {
         backgroundColor: "white",
         color: "#222",
         boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.3)",
+
         width: 270,
-        height: 112,
+        height: 70,
         borderRadius: 15,
         zIndex: 9999,
       }}

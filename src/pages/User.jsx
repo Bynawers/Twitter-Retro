@@ -20,6 +20,8 @@ import {
   unfollowUser,
 } from "../services/RequestUsers";
 
+import DateUser from "../utils/DateUser";
+
 import FeedUser from "../components/FeedUser";
 import axios from "axios";
 
@@ -68,8 +70,6 @@ function User() {
     );
     setSelectedChat(data);
     navigate("/messages");
-
-    console.log("data", data);
   };
 
   useEffect(() => {
@@ -178,7 +178,6 @@ function User() {
                 {!me && (
                   <>
                     <div className="flex space-x-2">
-                      <IconButton name="more" styles="border-[1px]" />
                       <div onClick={handleClickMessage}>
                         <IconButton name="message" styles="border-[1px]" />
                       </div>
@@ -194,17 +193,23 @@ function User() {
               </div>
             )}
           </div>
-          <div className="flex flex-col h-[50px] mt-1 mb-3">
+          <div className="flex flex-col h mt-1 mb-3">
             <span className="font-bold text-xl">
               {me ? auth.user.fullName : user.fullName}
             </span>
+
             <span className="font-normal text-sm text-icon-default-color">
               @{me ? auth.user.tag : user.tag}
+            </span>
+            <span className="text-gray-700 text-sm mt-2 mb-4">
+              A rejoint le{" "}
+              {me ? DateUser(auth.user.createdAt) : DateUser(user.createdAt)}
             </span>
           </div>
           <div className="h-auto w-full mb-3 overflow-x-hidden break-words">
             {me ? auth.user.bio : user.bio}
           </div>
+
           <div className="flex h-[20px] w-full space-x-4 text-sm">
             <p className="hover:underline">
               <span className="font-bold">

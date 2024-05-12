@@ -17,6 +17,21 @@ function FeedTab() {
     fetchData();
   }, []);
 
+  const handleModifyStat = (id, stat) => {
+    const newData = data.map((tweet) => {
+      if (tweet._id === id) {
+        return {
+          ...tweet,
+          stat: stat,
+        };
+      } else {
+        return tweet;
+      }
+    });
+
+    setData(newData);
+  };
+
   if (data.length == 0) {
     return (
       <div className="flex flex-col pl-[20%] pr-[20%] pt-10 space-y-2">
@@ -30,7 +45,7 @@ function FeedTab() {
 
   return (
     <div className="flex flex-col">
-      <Feed value={data} />
+      <Feed value={data} handleModifyStat={handleModifyStat} />
     </div>
   );
 }

@@ -45,7 +45,6 @@ function MessageSegment() {
     socket.emit("setup", user);
     socket.on("connected", () => {
       setSocketConnected(true);
-      console.log("connected");
     });
     socket.on("typing", (chatID) => {
       if (
@@ -73,8 +72,6 @@ function MessageSegment() {
       ) {
         //toast.info("New message recieved");
       } else {
-        console.log("new message recieved", newMessageRecieved.content);
-
         setMessagesList([...messagesList, newMessageRecieved]);
       }
     });
@@ -103,7 +100,6 @@ function MessageSegment() {
   }, [selectedChat]);
 
   useEffect(() => {
-    console.log(messagesList.length);
     if (messagesContainerRef.current) {
       messagesContainerRef.current.scrollTop =
         messagesContainerRef.current.scrollHeight;

@@ -26,10 +26,6 @@ const TooltipMoreDetails = (props) => {
 
   const me = [
     {
-      icon: <IoPencil size={20} />,
-      text: "Modifier",
-    },
-    {
       icon: <IoTrashBin size={20} />,
       text: "Supprimer ",
       event: () => props.handleDeleteTweet(props.data._id),

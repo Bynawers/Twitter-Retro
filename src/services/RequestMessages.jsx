@@ -39,8 +39,6 @@ const getMessages = async (id) => {
 
 const sendMessage = async (message, id) => {
   const token = Cookies.get("token");
-  console.log(message);
-  console.log(id);
   const response = await axios.post(
     BASE_URL + "/api/message",
     {
@@ -54,7 +52,6 @@ const sendMessage = async (message, id) => {
       },
     }
   );
-  console.log(response.data);
   return response.data;
 };
 

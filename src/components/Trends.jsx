@@ -27,8 +27,6 @@ const Trends = (props) => {
       navigate("/explore");
       return;
     }
-    console.log(page);
-    console.log(maxPage);
     const data = await getTopHashtag(page + 1);
     const newData = [data, ...trends];
     setTrends(newData);
@@ -72,7 +70,7 @@ const TrendsElement = (props) => {
   const reduceValue = ReduceBigNumber(props.item.count);
 
   const handleDetail = () => {
-    props.navigate(`/explore?src=typed_query&q=${props.item._id}`);
+    props.navigate(`/explore?src=typed_query&q=${props.item.text}`);
   };
 
   return (
@@ -86,7 +84,7 @@ const TrendsElement = (props) => {
         </span>
       </div>
       <div className="h-5">
-        <span>#{props.item._id}</span>
+        <span>#{props.item.text}</span>
       </div>
       <div className="h-5">
         <span className="font-normal text-textLight text-sm">

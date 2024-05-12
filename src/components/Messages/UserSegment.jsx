@@ -21,7 +21,6 @@ function UserItemSegment() {
   }, [auth.token, setChats]);
 
   const openModal = () => {
-    console.log("Open modal");
     setModalIsOpen(true);
   };
 
