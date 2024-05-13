@@ -217,7 +217,7 @@ const getUserPosts = async (tag, pageTmp, type) => {
       }
     );
     response.data.data;
-
+    console.log(response);
     return response.data;
   } catch (error) {
     console.error(error);

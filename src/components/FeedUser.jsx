@@ -10,10 +10,10 @@ import {
 
 const FeedUser = (props) => {
   const { likes, retweets, posts, replies } = useProfile();
-  const [userLikes, setUserLikes] = useState([]);
-  const [userRetweets, setUserRetweets] = useState([]);
-  const [userPosts, setUserPosts] = useState([]);
-  const [userReplies, setUserReplies] = useState([]);
+  const [userLikes, setUserLikes] = useState(null);
+  const [userRetweets, setUserRetweets] = useState(null);
+  const [userPosts, setUserPosts] = useState(null);
+  const [userReplies, setUserReplies] = useState(null);
 
   useEffect(() => {
     const fetchData = async (user) => {
@@ -22,7 +22,7 @@ const FeedUser = (props) => {
       const userRetweets = await getUserRetweets(user, 1);
       const userLikes = await getUserLikes(user, 1);
       setUserPosts(userPosts.data);
-      setUserPosts(userReplies.data);
+      setUserReplies(userReplies.data);
       setUserRetweets(userRetweets.data);
       setUserLikes(userLikes.data);
     };
@@ -36,7 +36,7 @@ const FeedUser = (props) => {
     <>
       {props.view == "Posts" && (
         <Feed
-          value={props.me ? posts : userPosts}
+          value={userPosts}
           view="Posts"
           me={props.me}
           tag={props.user.tag}

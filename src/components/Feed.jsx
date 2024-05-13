@@ -11,7 +11,7 @@ import { useAuth } from "../hooks/AuthProvider";
 import { useProfile } from "../hooks/ProfileProvider";
 import { useScroll } from "../hooks/ScrollProvider";
 
-const Feed = (props) => {
+const Feed = ({ value }, props) => {
   const auth = useAuth();
   const scroll = useScroll();
   const { updateUser } = useAuth();
@@ -47,6 +47,10 @@ const Feed = (props) => {
     }
   }, [scroll.isScrollEnd]);
 
+  if (value === null) {
+    return;
+  }
+
   return (
     <div>
       <ModalPhoto
@@ -60,11 +64,11 @@ const Feed = (props) => {
         handleDeleteTweet={handleDeleteTweet}
       />
 
-      {props.value && (
+      {value && (
         <FeedView
           me={props.me}
           view={props.view}
-          list={props.value.length > 0 ? props.value : []}
+          list={value}
           setSelectedPost={setSelectedPost}
           openModalPhoto={openModalPhoto}
           handleModifyStat={props.handleModifyStat}
