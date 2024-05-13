@@ -30,7 +30,7 @@ const FeedUser = (props) => {
     if (!props.me) {
       fetchData(props.user.tag);
     }
-  }, []);
+  }, [props.me]);
 
   return (
     <>

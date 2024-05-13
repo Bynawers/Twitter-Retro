@@ -34,8 +34,8 @@ const LayoutMessages = ({ children }) => {
               onScroll={handleMainScroll}
             >
               {children}
+              <BottomBar />
             </div>
-            <BottomBar />
           </main>
         </div>
       </div>

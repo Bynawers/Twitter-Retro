@@ -83,9 +83,6 @@ function User() {
   useEffect(() => {
     setInit(true);
     const fetchData = async () => {
-      if (user.length > 0) {
-        return;
-      }
       try {
         const data = await getUserByTag(username);
         setUser(data);
@@ -98,7 +95,11 @@ function User() {
       }
     };
 
+    if (username == auth.user.tag) {
+      setMe(true);
+    }
     if (!me) {
+      console.log("here");
       fetchData();
     }
   }, [username]);

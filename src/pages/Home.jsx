@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <div className="">
       <HeaderFeed label="Home" view={view} setView={handleSetView} />
-      <main className=" w-full h-full justify-center ">
+      <main className=" w-full h-full ">
         {view === "Pour vous" && <FeedTab />}
         {view === "Abonnement" && <SubscriptionTab />}
       </main>

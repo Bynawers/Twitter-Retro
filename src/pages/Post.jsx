@@ -129,6 +129,10 @@ const Post = () => {
     );
   }
 
+  const toParametersUser =
+    "/" +
+    (tweet ? (tweet.author ? tweet.author.tag : "undefined") : "undefined");
+
   if (!tweet) {
     return;
   }
@@ -138,7 +142,11 @@ const Post = () => {
       <HeaderBack view="post" />
       <div className="pl-4 pr-4">
         <div className="h-3 w-full" />
-        <div className="flex flex-row h-[42px]">
+        <Link
+          className="flex flex-row h-[42px]"
+          to={toParametersUser}
+          state={{ data: tweet.author }}
+        >
           <img
             className="flex h-[40px] w-[40px] rounded-full object-cover mr-2"
             src={BASE_URL + "profile/" + tweet.author._id}
@@ -157,7 +165,7 @@ const Post = () => {
               />
             )}
           </div>
-        </div>
+        </Link>
         <main className="flex w-full flex-col">
           <div className="mt-3 flex w-full">
             <textarea

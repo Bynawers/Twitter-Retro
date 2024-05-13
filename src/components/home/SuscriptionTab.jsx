@@ -18,6 +18,21 @@ function Suscription() {
     fetchData();
   }, []);
 
+  const handleModifyStat = (id, stat) => {
+    const newData = feed.map((tweet) => {
+      if (tweet._id === id) {
+        return {
+          ...tweet,
+          stat: stat,
+        };
+      } else {
+        return tweet;
+      }
+    });
+
+    setFeed(newData);
+  };
+
   if (auth.user.following.length == 0) {
     return (
       <div className="flex flex-col pl-[20%] pr-[20%] pt-10 space-y-2">
@@ -31,7 +46,7 @@ function Suscription() {
   }
   return (
     <div className="flex flex-col">
-      <Feed value={feed} />
+      <Feed value={feed} handleModifyStat={handleModifyStat} />
     </div>
   );
 }
