@@ -36,7 +36,7 @@ const FeedUser = (props) => {
     <>
       {props.view == "Posts" && (
         <Feed
-          value={userPosts}
+          value={props.me ? posts : userPosts}
           view="Posts"
           me={props.me}
           tag={props.user.tag}
