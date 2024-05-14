@@ -20,7 +20,7 @@ const UserItem = ({ item, username, lastMessage, onClick, selected }) => {
 
   return (
     <div
-      className={`flex items-center space-x-4 cursor-pointer p-4 ${
+      className={`flex items-center space-x-4 cursor-pointer pt-4 pb-4 pl-3 ${
         selected ? "bg-gray-200 border-blue-500 border-r-4" : ""
       }`}
       onClick={onClick}
@@ -43,7 +43,7 @@ const UserItem = ({ item, username, lastMessage, onClick, selected }) => {
         // Content for group chat can be added here if needed
       )}
 
-      <div className="flex flex-col flex-grow">
+      <div className="hidden md:flex flex-col flex-grow">
         <div className="flex justify-between items-center">
           <div className="font-bold">
             {/* Truncate long names */}

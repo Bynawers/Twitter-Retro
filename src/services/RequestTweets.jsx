@@ -288,12 +288,13 @@ const searchHashtags = async (search) => {
   }
 };
 
-const getTopHashtag = async (pageTmp) => {
+const getTopHashtag = async (pageTmp, pageSizeTmp) => {
   const token = Cookies.get("token");
   const page = pageTmp ? pageTmp : 1;
+  const pageSize = pageSizeTmp ? pageSizeTmp : 10;
   try {
     const response = await axios.get(
-      BASE_URL + "/tweets/topHashtags?page=" + page,
+      BASE_URL + "/tweets/topHashtags?page=" + page + "&pageSize=" + pageSize,
       {
         headers: {
           Auth: token,

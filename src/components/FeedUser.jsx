@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 import Feed from "./Feed";
 import { useProfile } from "../hooks/ProfileProvider";
@@ -8,12 +9,20 @@ import {
   getUserRetweets,
 } from "../services/RequestUsers";
 
+import { useAuth } from "../hooks/AuthProvider";
+
 const FeedUser = (props) => {
   const { likes, retweets, posts, replies } = useProfile();
   const [userLikes, setUserLikes] = useState(null);
   const [userRetweets, setUserRetweets] = useState(null);
   const [userPosts, setUserPosts] = useState(null);
   const [userReplies, setUserReplies] = useState(null);
+
+  const auth = useAuth();
+
+  const location = useLocation();
+  const parts = location.pathname.split("/");
+  const username = parts[parts.length - 1];
 
   useEffect(() => {
     const fetchData = async (user) => {
@@ -27,10 +36,10 @@ const FeedUser = (props) => {
       setUserLikes(userLikes.data);
     };
 
-    if (!props.me) {
+    if (username !== auth.user.tag) {
       fetchData(props.user.tag);
     }
-  }, [props.me]);
+  }, [props.me, username]);
 
   return (
     <>

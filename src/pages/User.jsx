@@ -99,7 +99,6 @@ function User() {
       setMe(true);
     }
     if (!me) {
-      console.log("here");
       fetchData();
     }
   }, [username]);

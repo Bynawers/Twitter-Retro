@@ -13,7 +13,8 @@ const Widget = () => {
 
   const showWidget = currentPath === "/messages" ? false : true;
 
-  const showHeaderSearch = currentPath === "/explore" ? false : true;
+  const showHeaderSearch =
+    currentPath === "/bookmark" || currentPath === "/home" ? true : false;
 
   const showTrends = currentPath === "/explore" ? false : true;
 

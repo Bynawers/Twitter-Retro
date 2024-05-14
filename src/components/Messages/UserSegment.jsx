@@ -29,17 +29,19 @@ function UserItemSegment() {
   };
 
   return (
-    <div className="w-5/12 h-screen border-r border-gray-300 overflow-hidden">
-      <div className="flex items-end justify-between p-4">
-        <h1 className="text-2xl font-bold mb-4">Messages</h1>
+    <div className="w-[75px] md:w-5/12 h-screen border-r border-gray-300 overflow-hidden">
+      <div className="flex items-end justify-between md:p-4">
+        <h1 className="hidden md:flex text-2xl font-bold mb-4">Messages</h1>
         <div className="flex items-end mb-4">
           <div className="cursor-pointer items-center space-x-1 rounded-full font-san transition-all duration-20"></div>
-          <IconButton
-            name="group"
-            colorHover={"#54b3f3"}
-            backgroundHover={"#e9f6fd"}
-            event={openModal}
-          />
+          <div className="pl-4 pt-4">
+            <IconButton
+              name="group"
+              colorHover={"#54b3f3"}
+              backgroundHover={"#e9f6fd"}
+              event={openModal}
+            />
+          </div>
         </div>
       </div>
       <div className="overflow-y-auto max-h-screen">

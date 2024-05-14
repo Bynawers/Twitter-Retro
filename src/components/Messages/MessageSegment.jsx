@@ -193,7 +193,7 @@ function MessageSegment() {
   };
 
   return (
-    <div className="flex flex-col w-3/4 h-full border-r-[1px]">
+    <div className="flex flex-col md:w-3/4 sm:w-1/2 h-full border-r-[1px]">
       {selectedChat ? (
         <>
           {/* Chat section */}

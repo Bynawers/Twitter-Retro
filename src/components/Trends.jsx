@@ -8,30 +8,17 @@ import { getTopHashtag } from "../services/RequestTweets";
 const Trends = (props) => {
   const [trends, setTrends] = useState([]);
   const [page, setPage] = useState(1);
+  const [noMore, setNoMore] = useState(false);
   const [maxPage, setMaxPage] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getTopHashtag(page);
+      const data = await getTopHashtag(page, props.full ? 30 : 10);
       setTrends(data.hashtags);
-      setMaxPage(
-        Math.ceil(data.pagination.totalCount / data.pagination.pageSize)
-      );
     };
     fetchData();
   }, []);
-
-  const handleShowMore = async () => {
-    if (!props.full) {
-      navigate("/explore");
-      return;
-    }
-    const data = await getTopHashtag(page + 1);
-    const newData = [data, ...trends];
-    setTrends(newData);
-    setPage(page + 1);
-  };
 
   return (
     <div
@@ -51,17 +38,6 @@ const Trends = (props) => {
           </React.Fragment>
         );
       })}
-      {(maxPage > page || !props.full) && (
-        <div
-          className="px-2 py-3 rounded-b-xl font-normal text-twitter hover:bg-foregroundHover cursor-pointer"
-          onClick={handleShowMore}
-        >
-          <span>Voir plus</span>
-        </div>
-      )}
-      {maxPage == page && props.full && (
-        <span className="px-2 font-light">Pas d'autres tendances...</span>
-      )}
     </div>
   );
 };

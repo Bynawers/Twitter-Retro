@@ -76,16 +76,16 @@ const Layout = ({ children }) => {
             <div className="flex flex-1 xl:min-w-[300px] justify-end sm:min-w-[88px]">
               <Sidebar />
             </div>
-            <main className="flex flex-3 overflow-x-hidden overflow-y-hidden">
+            <main className="w-full flex flex-3 overflow-x-hidden overflow-y-hidden">
               <div
-                className="flex flex-2 flex-col sm:min-w-[500px] md:min-w-[600px] max-w-[600px] lg:min-w-[600px] relative overflow-y-scroll no-scrollbar scrollbar-none"
+                className="flex flex-2 flex-col min-w-[400px] sm:min-w-[500px] md:min-w-[600px] max-w-[600px] lg:min-w-[600px] relative overflow-y-scroll no-scrollbar scrollbar-none"
                 ref={mainRef}
                 onScroll={handleScroll}
               >
                 {children}
                 <BottomBar />
               </div>
-              <div className="flex flex-1 border-l-[1px]">
+              <div className="hidden md:flex flex-1 border-l-[1px]">
                 <div className="flex w-full md:w-[320px] lg:w-[414px] md:pl-4 md:pr-4 lg:pl-8 lg:pr-8">
                   <div
                     className="hidden md:block w-full overflow-y-scroll no-scrollbar scrollbar-none"
@@ -96,7 +96,7 @@ const Layout = ({ children }) => {
                   </div>
                 </div>
               </div>
-              <div className="flex md:hidden w-[200px] flex-1 h-full"></div>
+              <div className="hidden sm:flex w-[20px] flex-1 h-full"></div>
             </main>
           </div>
         </div>
